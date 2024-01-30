@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+class CategoryUpdateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules()
+    {
+        return [
+            'name'       =>['required',
+                            Rule::unique('category')->where(function ($query) {
+                                   return $query
+                                   ->where('name', $this->name)
+                                   ->whereNull('deleted_at');
+                            })->ignore($this->id),
+                           ],
+            'parent_id'  =>['required'],
+            'image'      =>['required','mimes:png,jpg,jpeg,gif']
+        ];
+
+    }
+
+    public function messages()
+    {
+        return [
+            'name.reqired'         =>'Please fill category name!',
+            'parent_id.required'   =>'Please select sarent id!',
+            'image.required'       =>'Please select photo for category!',
+            'image.mimes'          =>'Please upload valid image extension(jpg,jpeg,png,gig)!'
+        ];
+
+
+    }
+}

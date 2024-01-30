@@ -1,0 +1,19 @@
+*.sqlite*
+/vendor/
+/node_modules/
+.env
+public/storage
+
+# User-specific files
+Homestead.yaml
+Homestead.json
+.env.example
+
+# Ignore these files if you are using Docker
+docker-compose.yml
+.docker/
+
+# Database
+*.sqlite
+*.sqlite3
+*.sql
