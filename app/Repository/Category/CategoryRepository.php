@@ -9,8 +9,8 @@ use App\ResponseStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
-
 use Illuminate\Support\Facades\Log;
+
 class CategoryRepository implements CategoryRepositoryInterface
 {
     public function create(array $data)
@@ -25,12 +25,12 @@ class CategoryRepository implements CategoryRepositoryInterface
             $file = $data['image'];
             $name_without_extension = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $file->getClientOriginalExtension();
-           $unique_name = $name_without_extension . '-' . now()->format('Y-m-d_His') . '-' . uniqid() . '.' . $extension;
+            $unique_name = $name_without_extension . '-' . now()->format('Y-m-d_His') . '-' . uniqid() . '.' . $extension;
             $insert_data['image'] = $unique_name;
             $store = Utility::getCreateId((array)$insert_data);
             $create_cat = Category::create($store);
-            $destination_path = public_path('upload/category/' . $create_cat->id);
-            Utility::cropResize($file,$destination_path,$unique_name);
+            $destination_path = storage_path('/app/public/upload/category/' . $create_cat->id);
+            Utility::cropResize($file, $destination_path, $unique_name);
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
@@ -39,29 +39,34 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
     }
 
-    public function getCategory() {
+    public function getCategory()
+    {
         try {
             $categories = [];
-            $categories = Category::select('id','name','image','parent_id','status',    )
-                ->where('status', '=', Constant::ENABLE_STATUS)
-                ->whereNull('deleted_at')
-                ->orderBy('id', 'desc')
-                ->paginate(10);
+            $categories= Category::from('category as c')
+            ->select('c.id', 'c.name', 'c.parent_id', 'c.status', 'c.image')
+            ->leftJoin('category as p', 'c.parent_id', '=', 'p.id')
+            ->whereNull('c.deleted_at')
+            ->orderByDesc('c.id')
+            ->addSelect(DB::raw('COALESCE(p.name, "None") as parent_name'))
+            ->get();
             return $categories;
         } catch (\Exception $e) {
+            $screen = "GetCategory From Category Form Screen::";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
-    public function updateCategory($category){
-        try{
+    public function updateCategory($category)
+    {
+        try {
             // $id = $request->id;
             // $setting = Setting::find($id);
             // $update = $request->all();
             // $setting->updated_at = date('Y-m-d H:i:s');
             // $setting->update($update);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             abort(500);
         }
     }
@@ -69,7 +74,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function  deleteCategory($id)
     {
         $user_id    = Auth::guard('admin')->user()->id;
-        try{
+        try {
             $delete = Category::find($id);
             $delete->deleted_at = date('Y-m-d H:i:s');
             $delete->updated_by = $user_id;
@@ -77,7 +82,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             $delete->save();
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             abort(500);
         }
     }

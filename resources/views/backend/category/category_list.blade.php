@@ -18,6 +18,8 @@
                                             <th>
                                                 <input type="checkbox" id="check-all" class="flat">
                                             </th>
+
+
                                             <th class="column-title">Name </th>
                                             <th class="column-title">Parent Category </th>
                                             <th class="column-title">Status </th>
@@ -38,18 +40,21 @@
                                                     <input type="checkbox" class="flat" name="table_records">
                                                 </td>
                                                 <td class=" ">{{ $category->name }}</td>
-                                                <td class=" ">asdf</td>
+                                                <td class=" ">{{ $category->parent_name }}</td>
                                                 <td class=" ">
-                                                    {{-- <?php
-                                                    if ($status == 0) {
-                                                        echo '<span class="badge badge-primary">Enable</span>';
-                                                    } else {
-                                                        echo '<span class="badge badge-secondary">Disable</span>';
-                                                    }
-                                                    ?> --}}
+                                                    @if ( $category->status == 0)
+                                                        <span class="badge badge-primary">Enable</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Disable</span>
+                                                    @endif
                                                 </td>
-                                                <td class=" "><img src="" alt=""
-                                                        style="width: 100px; height: auto;" /></td>
+                                                <td class="">
+                                                    <div class="" style="width: 100px; height: 100px;">
+                                                        <img src="{{ asset('storage/upload/category/' . $category->id . '/' . $category->image) }}" alt=""
+                                                            style="width: 100%; height: 100%;" />
+                                                    </div>
+                                                </td>
+
                                                 <td class="last">
                                                     <a href="{{ url('/sg-backend/category/edit/')}}/{{ $category->id }}" class="btn btn-info btn-xs"><i
                                                             class="fa fa-pencil"></i> Edit </a>
@@ -57,14 +62,12 @@
                                                         onclick="confirmDelete('{{ url('/sg-backend/category/delete/')}}/{{ $category->id }}')">
                                                         <i class="fa fa-trash-o"></i> Delete
                                                     </a>
-                                                    <a href="javascript:void(0)" class="btn btn-primary btn-xs"><i
-                                                            class="fa fa-arrows"></i>Move</a>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {!! $categories->links('pagination::bootstrap-5') !!}
+                                {{-- {!! $categories->links('pagination::bootstrap-5') !!} --}}
                             </div>
                         </div>
                     </div>

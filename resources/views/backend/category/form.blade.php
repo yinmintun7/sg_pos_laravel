@@ -1,5 +1,5 @@
 @extends('layouts.backend.master')
-@section('title', 'Category Form')
+@section('title', isset($category) ? 'Category Update' : 'Category Create')
 @section('content')
 
     <div class="right_col" role="main">
@@ -8,7 +8,7 @@
                 <div class="col-md-12 col-sm-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Category Create</h2>
+                            <h2>{{ isset($category) ? 'Category Update' : 'Category Create' }}</h2>
                             <div class="clearfix"></div>
                         </div>
 
@@ -43,7 +43,8 @@
                                     <select id="Parent" name = "parent_id" class="select2_group form-control">
                                         <!-- <optgroup label="Pacific Time Zone"> -->
                                         <option value="" disabled>SELECT ONE</option>
-                                        <option value="0">parent_name</option>
+                                        <option value="0" {{ isset($category) && $category->parent_id == '0' ? 'selected' : '' }}>parent_name</option>
+
                                         {{ getParentCategory(old('parent_id', ''), ['item' => false, 'category' => true]) }}
 
                                         <!-- </optgroup> -->
@@ -59,8 +60,8 @@
                                 <div class="col-md-6 col-sm-6">
                                     <select id="Status" name = "status" class="select2_group form-control">
                                         <option value=""></option>
-                                        <option value="0">Enable</option>
-                                        <option value="1">Disable</option>
+                                        <option value="0" {{ $category->status == '0' ? 'selected' : '' }}>Enable</option>
+                                        <option value="1" {{ $category->status == '1' ? 'selected' : '' }}>Disable</option>
                                     </select>
                                 </div>
                             </div>
