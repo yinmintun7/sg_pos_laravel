@@ -44,12 +44,22 @@ class Utility
         return $data;
     }
 
+    public static function getDeletedId(array $data)
+    {
+        $today_date = date('Y-m-d H:i:s');
+        $user_id    = Auth::guard('admin')->user()->id;
+        $data['deleted_at'] = $today_date;
+        $data['deleted_by'] = $user_id;
+        return $data;
+    }
+
+
     public static function cropResize($file,$destination_path,$unique_name){
         if (!is_dir($destination_path)) {
             mkdir($destination_path, 0777, true);
         }
         $modified_image = Image::make($file)
-                        ->crop(Constant::IMAGE_WIDTH, Constant::IMAGE_HEIGHT)
+                        ->fit(Constant::IMAGE_WIDTH, Constant::IMAGE_HEIGHT)
                         ->encode();
 $modified_image->save($destination_path . '/' . $unique_name);
     }

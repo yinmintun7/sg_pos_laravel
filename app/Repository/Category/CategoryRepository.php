@@ -58,15 +58,41 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
     }
 
-    public function updateCategory($category)
+    public function updateCategory($request)
     {
         try {
-            // $id = $request->id;
-            // $setting = Setting::find($id);
-            // $update = $request->all();
-            // $setting->updated_at = date('Y-m-d H:i:s');
-            // $setting->update($update);
+            $id = $request['id'];
+            $name = $request['name'];
+            $parent_id = $request['parent_id'];
+            $status = $request['status'];
+            $update_data =[];
+            $update = Category::find($id);
+            if(array_key_exists('image',$request)){
+                $name_without_extension = pathinfo($request['image']->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $request['image']->getClientOriginalExtension();
+                $unique_name = $name_without_extension . '-' . now()->format('Y-m-d_His') . '-' . uniqid() . '.' . $extension;
+                $destination_path = storage_path('/app/public/upload/category/' . $id);
+                Utility::cropResize( $request['image'], $destination_path, $unique_name);
+                $update_data['image'] = $unique_name;
+
+            }
+
+            $update_data['name']      = $name;
+            $update_data['parent_id'] =$parent_id;
+            $update_data['status']    =$status;
+
+            $old_image     = storage_path('/app/public/upload/category/' . $id);
+            $comfim_update = Utility::getUpdateId((array)$update_data);
+            $update->update($comfim_update);
+            $screen   = "UpdateCategory From Category Form Screen::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            $returnArray['ResponseStatus'] = ResponseStatus::OK;
+            return $returnArray;
+
         } catch (\Exception $e) {
+            $screen = "UpdateCategory From Category Form Screen::";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
@@ -76,6 +102,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $user_id    = Auth::guard('admin')->user()->id;
         try {
             $delete = Category::find($id);
+            // $comfim_update = Utility::getUpdateId((array)$update_data);
             $delete->deleted_at = date('Y-m-d H:i:s');
             $delete->updated_by = $user_id;
             $delete->deleted_by = $user_id;

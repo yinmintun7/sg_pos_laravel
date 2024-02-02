@@ -7,10 +7,9 @@
                 <div class="col-md-12 col-sm-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>{{ isset($category) ? 'Category Update' : 'Category Create' }}</h2>
+                            <h2>{{ isset($item) ? 'Item Update' : 'Item Create' }}</h2>
                             <div class="clearfix"></div>
                         </div>
-
                         <div class="">
                             @if (@isset($category))
                                 <form class="" action="{{ route('updateCategory') }}" method="POST"
@@ -20,7 +19,6 @@
                                 <form class="" action="{{ route('storeCategory') }}" method="POST"
                                     enctype="multipart/form-data" novalidate>
                             @endif
-
                             @csrf
                             <div class="field item form-group">
                                 <label for="name" class="col-form-label col-md-3 col-sm-3  label-align">Category

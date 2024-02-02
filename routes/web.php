@@ -47,7 +47,17 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/list',[CategoryController::class, 'getCategory']);
         Route::get('/edit/{id}',[CategoryController::class, 'categoryEditForm']);
         Route::post('/update',[CategoryController::class, 'updateCategory'])->name('updateCategory');
-        Route::get('/delete/{id}',[CategoryController::class, 'deleteCategory']);
+        Route::get('/delete',[CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+    });
+
+    Route::group(['prefix' => 'item'],function (){
+        Route::get('/', [CategoryController::class, 'form']);
+        // Route::get('/create', [CategoryController::class, 'create']);
+        Route::post('/create', [CategoryController::class, 'create'])->name('storeItem');
+        Route::get('/list',[CategoryController::class, 'getCategory']);
+        Route::get('/edit/{id}',[CategoryController::class, 'categoryEditForm']);
+        Route::post('/update',[CategoryController::class, 'updateCategory'])->name('updateCategory');
+        Route::get('/delete',[CategoryController::class, 'deleteCategory'])->name('deleteCategory');
     });
 
 });

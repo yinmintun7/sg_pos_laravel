@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Category;
+namespace App\Http\Controllers\Item;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\ResponseStatus;
 use App\Utility;
+use App\Models\Item;
 use App\Models\Category;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Repository\Category\CategoryRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
-class CategoryController extends Controller
+class ItemController extends Controller
 {
     private $CategoryRepository;
     public function __construct(CategoryRepositoryInterface $CategoryRepository)
@@ -22,7 +24,7 @@ class CategoryController extends Controller
 
     public function form(){
 
-        return view('backend.category.form');
+        return view('backend.item.form');
 
     }
 

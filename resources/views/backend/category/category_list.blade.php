@@ -42,7 +42,7 @@
                                                 <td class=" ">{{ $category->name }}</td>
                                                 <td class=" ">{{ $category->parent_name }}</td>
                                                 <td class=" ">
-                                                    @if ( $category->status == 0)
+                                                    @if ($category->status == 0)
                                                         <span class="badge badge-primary">Enable</span>
                                                     @else
                                                         <span class="badge badge-secondary">Disable</span>
@@ -50,18 +50,23 @@
                                                 </td>
                                                 <td class="">
                                                     <div class="" style="width: 100px; height: 100px;">
-                                                        <img src="{{ asset('storage/upload/category/' . $category->id . '/' . $category->image) }}" alt=""
-                                                            style="width: 100%; height: 100%;" />
+                                                        <img src="{{ asset('storage/upload/category/' . $category->id . '/' . $category->image) }}"
+                                                            alt="" style="width: 100%; height: 100%;" />
                                                     </div>
                                                 </td>
-
                                                 <td class="last">
-                                                    <a href="{{ url('/sg-backend/category/edit/')}}/{{ $category->id }}" class="btn btn-info btn-xs"><i
-                                                            class="fa fa-pencil"></i> Edit </a>
-                                                    <a href="javascript:void(0)" class="btn btn-danger btn-xs"
-                                                        onclick="confirmDelete('{{ url('/sg-backend/category/delete/')}}/{{ $category->id }}')">
-                                                        <i class="fa fa-trash-o"></i> Delete
-                                                    </a>
+                                                    <a href="{{ url('/sg-backend/category/edit/') }}/{{ $category->id }}"
+                                                        class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                    <form action="{{ url('deleteCategory') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{ $category->id }}">
+                                                        <input type="submit" value="Delete"
+                                                            onclick="confirmDelete('{{ url('/sg-backend/category/delete/') }}')">
+                                                        {{-- <a href="javascript:void(0)" class="btn btn-danger btn-xs"
+                                                                onclick="confirmDelete('{{ url('/sg-backend/category/delete/') }}/{{ $category->id }}')">
+                                                                <i class="fa fa-trash-o"></i> Delete
+                                                            </a> --}}
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -82,7 +87,7 @@
     <!-- java script herr -->
     <script>
         $(document).ready(function() {
-            @if (session('category_create'))
+            @if (session('success'))
                 new PNotify({
                     title: 'Success!',
                     text: '{{ session('category_create') }}',
@@ -90,15 +95,15 @@
                     styling: 'bootstrap3'
                 });
             @endif
-            @if (session('category_delete'))
-                new PNotify({
-                    title: 'Success!',
-                    text: '{{ session('category_delete') }}',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-            @endif
-            @if ($errors->has('category_error'))
+            // @if (session('success'))
+            //     new PNotify({
+            //         title: 'Success!',
+            //         text: '{{ session('category_delete') }}',
+            //         type: 'success',
+            //         styling: 'bootstrap3'
+            //     });
+            // @endif
+            @if ($errors->has('fail'))
                 new PNotify({
                     title: 'Oh No!',
                     text: '{{ $errors->first('category_error') }}',
