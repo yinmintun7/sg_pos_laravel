@@ -53,14 +53,14 @@ class Utility
         return $data;
     }
 
-
-    public static function cropResize($file,$destination_path,$unique_name){
+    public static function cropResize($file, $destination_path, $unique_name)
+    {
         if (!is_dir($destination_path)) {
             mkdir($destination_path, 0777, true);
         }
         $modified_image = Image::make($file)
                         ->fit(Constant::IMAGE_WIDTH, Constant::IMAGE_HEIGHT)
                         ->encode();
-$modified_image->save($destination_path . '/' . $unique_name);
+        $modified_image->save($destination_path . '/' . $unique_name);
     }
 }

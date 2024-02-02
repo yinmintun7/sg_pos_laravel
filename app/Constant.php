@@ -1,24 +1,26 @@
 <?php
+
 namespace App;
-class Constant{
 
-   const DEVELOPER_ROLE =1;
+class Constant
+{
+    public const DEVELOPER_ROLE = 1;
 
-   const ADMIN_ROLE     =2;
+    public const ADMIN_ROLE     = 2;
 
-   const CASHIER_ROLE   =3;
+    public const CASHIER_ROLE   = 3;
 
-   const ENABLE_STATUS  =0;
+    public const ENABLE_STATUS  = 0;
 
-   const DISABLE_STATUS =1;
+    public const DISABLE_STATUS = 1;
 
-   const UNPAID_STATUS  =0;
+    public const UNPAID_STATUS  = 0;
 
-   const PAID_STATUS    =1;
+    public const PAID_STATUS    = 1;
 
-   const CANCEL_STATUS  =2;
+    public const CANCEL_STATUS  = 2;
 
-   const IMAGE_WIDTH    =400;
+    public const IMAGE_WIDTH    = 450;
 
-   const IMAGE_HEIGHT   =450;
+    public const IMAGE_HEIGHT   = 400;
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,15 +25,15 @@ class CategoryStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'       =>['required',
+            'name'       => ['required',
                              Rule::unique('category')->where(function ($query) {
-                                    return $query
-                                    ->where('name', $this->name)
-                                    ->whereNull('deleted_at');
-                           }),
+                                 return $query
+                                 ->where('name', $this->name)
+                                 ->whereNull('deleted_at');
+                             }),
                            ],
-            'parent_id'  =>['required'],
-            'image'      =>['required','mimes:png,jpg,jpeg,gif'],
+            'parent_id'  => ['required'],
+            'image'      => ['required','mimes:png,jpg,jpeg,gif'],
         ];
 
     }
@@ -40,11 +41,11 @@ class CategoryStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.reqired'         => 'Please fill category name!',
-            'name.unique'          => 'This category name is already exitst!',
-            'parent_id.required'   => 'Please select sarent id!',
-            'image.required'       => 'Please select photo for category!',
-            'image.mimes'          => 'Please upload valid image extension(jpg,jpeg,png,gig)!'
+            'name.required'         => 'Please fill category name!',
+            'name.unique'           => 'This category name is already exist!',
+            'parent_id.required'    => 'Please select parent_id!',
+            'image.required'        => 'Please select photo for category!',
+            'image.mimes'           => 'Please upload valid image extension(jpg,jpeg,png,gig)!'
         ];
 
     }

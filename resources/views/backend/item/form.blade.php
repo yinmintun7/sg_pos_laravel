@@ -1,5 +1,5 @@
 @extends('layouts.backend.master')
-@section('title', isset($category) ? 'Category Update' : 'Category Create')
+@section('title', isset($item) ? 'Item Update' : 'Item Create')
 @section('content')
     <div class="right_col" role="main">
         <div class="">
@@ -11,21 +11,21 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="">
-                            @if (@isset($category))
-                                <form class="" action="{{ route('updateCategory') }}" method="POST"
+                            @if (@isset($item))
+                                <form class="" action="{{ route('updateItem') }}" method="POST"
                                     enctype="multipart/form-data" novalidate>
-                                    <input type="hidden" id="id" name="id" value="{{ $category->id }}">
+                                    <input type="hidden" id="id" name="id" value="{{ $item->id }}">
                                 @else
-                                <form class="" action="{{ route('storeCategory') }}" method="POST"
-                                    enctype="multipart/form-data" novalidate>
+                                    <form class="" action="{{ route('storeItem') }}" method="POST"
+                                        enctype="multipart/form-data" novalidate>
                             @endif
                             @csrf
                             <div class="field item form-group">
-                                <label for="name" class="col-form-label col-md-3 col-sm-3  label-align">Category
+                                <label for="name" class="col-form-label col-md-3 col-sm-3  label-align">Item
                                     Name<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <input id="name" class="form-control" name="name"
-                                        value="{{ old('name', isset($category) ? $category->name : '') }}" />
+                                        value="{{ old('name', isset($item) ? $item->name : '') }}" />
                                 </div>
                                 @if ($errors->has('name'))
                                     <span class="errormessage">{{ $errors->first('name') }}</span>
@@ -33,23 +33,47 @@
                             </div>
 
                             <div class="field item form-group">
-                                <label for="Parent"
-                                    class="col-form-label col-md-3 col-sm-3  label-align">Parent-Category<span
+                                <label for="category_id" class="col-form-label col-md-3 col-sm-3  label-align">Category<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <select id="Parent" name = "parent_id" class="select2_group form-control">
+                                    <select id="category_id" name = "category_id" class="select2_group form-control">
                                         <!-- <optgroup label="Pacific Time Zone"> -->
-                                        <option value="" disabled>SELECT ONE</option>
-                                        <option value="0" {{ isset($category) && $category->parent_id == '0' ? 'selected' : '' }}>parent_name</option>
+                                        <option value=""></option>
+                                        {{-- <option value="0"
+                                            {{ isset($item) && $item->category_id == '0' ? 'selected' : '' }}>Category
+                                        </option> --}}
 
-                                        {{ getParentCategory(old('parent_id', isset($category) ? $category->parent_id : ''), ['item' => false, 'category' => true]) }}
+                                        {{ getParentCategory(old('category_id', isset($item) ? $item->category_id : ''), ['item' => true, 'category' => false]) }}
 
                                         <!-- </optgroup> -->
                                     </select>
-                                    @if ($errors->has('parent_id'))
-                                        <span class="errormessage">{{ $errors->first('parent_id') }}</span>
-                                    @endif
+
                                 </div>
+                                @if ($errors->has('category_id'))
+                                    <span class="errormessage">{{ $errors->first('category_id') }}</span>
+                                @endif
+                            </div>
+                            <div class="field item form-group">
+                                <label for="price" class="col-form-label col-md-3 col-sm-3  label-align">Price
+                                    <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="number" id="price" class="form-control" name="price"
+                                        value="{{ old('price', isset($item) ? $item->price : '') }}" />
+                                </div>
+                                @if ($errors->has('price'))
+                                    <span class="errormessage">{{ $errors->first('price') }}</span>
+                                @endif
+                            </div>
+                            <div class="field item form-group">
+                                <label for="quantity" class="col-form-label col-md-3 col-sm-3  label-align">Quantity
+                                    <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="number" id="quantity" class="form-control" name="quantity"
+                                        value="{{ old('quantity', isset($item) ? $item->quantity : '') }}" />
+                                </div>
+                                @if ($errors->has('quantity'))
+                                    <span class="errormessage">{{ $errors->first('quantity') }}</span>
+                                @endif
                             </div>
                             <div class="field item form-group">
                                 <label for="Status" class="col-form-label col-md-3 col-sm-3  label-align">Status<span
@@ -57,22 +81,25 @@
                                 <div class="col-md-6 col-sm-6">
                                     <select id="Status" name = "status" class="select2_group form-control">
                                         <option value=""></option>
-                                        <option value="0" {{isset($category) && $category->status == '0' ? 'selected' : '' }}>Enable</option>
-                                        <option value="1" {{isset($category) && $category->status == '1' ? 'selected' : '' }}>Disable</option>
+                                        <option value="0"
+                                            {{ isset($item) && $item->status == '0' ? 'selected' : '' }}>Enable</option>
+                                        <option value="1"
+                                            {{ isset($item) && $item->status == '1' ? 'selected' : '' }}>Disable</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label for= "image" class="col-form-label col-md-3 col-sm-3  label-align">Category
+                                <label for= "image" class="col-form-label col-md-3 col-sm-3  label-align">Item
                                     Image<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <div id="previous_wrapper" style="display: {{ isset($category) ? 'none' : 'block' }}">
+                                    <div id="previous_wrapper" style="display: {{ isset($item) ? 'none' : 'block' }}">
 
                                         <label class="chooseFile" for="upload" onclick = "fileInput()">Upload</label>
                                     </div>
-                                    <div id="previous_wrapper-img" style="display: {{ isset($category) ? 'block' : 'none' }}">
+                                    <div id="previous_wrapper-img" style="display: {{ isset($item) ? 'block' : 'none' }}">
                                         <div class="vertical-center">
-                                            <img src="{{ isset($category) ? asset('storage/upload/category/' . $category->id . '/' . $category->image) : ''; }}" id="image" alt="" style="width:100%;">
+                                            <img src="{{ isset($item) ? asset('storage/upload/category/' . $item->id . '/' . $item->image) : '' }}"
+                                                id="image" alt="" style="width:100%;">
                                             <label class="chooseFile" for="upload" onclick = "fileInput()">Upload</label>
                                         </div>
                                     </div>

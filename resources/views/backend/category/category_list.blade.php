@@ -18,8 +18,6 @@
                                             <th>
                                                 <input type="checkbox" id="check-all" class="flat">
                                             </th>
-
-
                                             <th class="column-title">Name </th>
                                             <th class="column-title">Parent Category </th>
                                             <th class="column-title">Status </th>
@@ -55,18 +53,26 @@
                                                     </div>
                                                 </td>
                                                 <td class="last">
-                                                    <a href="{{ url('/sg-backend/category/edit/') }}/{{ $category->id }}"
-                                                        class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <form action="{{ url('deleteCategory') }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{ $category->id }}">
-                                                        <input type="submit" value="Delete"
-                                                            onclick="confirmDelete('{{ url('/sg-backend/category/delete/') }}')">
-                                                        {{-- <a href="javascript:void(0)" class="btn btn-danger btn-xs"
-                                                                onclick="confirmDelete('{{ url('/sg-backend/category/delete/') }}/{{ $category->id }}')">
-                                                                <i class="fa fa-trash-o"></i> Delete
-                                                            </a> --}}
-                                                    </form>
+                                                    <div class = "row">
+                                                        <div class="col-md-4">
+                                                            <a href="{{ url('/sg-backend/category/edit/') }}/{{ $category->id }}"
+                                                                class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>
+                                                                Edit </a>
+
+                                                        </div>
+                                                        <div class="col-md-4 text-right">
+                                                            <form action="{{ url('/sg-backend/category/delete') }}"
+                                                                method="POST" id="category-form">
+                                                                @csrf
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $category->id }}">
+                                                                <button type="button" class="btn btn-danger btn-md"
+                                                                    onclick="confirmDelete('category-form')"><i
+                                                                        class="fa fa-trash"
+                                                                        aria-hidden="true"></i>Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -81,54 +87,9 @@
         </div>
     </div>
     </div>
-
     @include('layouts.backend.partial.footer_start')
     @include('layouts.backend.partial.footer_end')
     <!-- java script herr -->
-    <script>
-        $(document).ready(function() {
-            @if (session('success'))
-                new PNotify({
-                    title: 'Success!',
-                    text: '{{ session('category_create') }}',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-            @endif
-            // @if (session('success'))
-            //     new PNotify({
-            //         title: 'Success!',
-            //         text: '{{ session('category_delete') }}',
-            //         type: 'success',
-            //         styling: 'bootstrap3'
-            //     });
-            // @endif
-            @if ($errors->has('fail'))
-                new PNotify({
-                    title: 'Oh No!',
-                    text: '{{ $errors->first('category_error') }}',
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-            @endif
-        });
 
-        function confirmDelete(deleteUrl) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You want to delete this category?! ",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If confirmed, redirect to the specified delete URL
-                    window.location.href = deleteUrl;
-                }
-            });
-        }
-    </script>
     @include('layouts.backend.partial.footer_html_end')
 @endsection

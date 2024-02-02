@@ -10,15 +10,14 @@
                             <h2>{{ isset($category) ? 'Category Update' : 'Category Create' }}</h2>
                             <div class="clearfix"></div>
                         </div>
-
                         <div class="">
                             @if (@isset($category))
                                 <form class="" action="{{ route('updateCategory') }}" method="POST"
                                     enctype="multipart/form-data" novalidate>
                                     <input type="hidden" id="id" name="id" value="{{ $category->id }}">
                                 @else
-                                <form class="" action="{{ route('storeCategory') }}" method="POST"
-                                    enctype="multipart/form-data" novalidate>
+                                    <form class="" action="{{ route('storeCategory') }}" method="POST"
+                                        enctype="multipart/form-data" novalidate>
                             @endif
 
                             @csrf
@@ -42,7 +41,9 @@
                                     <select id="Parent" name = "parent_id" class="select2_group form-control">
                                         <!-- <optgroup label="Pacific Time Zone"> -->
                                         <option value="" disabled>SELECT ONE</option>
-                                        <option value="0" {{ isset($category) && $category->parent_id == '0' ? 'selected' : '' }}>parent_name</option>
+                                        <option value="0"
+                                            {{ isset($category) && $category->parent_id == '0' ? 'selected' : '' }}>
+                                            parent_name</option>
 
                                         {{ getParentCategory(old('parent_id', isset($category) ? $category->parent_id : ''), ['item' => false, 'category' => true]) }}
 
@@ -59,8 +60,12 @@
                                 <div class="col-md-6 col-sm-6">
                                     <select id="Status" name = "status" class="select2_group form-control">
                                         <option value=""></option>
-                                        <option value="0" {{isset($category) && $category->status == '0' ? 'selected' : '' }}>Enable</option>
-                                        <option value="1" {{isset($category) && $category->status == '1' ? 'selected' : '' }}>Disable</option>
+                                        <option value="0"
+                                            {{ isset($category) && $category->status == '0' ? 'selected' : '' }}>Enable
+                                        </option>
+                                        <option value="1"
+                                            {{ isset($category) && $category->status == '1' ? 'selected' : '' }}>Disable
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -72,9 +77,11 @@
 
                                         <label class="chooseFile" for="upload" onclick = "fileInput()">Upload</label>
                                     </div>
-                                    <div id="previous_wrapper-img" style="display: {{ isset($category) ? 'block' : 'none' }}">
+                                    <div id="previous_wrapper-img"
+                                        style="display: {{ isset($category) ? 'block' : 'none' }}">
                                         <div class="vertical-center">
-                                            <img src="{{ isset($category) ? asset('storage/upload/category/' . $category->id . '/' . $category->image) : ''; }}" id="image" alt="" style="width:100%;">
+                                            <img src="{{ isset($category) ? asset('storage/upload/category/' . $category->id . '/' . $category->image) : '' }}"
+                                                id="image" alt="" style="width:100%;">
                                             <label class="chooseFile" for="upload" onclick = "fileInput()">Upload</label>
                                         </div>
                                     </div>

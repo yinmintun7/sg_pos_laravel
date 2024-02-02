@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Item\ItemController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\Shift\ShiftController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\test\TestController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,30 +36,30 @@ Route::post('/postlogin', [LoginController::class, 'postLoginForm'])->name('sg-b
 Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
     Route::get('/index', [DashboardController::class, 'index']);
 
-    Route::group(['prefix' => 'shift'],function (){
+    Route::group(['prefix' => 'shift'], function () {
         Route::get('/index', [ShiftController::class, 'index']);
         Route::get('/start', [ShiftController::class, 'start']);
         Route::get('/end', [ShiftController::class, 'end']);
     });
 
-    Route::group(['prefix' => 'category'],function (){
+    Route::group(['prefix' => 'category'], function () {
         Route::get('/', [CategoryController::class, 'form']);
         // Route::get('/create', [CategoryController::class, 'create']);
         Route::post('/create', [CategoryController::class, 'create'])->name('storeCategory');
-        Route::get('/list',[CategoryController::class, 'getCategory']);
-        Route::get('/edit/{id}',[CategoryController::class, 'categoryEditForm']);
-        Route::post('/update',[CategoryController::class, 'updateCategory'])->name('updateCategory');
-        Route::get('/delete',[CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+        Route::get('/list', [CategoryController::class, 'getCategory']);
+        Route::get('/edit/{id}', [CategoryController::class, 'categoryEditForm']);
+        Route::post('/update', [CategoryController::class, 'updateCategory'])->name('updateCategory');
+        Route::post('/delete', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
     });
 
-    Route::group(['prefix' => 'item'],function (){
-        Route::get('/', [CategoryController::class, 'form']);
+    Route::group(['prefix' => 'item'], function () {
+        Route::get('/', [ItemController::class, 'form']);
         // Route::get('/create', [CategoryController::class, 'create']);
-        Route::post('/create', [CategoryController::class, 'create'])->name('storeItem');
-        Route::get('/list',[CategoryController::class, 'getCategory']);
-        Route::get('/edit/{id}',[CategoryController::class, 'categoryEditForm']);
-        Route::post('/update',[CategoryController::class, 'updateCategory'])->name('updateCategory');
-        Route::get('/delete',[CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+        Route::post('/create', [ItemController::class, 'create'])->name('storeItem');
+        Route::get('/list', [ItemController::class, 'getCategory']);
+        Route::get('/edit/{id}', [ItemController::class, 'categoryEditForm']);
+        Route::post('/update', [ItemController::class, 'updateCategory'])->name('updateCategory');
+        Route::post('/delete', [ItemController::class, 'deleteCategory']);
     });
 
 });
