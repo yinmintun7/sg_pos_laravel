@@ -54,12 +54,11 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
 
     Route::group(['prefix' => 'item'], function () {
         Route::get('/', [ItemController::class, 'form']);
-        // Route::get('/create', [CategoryController::class, 'create']);
         Route::post('/create', [ItemController::class, 'create'])->name('storeItem');
-        Route::get('/list', [ItemController::class, 'getCategory']);
-        Route::get('/edit/{id}', [ItemController::class, 'categoryEditForm']);
-        Route::post('/update', [ItemController::class, 'updateCategory'])->name('updateCategory');
-        Route::post('/delete', [ItemController::class, 'deleteCategory']);
+        Route::get('/list', [ItemController::class, 'getItems']);
+        Route::get('/edit/{id}', [ItemController::class, 'itemEditForm']);
+        Route::post('/update', [ItemController::class, 'updateItem'])->name('updateItem');
+        Route::post('/delete', [ItemController::class, 'deleteItem'])->name('deleteItem');
     });
 
 });

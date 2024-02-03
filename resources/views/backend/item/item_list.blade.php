@@ -1,5 +1,5 @@
 @extends('layouts.backend.master')
-@section('title', 'Category Form')
+@section('title', 'Item List')
 @section('content')
     <div class="right_col" role="main">
         <div class="">
@@ -7,7 +7,7 @@
                 <div class="col-md-12 col-sm-12  ">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Category List </h2>
+                            <h2>Item List </h2>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
@@ -19,7 +19,10 @@
                                                 <input type="checkbox" id="check-all" class="flat">
                                             </th>
                                             <th class="column-title">Name </th>
-                                            <th class="column-title">Parent Category </th>
+                                            <th class="column-title">Category </th>
+                                            <th class="column-title">Price </th>
+                                            <th class="column-title">Quantity </th>
+                                            <th class="column-title">CodeNo </th>
                                             <th class="column-title">Status </th>
                                             <th class="column-title">Image </th>
                                             <th class="column-title no-link last"><span class="nobr">Action</span>
@@ -32,15 +35,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($categories as $category)
+                                        @foreach ($items as $item)
                                             <tr class="even pointer">
                                                 <td class="a-center ">
                                                     <input type="checkbox" class="flat" name="table_records">
                                                 </td>
-                                                <td class=" ">{{ $category->name }}</td>
-                                                <td class=" ">{{ $category->parent_name }}</td>
+                                                <td class=" ">{{ $item->name }}</td>
+                                                <td class=" ">{{ $item->category_name }}</td>
+                                                <td class=" ">{{ $item->price}}</td>
+                                                <td class=" ">{{ $item->quantity}}</td>
+                                                <td class=" ">{{ $item->code_no}}</td>
                                                 <td class=" ">
-                                                    @if ($category->status == 0)
+                                                    @if ($item->status == 0)
                                                         <span class="badge badge-primary">Enable</span>
                                                     @else
                                                         <span class="badge badge-secondary">Disable</span>
@@ -48,34 +54,33 @@
                                                 </td>
                                                 <td class="">
                                                     <div class="" style="width: 100px; height: 100px;">
-                                                        <img src="{{ asset('storage/upload/category/' . $category->id . '/' . $category->image) }}"
+                                                        <img src="{{ asset('storage/upload/item/' . $item->id . '/' . $item->image) }}"
                                                             alt="" style="width: 100%; height: 100%;" />
                                                     </div>
                                                 </td>
-                                                <td class="last">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <a href="{{ url('/sg-backend/category/edit/') }}/{{ $category->id }}" class="btn btn-info btn-xs">
+                                                <td class="">
+                                                    <div class = "row">
+                                                        <div class="col-md-6">
+                                                            <a href="{{ url('/sg-backend/item/edit/') }}/{{ $item->id }}" class="btn btn-info btn-md">
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <form action="{{ url('/sg-backend/category/delete') }}" method="POST" id="category-form">
+                                                        <div class="col-md-6">
+                                                            <form action="{{ url('/sg-backend/item/delete') }}" method="POST" id="item-form">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $category->id }}">
-                                                                <button type="button" class="btn btn-danger btn-md" onclick="confirmDelete('category-form')">
-                                                                    <i class="fa fa-trash"></i> Delete
+                                                                <input type="hidden" name="id" value="{{ $item->id }}">
+                                                                <button type="button" class="btn btn-danger btn-md" onclick="confirmDelete('item-form')">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete
                                                                 </button>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {!! $categories->links('pagination::bootstrap-5') !!}
+                                {!! $items->links('pagination::bootstrap-5') !!}
                             </div>
                         </div>
                     </div>

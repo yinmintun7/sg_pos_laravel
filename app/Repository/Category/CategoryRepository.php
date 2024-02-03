@@ -49,7 +49,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->whereNull('c.deleted_at')
             ->orderByDesc('c.id')
             ->addSelect(DB::raw('COALESCE(p.name, "None") as parent_name'))
-            ->get();
+            ->paginate(10);
             return $categories;
         } catch (\Exception $e) {
             $screen = "GetCategory From Category Form Screen::";

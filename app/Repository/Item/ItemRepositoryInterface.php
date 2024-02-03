@@ -5,8 +5,8 @@ namespace App\Repository\Item;
 interface ItemRepositoryInterface
 {
     public function create(array $data);
-    // public function getCategory();
+    public function getItems();
     // // public function getCategoryById($id);
-    // public function updateCategory($category);
-    // public function deleteCategory($id);
+    public function updateItem($item);
+    public function deleteItem($id);
 }

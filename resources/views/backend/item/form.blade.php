@@ -98,7 +98,7 @@
                                     </div>
                                     <div id="previous_wrapper-img" style="display: {{ isset($item) ? 'block' : 'none' }}">
                                         <div class="vertical-center">
-                                            <img src="{{ isset($item) ? asset('storage/upload/category/' . $item->id . '/' . $item->image) : '' }}"
+                                            <img src="{{ isset($item) ? asset('storage/upload/item/' . $item->id . '/' . $item->image) : '' }}"
                                                 id="image" alt="" style="width:100%;">
                                             <label class="chooseFile" for="upload" onclick = "fileInput()">Upload</label>
                                         </div>
