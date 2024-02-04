@@ -2,6 +2,7 @@
 
 use App\Constant;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 
 if (!function_exists('getParentCategory')) {
@@ -41,8 +42,6 @@ if (!function_exists('getParentCategory')) {
         // if ($parent_cat_id == null && $count == null) {
         getChildCategory($parent_cat_id, $count, $screen, $parent_id);
         //}
-
-
 
     }
 
@@ -116,5 +115,12 @@ if (!function_exists('checkChildCategoryExit')) {
                             ->where('status', Constant::ENABLE_STATUS)
                             ->count();
         return $cat_count;
+    }
+}
+
+if (!function_exists('getLoginUser')) {
+    function getLoginUser(){
+        $user_name    = Auth::guard('admin')->user()->username;
+        return $user_name;
     }
 }

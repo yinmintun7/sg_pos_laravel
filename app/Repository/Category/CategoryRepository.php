@@ -58,6 +58,20 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
     }
 
+    public function getCategoryById(int $id){
+        try{
+            $category = Category::find($id);
+            return $category;
+            $screen   = "GetCategoryById From CategoryRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        }catch(\Exception $e){
+            $screen = "GetCategoryById From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
     public function updateCategory($request)
     {
         try {

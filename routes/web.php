@@ -38,8 +38,11 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
 
     Route::group(['prefix' => 'shift'], function () {
         Route::get('/index', [ShiftController::class, 'index']);
-        Route::get('/start', [ShiftController::class, 'start']);
-        Route::get('/end', [ShiftController::class, 'end']);
+        Route::post('/start', [ShiftController::class, 'start']);
+        Route::post('/end', [ShiftController::class, 'end']);
+        Route::get('start', [ShiftController::class, 'redirectTo404']);
+        Route::get('end', [ShiftController::class, 'redirectTo404']);
+
     });
 
     Route::group(['prefix' => 'category'], function () {
@@ -47,7 +50,7 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         // Route::get('/create', [CategoryController::class, 'create']);
         Route::post('/create', [CategoryController::class, 'create'])->name('storeCategory');
         Route::get('/list', [CategoryController::class, 'getCategory']);
-        Route::get('/edit/{id}', [CategoryController::class, 'categoryEditForm']);
+        Route::get('/edit/{id}', [CategoryController::class, 'editCategory']);
         Route::post('/update', [CategoryController::class, 'updateCategory'])->name('updateCategory');
         Route::post('/delete', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
     });

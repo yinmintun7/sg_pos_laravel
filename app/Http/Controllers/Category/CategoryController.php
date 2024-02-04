@@ -64,10 +64,23 @@ class CategoryController extends Controller
         }
     }
 
-    public function categoryEditForm($id)
+    public function editCategory(int $id)
     {
-        $category = Category::find($id);
-        return view('backend.category.form', compact(['category']));
+        try{
+            $category =$this->CategoryRepository->getCategoryById((int) $id);
+            if($category == null){
+               return response()->view('errors.404',[],404);
+            }
+            $screen   = "GetCategoryById From CategoryController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            return view('backend.category.form', compact(['category']));
+        }catch(\Exception $e){
+            $screen = "GetCategoryById From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
     }
 
     public function updateCategory(CategoryUpdateRequest $request)

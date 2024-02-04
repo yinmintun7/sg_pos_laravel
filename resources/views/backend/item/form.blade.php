@@ -132,7 +132,6 @@
         function fileInput() {
             $('#fileInput').click();
         }
-
         function previewImage(input) {
             const file = input.files[0];
             let fileExtension = file.name.split('.').pop();
