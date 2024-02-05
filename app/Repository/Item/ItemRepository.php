@@ -33,13 +33,13 @@ class ItemRepository implements ItemRepositoryInterface
             $store = Utility::getCreateId((array)$insert_data);
             $create_item = Item::create($store);
             $code_key = '';
-				for ($i = 0; $i <= 3; $i++) {
-					$code_key .= chr(rand(65, 90));
-				}
-				$code_no = $create_item->category_id . $create_item->id . '-' . $code_key;
-				$insert_codeno = Item::find($create_item->id);
-                $confirm_codeno['code_no'] = $code_no;
-                $insert_codeno->update($confirm_codeno);
+            for ($i = 0; $i <= 3; $i++) {
+                $code_key .= chr(rand(65, 90));
+            }
+            $code_no = $create_item->category_id . $create_item->id . '-' . $code_key;
+            $insert_codeno = Item::find($create_item->id);
+            $confirm_codeno['code_no'] = $code_no;
+            $insert_codeno->update($confirm_codeno);
             $destination_path = storage_path('/app/public/upload/item/' . $create_item->id);
             Utility::cropResize($file, $destination_path, $unique_name);
             $returnArray['ResponseStatus'] = ResponseStatus::OK;

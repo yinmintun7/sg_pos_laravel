@@ -5,6 +5,7 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\Shift\ShiftController;
+use App\Http\Controllers\Discount\DiscountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\test\TestController;
 
@@ -22,10 +23,6 @@ use App\Http\Controllers\test\TestController;
 Route::get('/', function () {
     return view('welcome');
 });
-// Route::get('/test', [TestController::class, 'index']);
-// Route::get('/login', [LoginController::class, 'loginForm']);
-// Route::get('/logout', [LoginController::class, 'logout']);
-// Route::post('/login/authLogin', [LoginController::class, 'authLogin'])->name('AuthLogin');
 
 Route::get('/sg-backend/login', [LoginController::class, 'getLoginForm']);
 Route::get('/sg-backend/logout', [LoginController::class, 'logout']);
@@ -47,7 +44,6 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
 
     Route::group(['prefix' => 'category'], function () {
         Route::get('/', [CategoryController::class, 'form']);
-        // Route::get('/create', [CategoryController::class, 'create']);
         Route::post('/create', [CategoryController::class, 'create'])->name('storeCategory');
         Route::get('/list', [CategoryController::class, 'getCategory']);
         Route::get('/edit/{id}', [CategoryController::class, 'editCategory']);
@@ -64,12 +60,13 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::post('/delete', [ItemController::class, 'deleteItem'])->name('deleteItem');
     });
 
+    Route::group(['prefix' => 'discount'], function () {
+        Route::get('/', [DiscountController::class, 'form']);
+        Route::post('/create', [DiscountController::class, 'create'])->name('storeDiscount');
+        Route::get('/list', [DiscountController::class, 'getItems']);
+        Route::get('/edit/{id}', [DiscountController::class, 'itemEditForm']);
+        Route::post('/update', [DiscountController::class, 'updateItem'])->name('updateItem');
+        Route::post('/delete', [DiscountController::class, 'deleteItem'])->name('deleteItem');
+    });
+
 });
-// Route::group(['prefix' => 'test', 'middleware' => 'admin'], function () {
-//     Route::get('/show_form', [TestController::class, 'showForm']);
-//     Route::post('/store_data', [TestController::class, 'storeForm'])->name('StoreForm');
-//     Route::get('/list', [TestController::class, 'showList'])->name('showList');
-//     Route::get('/edit/{id}', [TestController::class, 'editForm']);
-//     Route::post('/update', [TestController::class, 'updateForm'])->name('UpdateForm');
-//     Route::get('/delete/{id}', [TestController::class, 'deleteForm'])->name('DeleteForm');
-// });
