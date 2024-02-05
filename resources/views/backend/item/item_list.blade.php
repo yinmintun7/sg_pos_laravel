@@ -41,7 +41,11 @@
                                                     <input type="checkbox" class="flat" name="table_records">
                                                 </td>
                                                 <td class=" ">{{ $item->name }}</td>
-                                                <td class=" ">{{ $item->category_name }}</td>
+                                                <td class=" ">
+                                                    @if ($item->getCategory() !=null)
+                                                    {{$item->getCategory->name}}
+                                                    @endif
+                                                   </td>
                                                 <td class=" ">{{ $item->price}}</td>
                                                 <td class=" ">{{ $item->quantity}}</td>
                                                 <td class=" ">{{ $item->code_no}}</td>
@@ -60,16 +64,16 @@
                                                 </td>
                                                 <td class="">
                                                     <div class = "row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-5">
                                                             <a href="{{ url('/sg-backend/item/edit/') }}/{{ $item->id }}" class="btn btn-info btn-md">
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <form action="{{ url('/sg-backend/item/delete') }}" method="POST" id="item-form">
+                                                            <form action="{{ url('/sg-backend/item/delete') }}" method="POST" id="item-form-{{ $item->id }}">
                                                                 @csrf
                                                                 <input type="hidden" name="id" value="{{ $item->id }}">
-                                                                <button type="button" class="btn btn-danger btn-md" onclick="confirmDelete('item-form')">
+                                                                <button type="button" class="btn btn-danger btn-md" onclick="confirmDelete('item-form-{{ $item->id }}')">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i> Delete
                                                                 </button>
                                                             </form>
@@ -92,6 +96,5 @@
     @include('layouts.backend.partial.footer_start')
     @include('layouts.backend.partial.footer_end')
     <!-- java script herr -->
-
     @include('layouts.backend.partial.footer_html_end')
 @endsection

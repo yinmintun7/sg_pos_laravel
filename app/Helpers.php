@@ -124,3 +124,14 @@ if (!function_exists('getLoginUser')) {
         return $user_name;
     }
 }
+
+if (!function_exists('lastNoComma')) {
+    function lastNoComma($items){
+       $item_name ='';
+       foreach($items as $item){
+        $item_name .= $item->name .',';
+       }
+       $name = rtrim($item_name,',');
+       return $name;
+    }
+}

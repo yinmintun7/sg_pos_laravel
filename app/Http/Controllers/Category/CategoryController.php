@@ -104,6 +104,7 @@ class CategoryController extends Controller
     }
 
     public function deleteCategory(CategoryDeleteRequest $request)
+
     {
         try {
             $delete_cat = $this->CategoryRepository->deleteCategory((int) $request->id);

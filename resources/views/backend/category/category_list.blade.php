@@ -39,6 +39,7 @@
                                                 </td>
                                                 <td class=" ">{{ $category->name }}</td>
                                                 <td class=" ">{{ $category->parent_name }}</td>
+
                                                 <td class=" ">
                                                     @if ($category->status == 0)
                                                         <span class="badge badge-primary">Enable</span>
@@ -59,11 +60,11 @@
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <form action="{{ url('/sg-backend/category/delete') }}" method="POST" id="category-form">
+                                                        <div class="col-md-6">
+                                                            <form action="{{ url('/sg-backend/category/delete') }}" method="POST" id="category-form-{{ $category->id }}" >
                                                                 @csrf
                                                                 <input type="hidden" name="id" value="{{ $category->id }}">
-                                                                <button type="button" class="btn btn-danger btn-md" onclick="confirmDelete('category-form')">
+                                                                <button type="button" class="btn btn-danger btn-lg" onclick="confirmDelete('category-form-{{$category->id}}')">
                                                                     <i class="fa fa-trash"></i> Delete
                                                                 </button>
                                                             </form>

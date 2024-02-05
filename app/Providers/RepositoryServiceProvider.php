@@ -7,6 +7,8 @@ use App\Repository\Shift\ShiftRepository;
 use App\Repository\Shift\ShiftRepositoryInterface;
 use App\Repository\Category\CategoryRepository;
 use App\Repository\Category\CategoryRepositoryInterface;
+use App\Repository\Discount\DiscountRepository;
+use App\Repository\Discount\DiscountRepositoryInterface;
 use App\Repository\Item\ItemRepository;
 use App\Repository\Item\ItemRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +25,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ShiftRepositoryInterface::class, ShiftRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(ItemRepositoryInterface::class, ItemRepository::class);
+        $this->app->bind(DiscountRepositoryInterface::class, DiscountRepository::class);
     }
 
     /**
