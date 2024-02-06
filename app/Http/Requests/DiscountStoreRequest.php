@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\CashAmountValidate;
 
 class DiscountStoreRequest extends FormRequest
 {
@@ -24,22 +25,33 @@ class DiscountStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name'          => ['required',
-                               Rule::unique('discount_promotion')->where(function ($query) {
-                                   return $query
-                                   ->where('name', $this->name)
-                                   ->whereNull('deleted_at');
-                               }),
-                               ],
-            'amount'       => ['required'],
-            'percentage'   => ['required'],
-            'start_date'   => ['required'],
-            'end_date'     => ['required'],
-
+        $rules = [
+            'name'           => ['required',
+                                  Rule::unique('discount_promotion')->where(function ($query) {
+                                      return $query
+                                          ->where('name', $this->name)
+                                          ->whereNull('deleted_at');
+                                  }),
+            ],
+            'discount_type'  => ['required'],
+            'amount'         => ['required'],
+            'start_date'     => ['required', 'date'],
+            'end_date'       => ['required', 'date', 'after:start_date'],
+            'description'    => ['required'],
+            'item'           => ['required', 'array']
         ];
 
+        if ($this->input('discount_type') == 'percentage') {
+            $rules['amount'] = ['required','numeric', 'max:100'];
+        }
+        if ($this->filled('item')) {
+            if ($this->input('discount_type') == 'cash') {
+                $rules['amount'] = ['required', 'numeric', new CashAmountValidate()];
+            }
+        }
+        return $rules;
     }
+
 
     public function messages()
     {
@@ -47,9 +59,15 @@ class DiscountStoreRequest extends FormRequest
             'name.required'           => 'Please fill category name!',
             'name.unique'             => 'Discount with this name is already created!',
             'amount.required'         => 'Please fill amount for discount!',
-            'amount.required'         => 'Please fill percentage for discount!',
-            'start_date.required'     => 'Please select start date for discount !',
-            'end_date.required'       => 'Please select start date for discount !',
+            'discount_type.required'  => 'Please select discount type
+            !',
+            'start_date.required'     => 'Please select start date for discount!',
+            'end_date.required'       => 'Please select end date for discount!',
+            'end_date.after'          => 'End date must be after the start date!',
+            'item.required'           => 'Please choose item at least one!',
+            'item.array'              => 'Please choose item at least one!',
+            'description.required'    => 'Please write description for this promotion!',
+            'amount.max'              => 'The amount must be less than or equal to 100!',
         ];
 
     }

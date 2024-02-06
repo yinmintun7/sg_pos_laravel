@@ -41,8 +41,6 @@ class DiscountController extends Controller
 
     public function create(DiscountStoreRequest $request)
     {
-        dd($request->all());
-
         try {
             $store = $this->DiscountRepository->create((array) $request->all());
             if ($store['ResponseStatus'] == ResponseStatus::OK) {

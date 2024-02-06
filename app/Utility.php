@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DateTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
@@ -62,5 +63,11 @@ class Utility
                         ->fit(Constant::IMAGE_WIDTH, Constant::IMAGE_HEIGHT)
                         ->encode();
         $modified_image->save($destination_path . '/' . $unique_name);
+    }
+
+    public static function changeTimeToYmdhis($dateString)
+    {
+        $date = DateTime::createFromFormat('m/d/Y', $dateString);
+        return $date->format('Y-m-d H:i:s');
     }
 }
