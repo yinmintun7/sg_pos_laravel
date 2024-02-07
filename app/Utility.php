@@ -2,10 +2,10 @@
 
 namespace App;
 
-use DateTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
+use Carbon\Carbon;
 
 class Utility
 {
@@ -65,9 +65,14 @@ class Utility
         $modified_image->save($destination_path . '/' . $unique_name);
     }
 
-    public static function changeTimeToYmdhis($dateString)
+    public static function changeFormatmdY2Ymd($dateString)
     {
-        $date = DateTime::createFromFormat('m/d/Y', $dateString);
-        return $date->format('Y-m-d H:i:s');
+        $date = Carbon::createFromFormat('m/d/Y', $dateString);
+        return $date->format('Y-m-d');
+    }
+    public static function changeFormatYmd2mdY($dateString)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $dateString);
+        return $date->format('m/d/Y');
     }
 }

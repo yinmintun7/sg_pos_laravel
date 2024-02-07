@@ -17,11 +17,12 @@ class DiscountRepository implements DiscountRepositoryInterface
         $returnArray  = array();
         $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
+            DB::beginTransaction();
             $itemIds = $data['item'];
             $insert_data = [];
             $insert_data['name']          = $data['name'];
-            $insert_data['start_date']    =  Utility::changeTimeToYmdhis($data['start_date']);
-            $insert_data['end_date']      =  Utility::changeTimeToYmdhis($data['end_date']);
+            $insert_data['start_date']    =  Utility::changeFormatmdY2Ymd($data['start_date']);
+            $insert_data['end_date']      =  Utility::changeFormatmdY2Ymd($data['end_date']);
             $insert_data['status']        = $data['status'];
             if ($data['discount_type'] == 'cash') {
                 $insert_data['amount']    = $data['amount'];
@@ -38,9 +39,11 @@ class DiscountRepository implements DiscountRepositoryInterface
                 $store_dis = Utility::getCreateId((array)$discount_items);
                 DiscountItem::create($store_dis);
             }
+            DB::commit();
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
+            DB::rollBack();
             $screen = "CreateDiscount From DiscountRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);

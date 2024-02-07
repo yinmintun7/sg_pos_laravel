@@ -17,8 +17,8 @@ return new class () extends Migration {
             $table->string('name', 100);
             $table->integer('amount')->nullable();
             $table->integer('percentage')->nullable();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->string('description')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->dateTime('created_at');

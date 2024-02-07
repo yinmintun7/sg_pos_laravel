@@ -48,12 +48,12 @@ class DiscountController extends Controller
             } else {
                 return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create Item!']);
             }
-            $screen = "ItemCreate From ItemController::";
+            $screen = "DiscountCreate from DiscountController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
 
         } catch (\Exception $e) {
-            $screen = "ItemCreate From ItemController::";
+            $screen = "DiscountCreate from DiscountController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }

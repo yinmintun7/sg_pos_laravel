@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\CashAmountValidate;
+use App\Rules\DiscountEndExit;
+use App\Rules\DiscountStartExit;
 
 class DiscountStoreRequest extends FormRequest
 {
@@ -35,7 +37,7 @@ class DiscountStoreRequest extends FormRequest
             ],
             'discount_type'  => ['required'],
             'amount'         => ['required'],
-            'start_date'     => ['required', 'date'],
+            'start_date'     => ['required', 'date',new DiscountStartExit()],
             'end_date'       => ['required', 'date', 'after:start_date'],
             'description'    => ['required'],
             'item'           => ['required', 'array']
