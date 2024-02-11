@@ -30,8 +30,8 @@
                     </li>
                     <li><a><i class="fa fa-users" aria-hidden="true"></i> User <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="{{ url('user/create') }}">Create</a></li>
-                            <li><a href="{{ url('user/list') }}">list</a></li>
+                            <li><a href="{{ url('/sg-backend/user/') }}">Create</a></li>
+                            <li><a href="{{ url('/sg-backend/user/list') }}">list</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-list-alt" aria-hidden="true"></i> Category <span class="fa fa-chevron-down"></span></a>

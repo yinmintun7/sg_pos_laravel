@@ -11,6 +11,8 @@ use App\Repository\Discount\DiscountRepository;
 use App\Repository\Discount\DiscountRepositoryInterface;
 use App\Repository\Item\ItemRepository;
 use App\Repository\Item\ItemRepositoryInterface;
+use App\Repository\User\UserRepository;
+use App\Repository\User\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -26,6 +28,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(ItemRepositoryInterface::class, ItemRepository::class);
         $this->app->bind(DiscountRepositoryInterface::class, DiscountRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**

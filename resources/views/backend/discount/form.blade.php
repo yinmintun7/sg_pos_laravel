@@ -123,7 +123,7 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">Description<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea id="description" required="required" class="form-control" name="description" value=""></textarea>
+                                <textarea id="description"  class="form-control" name="description" value=""></textarea>
                             </div>
                             @if ($errors->has('description'))
                                 <span class="errormessage">{{ $errors->first('description') }}</span>

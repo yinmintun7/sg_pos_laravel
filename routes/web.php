@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\Shift\ShiftController;
 use App\Http\Controllers\Discount\DiscountController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\test\TestController;
 
@@ -69,4 +70,12 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::post('/delete', [DiscountController::class, 'deleteItem'])->name('deleteItem');
     });
 
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', [UserController::class, 'form']);
+        Route::post('/create', [UserController::class, 'create'])->name('store');
+        Route::get('/list', [UserController::class, 'list']);
+        Route::get('/edit/{id}', [UserController::class, 'edit']);
+        Route::post('/update', [UserController::class, 'update'])->name('update');
+        Route::post('/delete', [UserController::class, 'delete'])->name('delete');
+    });
 });
