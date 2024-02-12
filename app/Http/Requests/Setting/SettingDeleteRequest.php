@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Setting;
 
 use App\Rules\ShiftCheckRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DiscountDeleteRequest extends FormRequest
+class SettingDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,8 @@ class DiscountDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-           'id'   => ['required','numeric',new ShiftCheckRule()],
-        ];
+            'id'   => ['required','numeric',new ShiftCheckRule()],
+         ];
     }
 
     public function messages()

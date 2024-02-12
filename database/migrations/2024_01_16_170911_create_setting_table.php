@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,11 +14,12 @@ return new class extends Migration
     {
         Schema::create('setting', function (Blueprint $table) {
             $table->id();
-            $table->string('company_name',100);
-            $table->string('company_phone',100);
-            $table->string('company_email',100);
-            $table->string('company_address',100);
-            $table->string('company_logo',150)->nullable();
+            $table->string('company_name', 100);
+            $table->string('company_phone', 100);
+            $table->string('company_email', 100);
+            $table->string('company_address', 100);
+            $table->string('company_logo', 150)->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at');

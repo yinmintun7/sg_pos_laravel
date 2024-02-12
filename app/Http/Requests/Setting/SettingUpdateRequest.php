@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Setting;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SettingStoreRequest extends FormRequest
+class SettingUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,14 @@ class SettingStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'company_name' => [
             'required',
              Rule::unique('setting')->where(function ($query) {
                  return $query
                         ->where('company_name', $this->company_name)
                         ->whereNull('deleted_at');
-             }),
+             })->ignore($this->id),
 
             ],
             'company_phone' => [
@@ -44,13 +44,18 @@ class SettingStoreRequest extends FormRequest
                  return $query
                         ->where('company_email', $this->company_email)
                         ->whereNull('deleted_at');
-             }),
+             })->ignore($this->id),
             ],
             'company_address' => [
              'required'
             ],
-            'company_logo'      => ['required','mimes:png,jpg,jpeg,gif'],
+
          ];
+        if ($this->has('company_logo')) {
+            $rules['company_logo'] = ['required', 'mimes:png,jpg,jpeg,gif'];
+        }
+        return $rules;
+
     }
     public function messages()
     {

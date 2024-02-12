@@ -20,8 +20,11 @@ return new class extends Migration
             $table->tinyInteger('role')
                   ->comment('1=developer,2=admin, 3=cashier');
             $table->tinyInteger('status')->default(0);
+            $table->dateTime('created_at');
             $table->integer('created_by');
+            $table->dateTime('updated_at');
             $table->integer('updated_by');
+            $table->dateTime('deleted_at')->nullable();
             $table->integer('deleted_by')->nullable();
             $table->rememberToken();
             $table->timestamps();

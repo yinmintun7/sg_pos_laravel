@@ -39,6 +39,4 @@ app.controller('myCtrl', function($scope) {
             $scope.password = $scope.password.slice(0, -1);
         }
      }
-  
-   
 });

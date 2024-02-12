@@ -18,6 +18,7 @@
                                 <form class="" action="{{ route('storeDiscount') }}" method="POST">
                         @endif
                         @csrf
+
                         <div class="field item form-group">
                             <label for="name" class="col-form-label col-md-3 col-sm-3  label-align">Discount
                                 Name<span class="required">*</span></label>
@@ -107,9 +108,10 @@
                             <div class="col-md-6 col-sm-6">
                                 @foreach ($items as $item)
                                     <!-- <div class="row"> -->
-                                    <div class="col-md-5">
+                                    <div class="col-md-4">
                                         <input type="checkbox" class="flat" id="{{ $item->name }}" name="item[]"
-                                            value="{{ $item->id }}" />
+                                            value="{{ $item->id }}"
+                                            {{ null !== old('item') ? (in_array($item->id, old('item')) ? 'checked' : '') : (isset($discount) && is_array($discount_items) && in_array($item->id, $discount_items) ? 'checked' : '') }} />
                                         <label for="{{ $item->name }}">{{ $item->name }}</label>
                                     </div>
                                     <!-- </div> -->
@@ -124,7 +126,8 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">Description<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea id="description" required="required" class="form-control" name="description" value=""></textarea>
+                                <textarea id="description" class="form-control" name="description">
+                                    {{ old('description', isset($discount) ? $discount->description : '') }}</textarea>
                             </div>
                             @if ($errors->has('description'))
                                 <span class="errormessage">{{ $errors->first('description') }}</span>

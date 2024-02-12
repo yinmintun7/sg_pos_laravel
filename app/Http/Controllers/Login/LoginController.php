@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
-
 class LoginController extends Controller
 {
     public function __construct()
@@ -77,4 +76,22 @@ class LoginController extends Controller
             abort(500);
         }
     }
+
+
+    public function getFrontendLoginForm()
+    {
+        try {
+
+            // if (Auth::guard('admin')->user() != null) {
+            //     $role = Auth::guard('admin')->user()->role;
+            //     if ($role == Constant::ADMIN_ROLE) {
+            //         return redirect('/sg-frontend/index');
+            //     }
+            // }
+            return view('Login.frontend_login');
+        } catch (\Exception $e) {
+            abort(500);
+        }
+    }
+
 }

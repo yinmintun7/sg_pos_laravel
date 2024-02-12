@@ -1,5 +1,5 @@
 @extends('layouts.backend.master')
-@section('title', 'Discount List')
+@section('title', 'Setting List')
 @section('content')
     <div class="right_col" role="main">
         <div class="">
@@ -7,10 +7,9 @@
                 <div class="col-md-12 col-sm-12  ">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Item List </h2>
+                            <h2>Setting List </h2>
                             <div class="clearfix"></div>
                         </div>
-                        {{-- {{ dd($discounts) }} --}}
                         <div class="x_content">
                             <div class="table-responsive">
                                 <table class="table table-striped jambo_table bulk_action">
@@ -19,12 +18,12 @@
                                             <th>
                                                 <input type="checkbox" id="check-all" class="flat">
                                             </th>
-                                            <th class="column-title">Name </th>
-                                            <th class="column-title">Discount </th>
-                                            <th class="column-title">Start_date </th>
-                                            <th class="column-title">End_date </th>
-                                            <th class="column-title">Items </th>
+                                            <th class="column-title">Company Name </th>
+                                            <th class="column-title">Company Phone </th>
+                                            <th class="column-title">Compnay Email </th>
+                                            <th class="column-title">Compnay Logo </th>
                                             <th class="column-title">Status </th>
+                                            <th class="column-title">Company Address </th>
                                             <th class="column-title no-link last"><span class="nobr">Action</span>
                                             </th>
                                             <th class="bulk-actions" colspan="7">
@@ -35,45 +34,44 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($discounts as $discount)
+                                        @if ($setting)
                                             <tr class="even pointer">
                                                 <td class="a-center ">
                                                     <input type="checkbox" class="flat" name="table_records">
                                                 </td>
-                                                <td class=" ">{{ $discount->name }}</td>
-                                                <td class=" ">{{ $discount->discount_amount }}</td>
-                                                <td class=" ">{{ changeFormatjfY($discount->start_date) }}</td>
-                                                <td class=" ">{{ changeFormatjfY($discount->end_date) }}</td>
+                                                <td class=" ">{{ $setting->company_name }}</td>
+                                                <td class=" ">{{ $setting->company_phone }}</td>
+                                                <td class=" ">{{ $setting->company_email }}</td>
+                                                <td class=" ">{{ $setting->company_address }}</td>
                                                 <td class=" ">
-                                                    @if ($discount->getDiscountItems() != null)
-                                                        @foreach ($discount->getDiscountItems as $key => $discountitem)
-                                                            {{ $discountitem->getItemByDiscountItem->name }}{{ $loop->last ? '' : ',' }}
-                                                        @endforeach
-                                                    @endif
-                                                </td>
-                                                <td class=" ">
-                                                    @if ($discount->status == 0)
+                                                    @if ($setting->status == 0)
                                                         <span class="badge badge-primary">Enable</span>
                                                     @else
                                                         <span class="badge badge-secondary">Disable</span>
                                                     @endif
                                                 </td>
                                                 <td class="">
+                                                    <div class="" style="width: 100px; height: 100px;">
+                                                        <img src="{{ asset('storage/upload/setting/' . $setting->company_logo) }}"
+                                                            alt="" style="width: 100%; height: 100%;" />
+                                                    </div>
+                                                </td>
+                                                <td class="">
                                                     <div class = "row">
                                                         <div class="col-md-5">
-                                                            <a href="{{ url('/sg-backend/discount/edit/') }}/{{ $discount->id }}"
+                                                            <a href="{{ url('/sg-backend/setting/edit/') }}"
                                                                 class="btn btn-info btn-md">
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <form action="{{ url('/sg-backend/discount/delete') }}"
-                                                                method="POST" id="discount-form-{{ $discount->id }}">
+                                                            <form action="{{ url('/sg-backend/setting/delete') }}"
+                                                                method="POST" id="setting-form-{{ $setting->id }}">
                                                                 @csrf
                                                                 <input type="hidden" name="id"
-                                                                    value="{{ $discount->id }}">
+                                                                    value="{{ $setting->id }}">
                                                                 <button type="button" class="btn btn-danger btn-md"
-                                                                    onclick="confirmDelete('discount-form-{{ $discount->id }}')">
+                                                                    onclick="confirmDelete('setting-form-{{ $setting->id }}')">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i> Delete
                                                                 </button>
                                                             </form>
@@ -81,10 +79,9 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
-                                {!! $discounts->links('pagination::bootstrap-5') !!}
                             </div>
                         </div>
                     </div>

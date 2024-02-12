@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Discount;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\CashAmountValidate;
 use App\Rules\CheckDiscountDate;
 
-class DiscountStoreRequest extends FormRequest
+class DiscountUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,7 +31,7 @@ class DiscountStoreRequest extends FormRequest
                                       return $query
                                           ->where('name', $this->name)
                                           ->whereNull('deleted_at');
-                                  }),
+                                  })->ignore($this->id),
             ],
             'discount_type'  => ['required'],
             'amount'         => ['required'],
@@ -53,6 +52,7 @@ class DiscountStoreRequest extends FormRequest
         return $rules;
     }
 
+
     public function messages()
     {
         return [
@@ -60,7 +60,7 @@ class DiscountStoreRequest extends FormRequest
             'name.unique'             => 'Discount with this name is already created!',
             'amount.required'         => 'Please fill amount for discount!',
             'discount_type.required'  => 'Please select discount type
-            !',
+                !',
             'start_date.required'     => 'Please select start date for discount!',
             'end_date.required'       => 'Please select end date for discount!',
             'end_date.after'          => 'End date must be after the start date!',
@@ -71,4 +71,5 @@ class DiscountStoreRequest extends FormRequest
         ];
 
     }
+
 }

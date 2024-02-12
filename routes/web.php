@@ -7,6 +7,8 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\Shift\ShiftController;
 use App\Http\Controllers\Discount\DiscountController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Order\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\test\TestController;
 
@@ -24,6 +26,12 @@ use App\Http\Controllers\test\TestController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/sg-frontend/login', [LoginController::class, 'getFrontendLoginForm']);
+Route::post('/postFrontendlogin', [LoginController::class, 'postFrontendlogin'])->name('frontendLogin');
+Route::get('/sg-frontend/order-list', [OrderController::class, 'orderList']);
+Route::get('/sg-frontend/logout', [LoginController::class, 'logout']);
+Route::get('/sg-frontend/unauthorze', [LoginController::class, 'unauthorize']);
+
 
 Route::get('/sg-backend/login', [LoginController::class, 'getLoginForm']);
 Route::get('/sg-backend/logout', [LoginController::class, 'logout']);
@@ -66,17 +74,25 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::post('/create', [DiscountController::class, 'create'])->name('storeDiscount');
         Route::get('/list', [DiscountController::class, 'getDiscount']);
         Route::get('/edit/{id}', [DiscountController::class, 'edit']);
-        Route::post('/update', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
-        Route::post('/delete', [DiscountController::class, 'delete'])->name('delete');
+        Route::post('/update', [DiscountController::class, 'update'])->name('updateDiscount');
+        Route::post('/delete', [DiscountController::class, 'delete']);
     });
 
     Route::group(['prefix' => 'setting'], function () {
         Route::get('/', [SettingController::class, 'form']);
         Route::post('/create', [SettingController::class, 'create'])->name('storeSetting');
-        Route::get('/list', [DiscountController::class, 'getDiscount']);
-        Route::get('/edit/{id}', [DiscountController::class, 'edit']);
-        Route::post('/update', [DiscountController::class, 'update'])->name('updateSetting');
-        Route::post('/delete', [DiscountController::class, 'delete'])->name('delete');
+        Route::get('/list', [SettingController::class, 'list']);
+        Route::get('/edit', [SettingController::class, 'edit']);
+        Route::post('/update', [SettingController::class, 'update'])->name('updateSetting');
+        Route::post('/delete', [SettingController::class, 'delete']);
     });
 
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', [UserController::class, 'form']);
+        Route::post('/create', [UserController::class, 'create'])->name('storeUser');
+        Route::get('/list', [UserController::class, 'list']);
+        Route::get('/edit/{id}', [UserController::class, 'edit']);
+        Route::post('/update', [UserController::class, 'update'])->name('updateUser');
+        Route::post('/delete', [UserController::class, 'delete'])->name('delete');
+    });
 });

@@ -1,5 +1,5 @@
 @extends('layouts.backend.master')
-@section('title', isset($category) ? 'Category Update' : 'Category Create')
+@section('title', isset($setting) ? 'Setting Update' : 'Setting Create')
 @section('content')
     <div class="right_col" role="main">
         <div class="">
@@ -14,7 +14,7 @@
                             @if (@isset($setting))
                                 <form class="" action="{{ route('updateSetting') }}" method="POST"
                                     enctype="multipart/form-data" novalidate>
-                                    <input type="hidden" id="id" name="id" value="{{ $category->id }}">
+                                    <input type="hidden" id="id" name="id" value="{{ $setting->id }}">
                                 @else
                                     <form class="" action="{{ route('storeSetting') }}" method="POST"
                                         enctype="multipart/form-data" novalidate>
@@ -64,10 +64,10 @@
                                     <select id="Status" name = "status" class="select2_group form-control">
                                         <option value=""></option>
                                         <option value="0"
-                                            {{ isset($category) && $category->status == '0' ? 'selected' : '' }}>Enable
+                                            {{ isset($setting) && $setting->status == '0' ? 'selected' : '' }}>Enable
                                         </option>
                                         <option value="1"
-                                            {{ isset($category) && $category->status == '1' ? 'selected' : '' }}>Disable
+                                            {{ isset($setting) && $setting->status == '1' ? 'selected' : '' }}>Disable
                                         </option>
                                     </select>
                                 </div>
@@ -76,14 +76,14 @@
                                 <label for= "image" class="col-form-label col-md-3 col-sm-3  label-align">Category
                                     Image<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <div id="previous_wrapper" style="display: {{ isset($category) ? 'none' : 'block' }}">
+                                    <div id="previous_wrapper" style="display: {{ isset($setting) ? 'none' : 'block' }}">
 
                                         <label class="chooseFile" for="upload" onclick = "fileInput()">Upload</label>
                                     </div>
                                     <div id="previous_wrapper-img"
-                                        style="display: {{ isset($category) ? 'block' : 'none' }}">
+                                        style="display: {{ isset($setting) ? 'block' : 'none' }}">
                                         <div class="vertical-center">
-                                            <img src="{{ isset($category) ? asset('storage/upload/category/' . $category->id . '/' . $category->image) : '' }}"
+                                            <img src="{{ isset($setting) ? asset('storage/upload/setting/' . $setting->company_logo) : '' }}"
                                                 id="company_logo" alt="" style="width:100%;">
                                             <label class="chooseFile" for="upload" onclick = "fileInput()">Upload</label>
                                         </div>

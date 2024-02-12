@@ -153,3 +153,15 @@ if (!function_exists('changeFormatjfY')) {
         return Carbon::parse($dateString)->format('jF Y');
     }
 }
+if (!function_exists('getAdminRole')) {
+    function getAdminRole()
+    {
+        return Constant::ADMIN_ROLE;
+    }
+}
+if (!function_exists('getCashierRole')) {
+    function getCashierRole()
+    {
+        return Constant::CASHIER_ROLE;
+    }
+}

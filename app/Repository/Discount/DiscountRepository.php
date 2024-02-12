@@ -29,6 +29,7 @@ class DiscountRepository implements DiscountRepositoryInterface
             } else {
                 $insert_data['percentage']    = $data['amount'];
             };
+
             $store = Utility::getCreateId((array)$insert_data);
             $create_discount = DiscountPromotion::create($store);
             $discount_id = $create_discount->id;
@@ -82,55 +83,90 @@ class DiscountRepository implements DiscountRepositoryInterface
         }
     }
 
-    // public function updateCategory($request)
-    // {
-    //     try {
-    //         $id = $request['id'];
-    //         $name = $request['name'];
-    //         $parent_id = $request['parent_id'];
-    //         $status = $request['status'];
-    //         $update_data = [];
-    //         $update = Category::find($id);
-    //         if (array_key_exists('image', $request)) {
-    //             $name_without_extension = pathinfo($request['image']->getClientOriginalName(), PATHINFO_FILENAME);
-    //             $extension = $request['image']->getClientOriginalExtension();
-    //             $unique_name = $name_without_extension . '-' . now()->format('Y-m-d_His') . '-' . uniqid() . '.' . $extension;
-    //             $destination_path = storage_path('/app/public/upload/category/' . $id);
-    //             Utility::cropResize($request['image'], $destination_path, $unique_name);
-    //             $update_data['image'] = $unique_name;
-    //             $old_image     = storage_path('/app/public/upload/category/' . $id.'/'.$update->image);
-    //             unlink($old_image);
+    public function getItemByDiscountId(int $id)
+    {
+        try {
+            $data = [];
+            $discount_items = DiscountItem::SELECT("item_id")
+                          ->where('discount_id', $id)
+                          ->whereNull('deleted_at')
+                          ->where('status', Constant::ENABLE_STATUS)
+                          ->get();
+            foreach ($discount_items as $item) {
+                array_push($data, $item->item_id);
+            }
+            return $data;
+            $screen   = "getItemByDiscountId From DiscountRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "getItemByDiscountId From DiscountRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 
-    //         }
-    //         $update_data['name']      = $name;
-    //         $update_data['parent_id'] = $parent_id;
-    //         $update_data['status']    = $status;
-    //         $confirm_update = Utility::getUpdateId((array)$update_data);
-    //         $update->update($confirm_update);
-    //         $screen   = "UpdateCategory From Category Form Screen::";
-    //         $queryLog = DB::getQueryLog();
-    //         Utility::saveDebugLog($screen, $queryLog);
-    //         $returnArray['ResponseStatus'] = ResponseStatus::OK;
-    //         return $returnArray;
+    public function update($request)
+    {
+        try {
+            DB::beginTransaction();
+            $update_data = [];
+            $itemIds = $request['item'];
+            $id = $request['id'];
+            $update_data['name']          = $request['name'];
+            $update_data['start_date']    =  Utility::changeFormatmdY2Ymd($request['start_date']);
+            $update_data['end_date']      =  Utility::changeFormatmdY2Ymd($request['end_date']);
+            $update_data['status']        = $request['status'];
+            if ($request['discount_type'] == 'cash') {
+                $update_data['amount']    = $request['amount'];
+            } else {
+                $update_data['percentage']    = $request['amount'];
+            };
+            $update_data['description']          = $request['description'];
 
-    //     } catch (\Exception $e) {
-    //         $screen = "UpdateCategory From CategoryRepository::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
-    // }
+            $update = DiscountPromotion::find($id);
+            $confirm_update = Utility::getUpdateId((array)$update_data);
+            $update->update($confirm_update);
+            DiscountItem::where('discount_id', $id)->delete();
+            $discount_items = [];
+            foreach ($itemIds as $itemId) {
+                $discount_items['item_id']  = $itemId;
+                $discount_items['discount_id'] = $id;
+                $store_dis = Utility::getCreateId((array)$discount_items);
+                DiscountItem::create($store_dis);
+            }
+            DB::commit();
+            $screen   = "UpdateCategory From Category Form Screen::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            $returnArray['ResponseStatus'] = ResponseStatus::OK;
+            return $returnArray;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $screen = "UpdateCategory From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 
     public function delete($id)
     {
         try {
+            DB::beginTransaction();
             $delete_data = [];
             $delete = DiscountPromotion::find($id);
             $confirm_delete = Utility::getDeletedId((array)$delete_data);
             $delete->update($confirm_delete);
-
+            $delete_dis = [];
+            $delete_dis_item = DiscountItem::where('discount_id', $id);
+            $confirm_delete = Utility::getDeletedId((array)$delete_dis);
+            $delete_dis_item->update($confirm_delete);
+            DB::commit();
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
+            DB::rollBack();
             $screen = "DeleteCategory From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
