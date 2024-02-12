@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DiscountItem extends Model
 {
@@ -23,4 +25,15 @@ class DiscountItem extends Model
         'deleted_by',
 
     ];
+
+    public function getDiscountPromotion(): BelongsTo
+    {
+        return $this->belongsTo(DiscountPromotion::class, 'discount_id', 'id');
+    }
+
+    public function getItemByDiscountItem(): BelongsTo
+    {
+        return $this->belongsTo(Item::class, 'item_id', 'id');
+    }
+
 }

@@ -10,6 +10,7 @@
                             <h2>Item List </h2>
                             <div class="clearfix"></div>
                         </div>
+                        {{-- {{ dd($discounts) }} --}}
                         <div class="x_content">
                             <div class="table-responsive">
                                 <table class="table table-striped jambo_table bulk_action">
@@ -34,45 +35,45 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($items as $item)
+                                        @foreach ($discounts as $discount)
                                             <tr class="even pointer">
                                                 <td class="a-center ">
                                                     <input type="checkbox" class="flat" name="table_records">
                                                 </td>
-                                                <td class=" ">{{ $item->name }}</td>
+                                                <td class=" ">{{ $discount->name }}</td>
+                                                <td class=" ">{{ $discount->discount_amount }}</td>
+                                                <td class=" ">{{ changeFormatjfY($discount->start_date) }}</td>
+                                                <td class=" ">{{ changeFormatjfY($discount->end_date) }}</td>
                                                 <td class=" ">
-                                                    @if ($item->getCategory() !=null)
-                                                    {{$item->getCategory->name}}
+                                                    @if ($discount->getDiscountItems() != null)
+                                                        @foreach ($discount->getDiscountItems as $key => $discountitem)
+                                                            {{ $discountitem->getItemByDiscountItem->name }}{{ $loop->last ? '' : ',' }}
+                                                        @endforeach
                                                     @endif
-                                                   </td>
-                                                <td class=" ">{{ $item->price}}</td>
-                                                <td class=" ">{{ $item->quantity}}</td>
-                                                <td class=" ">{{ $item->code_no}}</td>
+                                                </td>
                                                 <td class=" ">
-                                                    @if ($item->status == 0)
+                                                    @if ($discount->status == 0)
                                                         <span class="badge badge-primary">Enable</span>
                                                     @else
                                                         <span class="badge badge-secondary">Disable</span>
                                                     @endif
                                                 </td>
                                                 <td class="">
-                                                    <div class="" style="width: 100px; height: 100px;">
-                                                        <img src="{{ asset('storage/upload/item/' . $item->id . '/' . $item->image) }}"
-                                                            alt="" style="width: 100%; height: 100%;" />
-                                                    </div>
-                                                </td>
-                                                <td class="">
                                                     <div class = "row">
                                                         <div class="col-md-5">
-                                                            <a href="{{ url('/sg-backend/item/edit/') }}/{{ $item->id }}" class="btn btn-info btn-md">
+                                                            <a href="{{ url('/sg-backend/discount/edit/') }}/{{ $discount->id }}"
+                                                                class="btn btn-info btn-md">
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <form action="{{ url('/sg-backend/item/delete') }}" method="POST" id="item-form-{{ $item->id }}">
+                                                            <form action="{{ url('/sg-backend/discount/delete') }}"
+                                                                method="POST" id="item-form-{{ $discount->id }}">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $item->id }}">
-                                                                <button type="button" class="btn btn-danger btn-md" onclick="confirmDelete('item-form-{{ $item->id }}')">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $discount->id }}">
+                                                                <button type="button" class="btn btn-danger btn-md"
+                                                                    onclick="confirmDelete('item-form-{{ $discount->id }}')">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i> Delete
                                                                 </button>
                                                             </form>
@@ -83,7 +84,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {!! $items->links('pagination::bootstrap-5') !!}
+                                {!! $discounts->links('pagination::bootstrap-5') !!}
                             </div>
                         </div>
                     </div>

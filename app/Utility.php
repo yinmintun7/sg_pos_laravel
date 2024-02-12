@@ -75,4 +75,5 @@ class Utility
         $date = Carbon::createFromFormat('Y-m-d', $dateString);
         return $date->format('m/d/Y');
     }
+
 }

@@ -35,10 +35,10 @@
                             <div class="col-md-6 col-sm-6">
                                 <div style="margin-top:9px;">
                                     <input type="radio" id="percentage" name="discount_type" value="percentage"
-                                        {{ old('discount_type') == 'percentage' ? 'checked' : '' }} />
+                                        {{ old('discount_type') == 'percentage' || (isset($discount) && $discount->percentage != null) ? 'checked' : '' }} />
                                     <label for="percentage">Percentage</label>
                                     <input type="radio" id="cash" name="discount_type" value="cash"
-                                        {{ old('discount_type') == 'cash' ? 'checked' : '' }} />
+                                        {{ old('discount_type') == 'cash' || (isset($discount) && $discount->amount != null) ? 'checked' : '' }} />
                                     <label for="cash">Cash</label>
                                 </div>
                             </div>
@@ -49,7 +49,8 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input type="number" class="form-control" id="amount" name="amount"
-                                    value="{{ old('amount', isset($discount) ? $discount->amount : '') }}" />
+                                    value="{{ old('amount', isset($discount) && $discount->amount != null ? $discount->amount : $discount->percentage ?? '') }}" />
+
                             </div>
                             @if ($errors->has('amount'))
                                 <span class="errormessage">{{ $errors->first('amount') }}</span>
@@ -62,10 +63,10 @@
                                 <select id="Status" name = "status" class="select2_group form-control">
                                     <option value=""></option>
                                     <option value="0"
-                                        {{ old('status') == '0' || (isset($category) && $category->status == '0') ? 'selected' : '' }}>
+                                        {{ old('status') == '0' || (isset($discount) && $discount->status == '0') ? 'selected' : '' }}>
                                         Enable</option>
                                     <option value="1"
-                                        {{ old('status') == '1' || (isset($category) && $category->status == '1') ? 'selected' : '' }}>
+                                        {{ old('status') == '1' || (isset($discount) && $discount->status == '1') ? 'selected' : '' }}>
                                         Disable</option>
                                 </select>
                             </div>
@@ -76,7 +77,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <input type="text" class="form-control has-feedback-left" name="start_date"
                                     id="start_date"
-                                    value="{{ old('start_date', isset($discount) ? $discount->start_date : '') }}"
+                                    value="{{ old('start_date', isset($discount) ? changeFormatmdY($discount->start_date) : '') }}"
                                     aria-describedby="inputSuccess2Status">
                                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                 <span id="inputSuccess2Status" class="sr-only">(success)</span>
@@ -90,7 +91,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input type="text" class="form-control has-feedback-left" name="end_date" id="end_date"
-                                    value="{{ old('end_date', isset($discount) ? $discount->end_date : '') }}"
+                                    value="{{ old('end_date', isset($discount) ? changeFormatmdY($discount->end_date) : '') }}"
                                     aria-describedby="inputSuccess2Status2">
                                 <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                 <span id="inputSuccess2Status2" class="sr-only">(success)</span>

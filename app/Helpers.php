@@ -4,6 +4,7 @@ use App\Constant;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
+use Carbon\Carbon;
 
 if (!function_exists('getParentCategory')) {
     function getParentCategory($parent_id, $screen)
@@ -119,19 +120,36 @@ if (!function_exists('checkChildCategoryExit')) {
 }
 
 if (!function_exists('getLoginUser')) {
-    function getLoginUser(){
+    function getLoginUser()
+    {
         $user_name    = Auth::guard('admin')->user()->username;
         return $user_name;
     }
 }
 
 if (!function_exists('lastNoComma')) {
-    function lastNoComma($items){
-       $item_name ='';
-       foreach($items as $item){
-        $item_name .= $item->name .',';
-       }
-       $name = rtrim($item_name,',');
-       return $name;
+    function lastNoComma($items)
+    {
+        $item_name = '';
+        foreach ($items as $item) {
+            $item_name .= $item->name .',';
+        }
+        $name = rtrim($item_name, ',');
+        return $name;
+    }
+}
+
+if (!function_exists('changeFormatmdY')) {
+    function changeFormatmdY($dateString)
+    {
+        $date = Carbon::parse($dateString);
+        return $date->format('m/d/Y');
+    }
+}
+
+if (!function_exists('changeFormatjfY')) {
+    function changeFormatjfY($dateString)
+    {
+        return Carbon::parse($dateString)->format('jF Y');
     }
 }

@@ -37,7 +37,7 @@ class DiscountStoreRequest extends FormRequest
             ],
             'discount_type'  => ['required'],
             'amount'         => ['required'],
-            'start_date'     => ['required', 'date',new DiscountStartExit()],
+            'start_date'     => ['required', 'date'],
             'end_date'       => ['required', 'date', 'after:start_date'],
             'description'    => ['required'],
             'item'           => ['required', 'array']
@@ -48,7 +48,7 @@ class DiscountStoreRequest extends FormRequest
         }
         if ($this->filled('item')) {
             if ($this->input('discount_type') == 'cash') {
-                $rules['amount'] = ['required', 'numeric', new CashAmountValidate()];
+                $rules['amount'] = ['required', 'numeric'];
             }
         }
         return $rules;

@@ -50,39 +50,37 @@ class DiscountRepository implements DiscountRepositoryInterface
         }
     }
 
-    // public function getCategory()
-    // {
-    //     try {
-    //         $categories = [];
-    //         $categories = Category::from('category as c')
-    //         ->select('c.id', 'c.name', 'c.parent_id', 'c.status', 'c.image')
-    //         ->leftJoin('category as p', 'c.parent_id', '=', 'p.id')
-    //         ->whereNull('c.deleted_at')
-    //         ->orderByDesc('c.id')
-    //         ->addSelect(DB::raw('COALESCE(p.name, "None") as parent_name'))
-    //         ->paginate(10);
-    //         return $categories;
-    //     } catch (\Exception $e) {
-    //         $screen = "GetCategory From Category Form Screen::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
-    // }
+    public function getDiscount()
+    {
+        try {
+            $discount_items = [];
+            $discount_items = DiscountPromotion::select('id', 'name', DB::raw("CASE WHEN amount IS NULL THEN CONCAT(percentage, '%') ELSE CONCAT(amount, ' kyats') END as discount_amount"), 'start_date', 'end_date', 'description', 'status')
+                        ->whereNull('deleted_at')
+                        ->orderByDesc('id')
+                        ->paginate(10);
 
-    // public function getCategoryById(int $id)
-    // {
-    //     try {
-    //         $category = Category::find($id);
-    //         return $category;
-    //         $screen   = "GetCategoryById From CategoryRepository::";
-    //         $queryLog = DB::getQueryLog();
-    //         Utility::saveDebugLog($screen, $queryLog);
-    //     } catch (\Exception $e) {
-    //         $screen = "GetCategoryById From CategoryRepository::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
-    // }
+            return $discount_items;
+        } catch (\Exception $e) {
+            $screen = "GetCategory From Category Form Screen::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
+    public function getDiscountById(int $id)
+    {
+        try {
+            $discount_item = DiscountPromotion::find($id);
+            return $discount_item;
+            $screen   = "GetDiscountById From DiscountRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "GetDiscountById From DiscountRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 
     // public function updateCategory($request)
     // {
@@ -122,19 +120,20 @@ class DiscountRepository implements DiscountRepositoryInterface
     //     }
     // }
 
-    // public function deleteCategory($id)
-    // {
-    //     try {
-    //         $delete_data = [];
-    //         $delete = Category::find($id);
-    //         $confirm_delete = Utility::getDeletedId((array)$delete_data);
-    //         $delete->update($confirm_delete);
-    //         $returnArray['ResponseStatus'] = ResponseStatus::OK;
-    //         return $returnArray;
-    //     } catch (\Exception $e) {
-    //         $screen = "DeleteCategory From CategoryRepository::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
-    // }
+    public function delete($id)
+    {
+        try {
+            $delete_data = [];
+            $delete = DiscountPromotion::find($id);
+            $confirm_delete = Utility::getDeletedId((array)$delete_data);
+            $delete->update($confirm_delete);
+
+            $returnArray['ResponseStatus'] = ResponseStatus::OK;
+            return $returnArray;
+        } catch (\Exception $e) {
+            $screen = "DeleteCategory From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 }

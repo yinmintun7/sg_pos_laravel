@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Item\ItemController;
+use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Login\LoginController;
@@ -63,10 +64,19 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
     Route::group(['prefix' => 'discount'], function () {
         Route::get('/', [DiscountController::class, 'form']);
         Route::post('/create', [DiscountController::class, 'create'])->name('storeDiscount');
-        Route::get('/list', [DiscountController::class, 'getItems']);
-        Route::get('/edit/{id}', [DiscountController::class, 'itemEditForm']);
-        Route::post('/update', [DiscountController::class, 'updateItem'])->name('updateItem');
-        Route::post('/delete', [DiscountController::class, 'deleteItem'])->name('deleteItem');
+        Route::get('/list', [DiscountController::class, 'getDiscount']);
+        Route::get('/edit/{id}', [DiscountController::class, 'edit']);
+        Route::post('/update', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
+        Route::post('/delete', [DiscountController::class, 'delete'])->name('delete');
+    });
+
+    Route::group(['prefix' => 'setting'], function () {
+        Route::get('/', [SettingController::class, 'form']);
+        Route::post('/create', [SettingController::class, 'create'])->name('storeSetting');
+        Route::get('/list', [DiscountController::class, 'getDiscount']);
+        Route::get('/edit/{id}', [DiscountController::class, 'edit']);
+        Route::post('/update', [DiscountController::class, 'update'])->name('updateSetting');
+        Route::post('/delete', [DiscountController::class, 'delete'])->name('delete');
     });
 
 });

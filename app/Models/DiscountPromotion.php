@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class DiscountPromotion extends Model
 {
     use HasFactory;
@@ -27,4 +27,8 @@ class DiscountPromotion extends Model
         'deleted_by',
 
     ];
+    public function getDiscountItems():HasMany
+    {
+        return $this->hasMany(DiscountItem::class,'discount_id','id');
+    }
 }

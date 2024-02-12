@@ -7,7 +7,7 @@ use App\ResponseStatus;
 use App\Utility;
 use App\Http\Requests\DiscountStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
-use App\Http\Requests\ItemDeleteRequest;
+use App\Http\Requests\DiscountDeleteRequest;
 use App\Repository\Discount\DiscountRepositoryInterface;
 use App\Repository\Item\ItemRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +44,7 @@ class DiscountController extends Controller
         try {
             $store = $this->DiscountRepository->create((array) $request->all());
             if ($store['ResponseStatus'] == ResponseStatus::OK) {
-                return redirect('/sg-backend/item/list')->with('success', 'Success! Item created!');
+                return redirect('/sg-backend/discount/list')->with('success', 'Success! Item created!');
             } else {
                 return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create Item!']);
             }
@@ -60,26 +60,46 @@ class DiscountController extends Controller
 
     }
 
-    // public function getItems()
-    // {
-    //     try {
-    //         $items = $this->ItemRepository->getItems();
-    //         $screen = "GetItems From ItemController::";
-    //         $queryLog = DB::getQueryLog();
-    //         Utility::saveDebugLog($screen, $queryLog);
-    //         return view('backend.item.item_list', compact(['items']));
-    //     } catch (\Exception $e) {
-    //         $screen = "GetItems From ItemController::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
-    // }
+    public function getDiscount()
+    {
+        try {
+            $discounts = $this->DiscountRepository->getDiscount();
+            // dd($discount_items);
+            $screen = "GetItems From ItemController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            return view('backend.discount.discount_list', compact(['discounts']));
+            $screen = "GetDiscount from DiscountController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "GetDiscount from DiscountController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 
-    // public function itemEditForm($id)
-    // {
-    //     $item = Item::find($id);
-    //     return view('backend.item.form', compact(['item']));
-    // }
+
+    public function edit(int $id)
+    {
+        try {
+            $discount = $this->DiscountRepository->getDiscountById((int) $id);
+            if ($discount == null) {
+                return response()->view('errors.404', [], 404);
+            }
+            //dd($discount);
+            $items = $this->ItemRepository->getItems();
+            $screen   = "GetCategoryById From CategoryController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            return view('backend.discount.form', compact(['discount','items']));
+        } catch (\Exception $e) {
+            $screen = "GetCategoryById From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
 
     // public function updateItem(ItemUpdateRequest $request)
     // {
@@ -102,25 +122,25 @@ class DiscountController extends Controller
 
     // }
 
-    // public function deleteItem(ItemDeleteRequest $request)
-    // {
+    public function delete(DiscountDeleteRequest $request)
+    {
 
-    //     try {
-    //         $delete_item = $this->ItemRepository->deleteItem((int) $request->id);
-    //         if ($delete_item['ResponseStatus'] == ResponseStatus::OK) {
-    //             return redirect()->back()->with(['success' => 'Success!,item is deleted!']);
-    //         } else {
-    //             return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot delete item!']);
-    //         }
-    //         $screen = "DeleteItem From ItemController::";
-    //         $queryLog = DB::getQueryLog();
-    //         Utility::saveDebugLog($screen, $queryLog);
-    //     } catch (\Exception $e) {
-    //         $screen = "DeleteItem From ItemController::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
-    // }
+        try {
+            $delete_item = $this->DiscountRepository->delete((int) $request->id);
+            if ($delete_item['ResponseStatus'] == ResponseStatus::OK) {
+                return redirect()->back()->with(['success' => 'Success!,DiscountPromotion is deleted!']);
+            } else {
+                return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot delete DiscountPromotion!']);
+            }
+            $screen = "DeleteDiscountPromotion From ItemController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "DeleteDiscountPromotion From ItemController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 
 
 }
