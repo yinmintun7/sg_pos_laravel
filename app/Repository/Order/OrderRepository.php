@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Category;
+namespace App\Repository\Order;
 
 use App\Constant;
 use App\Models\Category;
@@ -8,10 +8,8 @@ use App\Utility;
 use App\ResponseStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
 
-class CategoryRepository implements CategoryRepositoryInterface
+class OrderRepository implements OrderRepositoryInterface
 {
     public function create(array $data)
     {
@@ -68,23 +66,6 @@ class CategoryRepository implements CategoryRepositoryInterface
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             $screen = "GetCategoryById From CategoryRepository::";
-            Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
-        }
-    }
-    public function getCategoryByParentId(int $id)
-    {
-        try {
-            $categories = Category::where('parent_id', $id)
-                        ->whereNull('deleted_at')
-                        ->where('status', Constant::ENABLE_STATUS)
-                        ->get();
-            $screen   = "getCategoryByParentId From CategoryRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
-            return $categories;
-        } catch (\Exception $e) {
-            $screen = "getCategoryByParentId From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }

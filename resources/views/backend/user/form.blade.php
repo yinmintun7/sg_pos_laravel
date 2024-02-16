@@ -54,8 +54,7 @@
                                 <label for="password" class="col-form-label col-md-3 col-sm-3  label-align">Password<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input id="password" class="form-control" name="password"
-                                        value="{{ old('password', isset($user) ? $user->password : '') }}" />
+                                    <input id="password" class="form-control" name="password" {{-- value="{{ old('password', isset($user) ? $user->password : '') }}" --}} />
                                 </div>
                                 @if ($errors->has('password'))
                                     <span class="errormessage">{{ $errors->first('password') }}</span>

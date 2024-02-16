@@ -6,6 +6,7 @@ use App\Constant;
 use App\Utility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminAuthRequest;
+use App\Http\Requests\CashierAuthRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -94,4 +95,28 @@ class LoginController extends Controller
         }
     }
 
+
+    public function postFrontendlogin(CashierAuthRequest $request)
+    {
+        try {
+            $auth = Auth::guard('admin')->attempt([
+                'username' => $request->username,
+                'password' => $request->password,
+            ]);
+            $screen = "Post Login Form";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+
+            if ($auth) {
+                return redirect('/order-list');
+            } else {
+                return redirect()->back()->withErrors(['login_error' => 'Wrong Credential!'])->withInput();
+            }
+        } catch (\Exception $e) {
+
+            $screen = "Post Login Form";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 }

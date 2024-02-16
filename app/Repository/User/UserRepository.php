@@ -66,37 +66,29 @@ class UserRepository implements UserRepositoryInterface
     }
     public function update($request)
     {
+
         try {
             $id = $request['id'];
-            $name = $request['name'];
-            $parent_id = $request['parent_id'];
-            $status = $request['status'];
             $update_data = [];
-            $update = User::find($id);
-            if (array_key_exists('image', $request)) {
-                $name_without_extension = pathinfo($request['image']->getClientOriginalName(), PATHINFO_FILENAME);
-                $extension = $request['image']->getClientOriginalExtension();
-                $unique_name = $name_without_extension . '-' . now()->format('Y-m-d_His') . '-' . uniqid() . '.' . $extension;
-                $destination_path = storage_path('/app/public/upload/category/' . $id);
-                Utility::cropResize($request['image'], $destination_path, $unique_name);
-                $update_data['image'] = $unique_name;
-                $old_image     = storage_path('/app/public/upload/category/' . $id.'/'.$update->image);
-                unlink($old_image);
-
+            $update_data['username'] = $request['username'];
+            $update_data['password'] = bcrypt($request['password']);
+            $update_data['status']   = $request['status'];
+            if ($request['usertype'] == 'admin') {
+                $update_data['role'] = Constant::ADMIN_ROLE;
             }
-            $update_data['name']      = $name;
-            $update_data['parent_id'] = $parent_id;
-            $update_data['status']    = $status;
+            if ($request['usertype'] == 'cashier') {
+                $update_data['role'] = Constant::CASHIER_ROLE;
+            }
+            $update = User::find($id);
             $confirm_update = Utility::getUpdateId((array)$update_data);
             $update->update($confirm_update);
-            $screen   = "UpdateCategory From Category Form Screen::";
+            $screen   = "UpdateUser From UserRepository::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
-
         } catch (\Exception $e) {
-            $screen = "UpdateCategory From CategoryRepository::";
+            $screen = "UpdateUser From UserRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }

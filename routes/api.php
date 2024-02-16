@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Login\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/postFrontendlogin', [LoginController::class, 'postFrontendlogin'])->name('frontendLogin');
+Route::middleware('auth:sanctum', 'cashier')->group(function () {
+    Route::get('/test', function () {
+        dd('hi');
+    });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
 });

@@ -14,6 +14,8 @@
     <script src="{{ asset('asset/bootstrap/js/jquery-2.2.4.min.js') }}"></script>
     <script src="{{ asset('asset/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('asset/js/angular/angular.min.js') }}"></script>
+    <script src="{{ asset('asset/js/angular/angular.min.js') }}"></script>
+    <script src="{{ asset('asset/js/common.js') }}"></script>
 </head>
 
 <body>
@@ -21,18 +23,17 @@
         <div class="inner">
             <div class="content">
                 <form class="login-form" method="POST" id='submit' action="{{ route('frontendLogin') }}">
+                    @csrf
                     <table style="margin:0 auto;width: 18vw;">
                         <tr>
                             <td colspan="3">
                                 <input type="text" placeholder="Enter Username" class="userInput" name = "username"
                                     ng-model = 'username' ng-focus="usernameFocus()" />
-                                @if ($errors->has('user_name'))
-                                    <span>{{ $errors->first('user_name') }}</span>
+                                @if ($errors->has('username'))
+                                    <span>{{ $errors->first('username') }}</span>
                                 @endif
                             </td>
-
                         </tr>
-
                         <tr>
                             <td colspan="3"><input type="password" placeholder="Enter Password" class="userInput"
                                     name = "password" ng-model = 'password' ng-focus="passwordFocus()">
@@ -41,7 +42,6 @@
                                 <span>{{ $errors->first('password') }}</span>
                             @endif
                         </tr>
-
                         <tr>
                             <td><button type="button" class="number-btn fl-left num-btn"
                                     ng-click = "numberClick(0)">0</button></td>

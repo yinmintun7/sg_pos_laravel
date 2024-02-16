@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserDeleteRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Repository\User\UserRepositoryInterface;
 
 class UserController extends Controller
@@ -82,25 +82,25 @@ class UserController extends Controller
 
     }
 
-    // public function updateCategory(CategoryUpdateRequest $request)
-    // {
-    //     try {
-    //         $update_cat = $this->UserRepository->update($request->all());
-    //         if ($update_cat['ResponseStatus'] == ResponseStatus::OK) {
-    //             return redirect('/sg-backend/category/list')->with('success', 'Success! Category created!');
-    //         } else {
-    //             return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create category!']);
-    //         }
-    //         $screen = "UpdateCategory From Category Form Screen::";
-    //         $queryLog = DB::getQueryLog();
-    //         Utility::saveDebugLog($screen, $queryLog);
-    //     } catch (\Exception $e) {
-    //         $screen = "UpdateCategory From Category Form Screen::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
+    public function update(UserUpdateRequest $request)
+    {
+        try {
+            $update_cat = $this->UserRepository->update($request->all());
+            if ($update_cat['ResponseStatus'] == ResponseStatus::OK) {
+                return redirect('/sg-backend/user/list')->with('success', 'Success! User updated!');
+            } else {
+                return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot update User!']);
+            }
+            $screen = "UpdateUser From UserController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "UpdateUser From UserController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
 
-    // }
+    }
 
     public function delete(UserDeleteRequest $request)
     {

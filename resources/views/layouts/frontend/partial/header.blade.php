@@ -23,6 +23,7 @@
     <script src="{{ asset('asset/js/swiper.min.js') }}"></script>
     <script src="{{ asset('asset/js/sweetalert-dev.js') }}"></script>
     <script src="{{ asset('asset/js/angular/angular.min.js') }}"></script>
+    <script src="{{ asset('asset/js/common.js') }}"></script>
     <style>
         .item-td {
             text-align: center !important;

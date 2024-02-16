@@ -73,6 +73,17 @@
                                 </div>
                             </div>
                             <div class="field item form-group">
+                                <label for="name" class="col-form-label col-md-3 col-sm-3  label-align">CompanyAddress
+                                    <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input id="company_address" class="form-control" name="company_address"
+                                        value="{{ old('company_address', isset($setting) ? $setting->company_address : '') }}" />
+                                </div>
+                                @if ($errors->has('company_address'))
+                                    <span class="errormessage">{{ $errors->first('company_address') }}</span>
+                                @endif
+                            </div>
+                            <div class="field item form-group">
                                 <label for= "image" class="col-form-label col-md-3 col-sm-3  label-align">Category
                                     Image<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
@@ -89,40 +100,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($errors->has('company_logo'))
-                                    <span class="errormessage">{{ $errors->first('company_logo') }}</span>
-                                @endif
-                            </div>
-                            <div class="field item form-group">
-                                <label for="name" class="col-form-label col-md-3 col-sm-3  label-align">Company Address
-                                    <span class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <input id="company_address" class="form-control" name="company_address"
-                                        value="{{ old('company_address', isset($setting) ? $setting->company_address : '') }}" />
-                                </div>
-                                @if ($errors->has('company_address'))
-                                    <span class="errormessage">{{ $errors->first('company_address') }}</span>
-                                @endif
-                            </div>
 
-                        </div>
-                        <input class="hide" type="file" id="fileInput" name="company_logo"
-                            onchange = 'previewImage(this)'>
-                        <div class="ln_solid">
-                            <div class="form-group">
-                                <div class="col-md-6 offset-md-3">
-                                    <button type='submit' class="btn btn-primary">Submit</button>
-                                    <button type='reset' class="btn btn-success">Reset</button>
-                                    <input type="hidden" name="form_sub" value = "1" />
+                            </div>
+                            <input class="hide" type="file" id="fileInput" name="company_logo"
+                                onchange = 'previewImage(this)'>
+
+                            <div class="ln_solid">
+                                <div class="form-group">
+                                    <div class="col-md-6 offset-md-3">
+                                        <button type='submit' class="btn btn-primary">Submit</button>
+                                        <button type='reset' class="btn btn-success">Reset</button>
+                                        <input type="hidden" name="form_sub" value = "1" />
+                                    </div>
                                 </div>
                             </div>
+                            </form>
                         </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     @include('layouts.backend.partial.footer_start')
     @include('layouts.backend.partial.footer_end')

@@ -26,12 +26,18 @@ use App\Http\Controllers\test\TestController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/sg-frontend/login', [LoginController::class, 'getFrontendLoginForm']);
+Route::get('/login', [LoginController::class, 'getFrontendLoginForm']);
 Route::post('/postFrontendlogin', [LoginController::class, 'postFrontendlogin'])->name('frontendLogin');
-Route::get('/sg-frontend/order-list', [OrderController::class, 'orderList']);
-Route::get('/sg-frontend/logout', [LoginController::class, 'logout']);
-Route::get('/sg-frontend/unauthorze', [LoginController::class, 'unauthorize']);
-
+Route::get('/logout', [LoginController::class, 'logout']);
+Route::get('/unauthorze', [LoginController::class, 'unauthorize']);
+Route::group(['prefix' => '/', 'middleware' => 'cashier'], function () {
+    Route::get('/order-list', [OrderController::class, 'orderList']);
+    Route::get('/order', [OrderController::class, 'order']);
+    Route::post('/get-category', [OrderController::class, 'getCategory']);
+    Route::post('/get-item', [OrderController::class, 'getAllItem']);
+    Route::post('/get-item-by-cat', [OrderController::class, 'getItemByCategory']);
+    Route::post('/get-item-data', [OrderController::class, 'getItemData']);
+});
 
 Route::get('/sg-backend/login', [LoginController::class, 'getLoginForm']);
 Route::get('/sg-backend/logout', [LoginController::class, 'logout']);

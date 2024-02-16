@@ -4,19 +4,19 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.showItems = false;
   $scope.items = [];
   $scope.base_url = base_url;
-  $scope.shift_id = shift_id;
+//   $scope.shift_id = shift_id;
   $scope.categories = [];
   $scope.itemsData = [];
   $scope.allItems = [];
   // $scope.orderList = [];
   $scope.orderDetail = [];
   $scope.subTotal = 0;
-  
+
   $scope.init = function () {
     $scope.fetchChildCategory(0);
     $scope.fetchAllItems();
-    $scope.calculateTotalAmount();
-    
+    // $scope.calculateTotalAmount();
+
   };
   $scope.returnBack = function(){
     $scope.fetchChildCategory(0);
@@ -34,7 +34,7 @@ app.controller("myCtrl", function ($scope, $http) {
     var data = {
       parent_id: parent_id,
     };
-    var url = base_url + "api/get_category.php";
+    var url = base_url + "get-category";
     $http({
       method: "POST",
       url: url,
@@ -46,9 +46,11 @@ app.controller("myCtrl", function ($scope, $http) {
             $scope.showCategories = false;
             $scope.showItems = true;
             $scope.fetchItems(parent_id);
+            console.log('success');
           } else {
             $scope.categories = response.data;
             console.log($scope.categories);
+            // console.log('fail');
           }
         } else {
           alert("Something Wrong");
@@ -64,7 +66,7 @@ app.controller("myCtrl", function ($scope, $http) {
     var data = {
       category_id: category_id,
     };
-    var url = base_url + "api/get_item";
+    var url = base_url + "get-item-by-cat";
     $http({
       method: "POST",
       url: url,
@@ -72,7 +74,7 @@ app.controller("myCtrl", function ($scope, $http) {
     }).then(
       function (response) {
         if (response.status == 200) {
-          $scope.items = response.data;
+        //   $scope.items = response.data;
         } else {
           alert("Something Wrong");
         }
@@ -85,7 +87,7 @@ app.controller("myCtrl", function ($scope, $http) {
 
   $scope.fetchAllItems = function () {
     var data = {};
-    var url = base_url + "api/get_all_items";
+    var url = base_url + "get-item";
     $http({
       method: "POST",
       url: url,
@@ -213,7 +215,7 @@ app.controller("myCtrl", function ($scope, $http) {
     var orderDetails = {
       items: $scope.itemsData,
       subTotal: $scope.subTotal,
-      shift_id: shift_id,
+    //   shift_id: shift_id,
     };
 
     $http({

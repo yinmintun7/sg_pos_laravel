@@ -11,12 +11,12 @@ app.controller("myCtrl", function ($scope, $http) {
   // $scope.orderList = [];
   $scope.orderDetail = [];
   $scope.subTotal = 0;
-  
+
   $scope.init = function () {
     $scope.fetchChildCategory(0);
     $scope.fetchAllItems();
     $scope.calculateTotalAmount();
-    
+
   };
   $scope.returnBack = function(){
     $scope.fetchChildCategory(0);
@@ -34,7 +34,7 @@ app.controller("myCtrl", function ($scope, $http) {
     var data = {
       parent_id: parent_id,
     };
-    var url = base_url + "api/get_category.php";
+    var url = base_url + "get-category";
     $http({
       method: "POST",
       url: url,

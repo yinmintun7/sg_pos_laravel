@@ -56,6 +56,12 @@
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <a href="{{ url('/sg-backend/user/edit/') }}/{{ $user->id }}"
+                                                                class="btn btn-info btn-xs">
+                                                                <i class="fa fa-pencil"></i> Edit
+                                                            </a>
+                                                        </div>
                                                         <div class="col-md-6">
                                                             <form action="{{ url('/sg-backend/user/delete') }}"
                                                                 method="POST" id="user-form-{{ $user->id }}">

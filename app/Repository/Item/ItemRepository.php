@@ -51,15 +51,20 @@ class ItemRepository implements ItemRepositoryInterface
         }
     }
 
-    public function getItems()
+    public function getItems($api = false)
     {
         try {
             $items = [];
             $items = Item::select('id', 'name', 'price', 'quantity', 'code_no', 'category_id', 'status', 'image')
             ->from('item')
             ->whereNull('deleted_at')
-            ->orderByDesc('id')
-            ->paginate(10);
+            ->orderByDesc('id');
+            if ($api == true) {
+                $items->where('status', Constant::ENABLE_STATUS);
+                $items = $items->get();
+            } else {
+                $items = $items->paginate(10);
+            }
             return $items;
         } catch (\Exception $e) {
             $screen = "GetItems From ItemRepository::";
@@ -67,6 +72,57 @@ class ItemRepository implements ItemRepositoryInterface
             abort(500);
         }
     }
+
+    public function getItemByCategory($category_id, $api = false)
+    {
+
+        try {
+            $items = [];
+            $items = Item::select('id', 'name', 'price', 'quantity', 'code_no', 'category_id', 'status', 'image')
+            ->from('item')
+            ->whereNull('deleted_at')
+            ->orderByDesc('id')
+            ->where('category_id', $category_id);
+            if ($api == true) {
+                $items->where('status', Constant::ENABLE_STATUS);
+                $items = $items->get();
+            } else {
+                $items = $items->paginate(10);
+            }
+
+            return $items;
+        } catch (\Exception $e) {
+            $screen = "GetItems From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
+    public function getItemData($item_id)
+    {
+
+        try {
+            $items = [];
+            $items = Item::select('id', 'name', 'price', 'quantity', 'code_no', 'category_id', 'status', 'image')
+            ->from('item')
+            ->whereNull('deleted_at')
+            ->orderByDesc('id')
+            ->where('category_id', $category_id);
+            if ($api == true) {
+                $items->where('status', Constant::ENABLE_STATUS);
+                $items = $items->get();
+            } else {
+                $items = $items->paginate(10);
+            }
+
+            return $items;
+        } catch (\Exception $e) {
+            $screen = "GetItems From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
 
     public function updateItem($request)
     {
