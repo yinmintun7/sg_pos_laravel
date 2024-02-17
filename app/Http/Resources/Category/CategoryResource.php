@@ -25,8 +25,6 @@ class CategoryResource extends JsonResource
                 $this->getItems() != null,
                 ItemResource::collection($this->getItems)
             ),
-
-
         ];
     }
 }

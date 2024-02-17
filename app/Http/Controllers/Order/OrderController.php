@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Api\GetCategoryRequest;
+use App\Http\Requests\Api\GetItemRequest;
 use App\Repository\Order\OrderRepositoryInterface;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Item\OrderItemResource;
 use App\Http\Resources\Item\ItemResource;
 use App\Repository\Category\CategoryRepositoryInterface;
 use App\Repository\Item\ItemRepositoryInterface;
@@ -35,7 +38,7 @@ class OrderController extends Controller
     {
         return view('frontend.order.order');
     }
-    public function getCategory(Request $request)
+    public function getCategory(GetCategoryRequest $request)
     {
         $categories = $this->CategoryRepository->getCategoryByParentId((int) $request->parent_id);
         return CategoryResource::collection($categories);
@@ -53,7 +56,7 @@ class OrderController extends Controller
     }
     public function getItemData(Request $request)
     {
-        $items = $this->ItemRepository->getItemData((int) $request->item_id);
-        return ItemResource::collection($items);
+        $item = $this->ItemRepository->getOrderItemById((int) $request->item_id);
+        return new OrderItemResource($item);
     }
 }

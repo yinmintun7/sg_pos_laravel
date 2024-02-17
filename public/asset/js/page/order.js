@@ -42,14 +42,12 @@ app.controller("myCtrl", function ($scope, $http) {
     }).then(
       function (response) {
         if (response.status == 200) {
-          if (response.data.length <= 0) {
+          if (response.data.data.length <= 0) {
             $scope.showCategories = false;
             $scope.showItems = true;
             $scope.fetchItems(parent_id);
-            console.log('success');
           } else {
-            $scope.categories = response.data;
-            console.log($scope.categories);
+            $scope.categories = response.data.data;
             // console.log('fail');
           }
         } else {
@@ -74,7 +72,7 @@ app.controller("myCtrl", function ($scope, $http) {
     }).then(
       function (response) {
         if (response.status == 200) {
-        //   $scope.items = response.data;
+        $scope.items = response.data.data;
         } else {
           alert("Something Wrong");
         }
@@ -95,7 +93,7 @@ app.controller("myCtrl", function ($scope, $http) {
     }).then(
       function (response) {
         if (response.status == 200) {
-          $scope.allItems = response.data;
+          $scope.allItems = response.data.data;
         } else {
           alert("Something Wrong");
         }
@@ -110,7 +108,7 @@ app.controller("myCtrl", function ($scope, $http) {
     var data = {
       item_id: item_id,
     };
-    var url = base_url + "api/get_item_data";
+    var url = base_url + "get-item-data";
     $http({
       method: "POST",
       url: url,
@@ -132,7 +130,7 @@ app.controller("myCtrl", function ($scope, $http) {
           if (item_exist) {
             $scope.itemsData = updatedItems;
           } else {
-            $scope.itemsData.push(response.data[0]);
+            $scope.itemsData.push(response.data.data);
           }
         } else {
           alert("Something Wrong");

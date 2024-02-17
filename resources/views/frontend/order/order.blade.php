@@ -120,7 +120,7 @@
                                         ng-if="showCategories">
                                         <button ng-click="getParentCategories(category.id)">
                                             <figure>
-                                                <img ng-src="@{{ base_url }}storage/upload/@{{ category.id }}/@{{ category.image }}"
+                                                <img ng-src="@{{ base_url }}storage/upload/category/@{{ category.id }}/@{{ category.image }}"
                                                     class="img-responsive">
                                                 <figcaption>@{{ category.name }}</figcaption>
                                             </figure>
@@ -130,7 +130,7 @@
                                     <div class="cat-box" ng-if="showItems" ng-repeat="item in items">
                                         <button ng-click="getItemData(item.id)">
                                             <figure>
-                                                <img ng-src="@{{ base_url }}asset/upload/category/@{{ category.id }}/@{{ category.image }}"
+                                                <img ng-src="@{{ base_url }}storage/upload/item/@{{ item.id }}/@{{ item.image }}"
                                                     class="img-responsive">
                                                 <figcaption>@{{ item.name }}</figcaption>
                                             </figure>

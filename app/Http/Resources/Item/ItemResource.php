@@ -20,7 +20,9 @@ class ItemResource extends JsonResource
             'category_id'  => $this->category_id,
             'price'        => $this->price,
             'quantity'     => $this->quantity,
+            'code_no'      => $this->code_no,
             'image'        => $this->image,
+            'status'       => $this->status,
             // 'item'       =>when($this->getItems() != null){
             //                I
             // }

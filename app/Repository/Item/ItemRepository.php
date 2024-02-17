@@ -5,6 +5,7 @@ namespace App\Repository\Item;
 use App\Constant;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\DiscountItem;
 use App\Utility;
 use App\ResponseStatus;
 use Illuminate\Support\Facades\Auth;
@@ -98,31 +99,42 @@ class ItemRepository implements ItemRepositoryInterface
         }
     }
 
-    public function getItemData($item_id)
+    public function getOrderItemById(int $item_id)
     {
 
         try {
-            $items = [];
-            $items = Item::select('id', 'name', 'price', 'quantity', 'code_no', 'category_id', 'status', 'image')
-            ->from('item')
+            $today_date = date('Y-m-d');
+            $item = Item::where('id', $item_id)
+            ->where('status', Constant::ENABLE_STATUS)
             ->whereNull('deleted_at')
-            ->orderByDesc('id')
-            ->where('category_id', $category_id);
-            if ($api == true) {
-                $items->where('status', Constant::ENABLE_STATUS);
-                $items = $items->get();
-            } else {
-                $items = $items->paginate(10);
-            }
-
-            return $items;
+            ->select('id', 'name', 'category_id', 'image', 'price', 'code_no')
+            ->first();
+            $discount = DiscountItem::select(DB::raw('CAST(
+                                CASE
+                                WHEN dp.amount IS NULL AND dp.percentage IS NOT NULL THEN (i.price * dp.percentage / 100)
+                                WHEN dp.amount IS NOT NULL AND dp.percentage IS NULL THEN dp.amount
+                            END
+                            AS UNSIGNED) AS total_discount'))
+                       ->leftJoin('discount_promotion as dp', 'discount_item.discount_id', '=', 'dp.id')
+                       ->leftJoin('item as i', 'discount_item.item_id', '=', 'i.id')
+                       ->where('dp.start_date', '<=', $today_date)
+                       ->where('dp.end_date', '>=', $today_date)
+                       ->whereNull('dp.deleted_at')
+                       ->whereNull('discount_item.deleted_at')
+                       ->where('i.id', $item_id)
+                       ->first();
+            $total_discount          = ($discount != null) ? $discount->total_discount : 0;
+            $item->discount          = $total_discount;
+            $item->original_discount = $total_discount;
+            $item->amount            = $item->price - $total_discount;
+            $item->original_amount   = $item->price - $total_discount;
+            return $item;
         } catch (\Exception $e) {
-            $screen = "GetItems From ItemRepository::";
+            $screen = "GetItemData From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
-
 
     public function updateItem($request)
     {
