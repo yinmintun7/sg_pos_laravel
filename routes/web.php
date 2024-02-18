@@ -28,7 +28,7 @@ Route::get('/', function () {
 });
 Route::get('/login', [LoginController::class, 'getFrontendLoginForm']);
 Route::post('/postFrontendlogin', [LoginController::class, 'postFrontendlogin'])->name('frontendLogin');
-Route::get('/logout', [LoginController::class, 'logout']);
+Route::get('/logout', [LoginController::class, 'frontendLogout']);
 Route::get('/unauthorze', [LoginController::class, 'unauthorize']);
 Route::group(['prefix' => '/', 'middleware' => 'cashier'], function () {
     Route::get('/order-list', [OrderController::class, 'orderList']);

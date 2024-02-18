@@ -71,7 +71,18 @@
                                     <span class="errormessage">{{ $errors->first('confirm_password') }}</span>
                                 @endif
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" style="{{ isset($user) ? 'display: block;' : 'display: none;' }}">
+                                <label for="confirm_password" class="col-form-label col-md-3 col-sm-3  label-align">Old
+                                    Password<span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input id="confirm_password" class="form-control" name="old_password"
+                                        value="{{ old('old_password', isset($user) ? $user->old_password : '') }}" />
+                                </div>
+                                @if ($errors->has('old_password'))
+                                    <span class="errormessage">{{ $errors->first('old_password') }}</span>
+                                @endif
+                            </div>
+                            {{-- <div class="field item form-group">
                                 <label for="Status" class="col-form-label col-md-3 col-sm-3  label-align">Status<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
@@ -85,7 +96,7 @@
                                         </option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="ln_solid">
                             <div class="form-group">

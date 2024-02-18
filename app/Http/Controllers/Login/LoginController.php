@@ -68,6 +68,16 @@ class LoginController extends Controller
             abort(500);
         }
     }
+    public function frontendLogout()
+    {
+        try {
+            Auth::logout();
+            Session::flush();
+            return redirect('/login');
+        } catch (\Exception $e) {
+            abort(500);
+        }
+    }
 
     public function unauthorize()
     {
@@ -85,8 +95,8 @@ class LoginController extends Controller
 
             // if (Auth::guard('admin')->user() != null) {
             //     $role = Auth::guard('admin')->user()->role;
-            //     if ($role == Constant::ADMIN_ROLE) {
-            //         return redirect('/sg-frontend/index');
+            //     if ($role == Constant::CASHIER_ROLE) {
+            //         return redirect('/order');
             //     }
             // }
             return view('Login.frontend_login');
@@ -94,7 +104,6 @@ class LoginController extends Controller
             abort(500);
         }
     }
-
 
     public function postFrontendlogin(CashierAuthRequest $request)
     {
@@ -108,7 +117,7 @@ class LoginController extends Controller
             Utility::saveDebugLog($screen, $queryLog);
 
             if ($auth) {
-                return redirect('/order-list');
+                return redirect('/order');
             } else {
                 return redirect()->back()->withErrors(['login_error' => 'Wrong Credential!'])->withInput();
             }

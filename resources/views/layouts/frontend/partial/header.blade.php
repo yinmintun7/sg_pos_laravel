@@ -9,6 +9,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
+    <link rel="icon" type="image/png" href="{{asset('asset/images/favicon/favicon.ico')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/bootstrap/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/css/uistyle2.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/css/swiper.min.css') }}" />
@@ -188,7 +189,7 @@ box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1
                                     <img src="{{ asset('asset/images/frontend/login_img.png') }}" alt="login image">
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="">Logout</a>
+                                    <a class="dropdown-item" href="{{url('/logout')}}">Logout</a>
                                 </div>
                             </div>
                         </div>

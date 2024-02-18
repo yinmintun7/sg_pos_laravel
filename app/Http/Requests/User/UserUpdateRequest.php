@@ -25,9 +25,11 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'usertype' => 'required|in:admin,cashier',
-            'password' => 'required',
+            'id'               =>['required','numeric'],
+            'usertype'         => 'required|in:admin,cashier',
+            'password'         => 'required',
             'confirm_password' => 'required|same:password',
+            'old_password'     => 'required|same:password',
             'username' => [
                 'required',
                 Rule::unique('users')->where(function ($query) {
