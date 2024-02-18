@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetItemRequest extends FormRequest
+class GetOrderListRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,8 @@ class GetItemRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
-            'item_id' => ['required','nullable'],
+          'shift_id' => ['required','numeric']
         ];
-
     }
 }

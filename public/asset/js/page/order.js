@@ -13,10 +13,11 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.subTotal = 0;
 
   $scope.init = function () {
+    $('.loading').show();
     $scope.fetchChildCategory(0);
     $scope.fetchAllItems();
-    // $scope.calculateTotalAmount();
-
+    $scope.calculateTotalAmount();
+    $('.loading').hide();
   };
   $scope.returnBack = function(){
     $scope.fetchChildCategory(0);
@@ -29,6 +30,7 @@ app.controller("myCtrl", function ($scope, $http) {
     $scope.fetchChildCategory(0);
   };
   $scope.fetchChildCategory = function (parent_id) {
+    $('.loading').show();
     $scope.showCategories = true;
     $scope.showItems = false;
     var data = {
@@ -42,10 +44,12 @@ app.controller("myCtrl", function ($scope, $http) {
     }).then(
       function (response) {
         if (response.status == 200) {
+            $('.loading').hide();
           if (response.data.data.length <= 0) {
             $scope.showCategories = false;
             $scope.showItems = true;
             $scope.fetchItems(parent_id);
+
           } else {
             $scope.categories = response.data.data;
             // console.log('fail');
@@ -61,6 +65,7 @@ app.controller("myCtrl", function ($scope, $http) {
   };
 
   $scope.fetchItems = function (category_id) {
+    $('.loading').show();
     var data = {
       category_id: category_id,
     };
@@ -72,6 +77,7 @@ app.controller("myCtrl", function ($scope, $http) {
     }).then(
       function (response) {
         if (response.status == 200) {
+            $('.loading').hide();
         $scope.items = response.data.data;
         } else {
           alert("Something Wrong");
@@ -105,6 +111,7 @@ app.controller("myCtrl", function ($scope, $http) {
   };
 
   $scope.getItemData = function (item_id) {
+    $('.loading').show();
     var data = {
       item_id: item_id,
     };
@@ -115,7 +122,9 @@ app.controller("myCtrl", function ($scope, $http) {
       data: data,
     }).then(
       function (response) {
+        console.log(response);
         if (response.status == 200) {
+            $('.loading').hide();
           var item_exist = false;
           var updatedItems = $scope.itemsData.map((item) => {
             if (item.id === item_id) {
@@ -130,7 +139,7 @@ app.controller("myCtrl", function ($scope, $http) {
           if (item_exist) {
             $scope.itemsData = updatedItems;
           } else {
-            $scope.itemsData.push(response.data.data);
+           console.log($scope.itemsData.push(response.data.data));
           }
         } else {
           alert("Something Wrong");
@@ -201,9 +210,11 @@ app.controller("myCtrl", function ($scope, $http) {
       $scope.items = [];
       $scope.items = $scope.allItems.filter(function (item) {
         return (
-          item.code_no && item.code_no.toString().startsWith($scope.search_item)
+          item.code_no && item.code_no.toString().startsWith($scope.search_item) ||
+          item.name && item.name.toString().toLowerCase().startsWith($scope.search_item.toLowerCase())
         );
       });
+
     }
   };
   // for item search end////////////////////////////////////////////////////////////////
@@ -213,17 +224,17 @@ app.controller("myCtrl", function ($scope, $http) {
     var orderDetails = {
       items: $scope.itemsData,
       subTotal: $scope.subTotal,
-    //   shift_id: shift_id,
+      shift_id: 1,
     };
 
     $http({
       method: "POST",
-      url: base_url + "api/insert_order",
+      url: base_url + "store-order",
       data: orderDetails,
     }).then(
       function (response) {
         if (response.status == 200) {
-          window.location.href = base_url + "sg_frontend/order_list";
+          window.location.href = base_url + "order-list";
           //  $scope.orderlist();
         } else {
           // window.location.href = base_url + 'sg_frontend/order?err=shift';

@@ -37,6 +37,9 @@ Route::group(['prefix' => '/', 'middleware' => 'cashier'], function () {
     Route::post('/get-item', [OrderController::class, 'getAllItem']);
     Route::post('/get-item-by-cat', [OrderController::class, 'getItemByCategory']);
     Route::post('/get-item-data', [OrderController::class, 'getItemData']);
+    Route::post('/store-order', [OrderController::class, 'storeOrder']);
+    Route::post('/get-order-list', [OrderController::class, 'getOrderList']);
+    Route::post('/cancel-order', [OrderController::class, 'CancelOrder']);
 });
 
 Route::get('/sg-backend/login', [LoginController::class, 'getLoginForm']);

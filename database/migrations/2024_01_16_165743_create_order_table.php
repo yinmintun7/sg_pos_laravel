@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('order', function (Blueprint $table) {
             $table->id();
             $table->integer('total_amount');
-            $table->integer('payment');
-            $table->integer('refund');
+            $table->integer('payment')->nullable();
+            $table->integer('refund')->nullable();
             $table->integer('shift_id');
             $table->tinyInteger('status')->default(0);
             $table->dateTime('created_at');

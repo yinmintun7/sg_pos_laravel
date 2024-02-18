@@ -5,7 +5,10 @@ namespace App\Repository\Item;
 use App\Constant;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderDetails;
 use App\Models\DiscountItem;
+use App\Models\OrderDetail;
 use App\Utility;
 use App\ResponseStatus;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +55,40 @@ class ItemRepository implements ItemRepositoryInterface
         }
     }
 
+    public function storeOrderItems(array $data)
+    {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+        DB::beginTransaction();
+        try {
+            $insert_data = [];
+            $insert_data['total_amount'] = $data['subTotal'];
+            $insert_data['shift_id']     = $data['shift_id'];
+            $store = Utility::getCreateId((array)$insert_data);
+            $store_order = Order::create($store);
+            // dd($data['items']);
+            foreach ($data['items'] as $detail_item){
+                $insert_detail_data = [];
+                $insert_detail_data['quantity']       = $detail_item['quantity'];
+                $insert_detail_data['sub_total']      = $detail_item['amount'];
+                $insert_detail_data['order_id']       = $store_order->id;
+                $insert_detail_data['item_id']        = $detail_item['id'];
+                $insert_detail_data['discount_price'] = $detail_item['original_discount'];
+                $insert_detail_data['orginal_price']  = $detail_item['original_amount'];
+                $store = Utility::getCreateId((array)$insert_detail_data);
+                OrderDetail::create($store);
+            }
+            DB::commit();
+            $returnArray['ResponseStatus'] = ResponseStatus::OK;
+            return $returnArray;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $screen = "StoreOrder From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
     public function getItems($api = false)
     {
         try {
@@ -74,9 +111,29 @@ class ItemRepository implements ItemRepositoryInterface
         }
     }
 
+    public function getOrderList($shift_id)
+    {
+        try {
+            $currentDate = date("Y-m-d");
+            $order_list = [];
+            $order_list = Order::select('id', 'created_at', 'status', 'total_amount')
+            ->selectRaw("CONCAT('$shift_id', '-', id, DATE_FORMAT(created_at, '%y%m%d')) AS order_no")
+            ->selectRaw("TIME_FORMAT(created_at, '%H:%i') AS order_time")
+            ->where('shift_id', $shift_id)
+            ->whereNull('deleted_at')
+            ->orderBy('status', 'ASC')
+            ->orderBy('id', 'DESC')
+            ->get();
+        return $order_list;
+        } catch (\Exception $e) {
+            $screen = "GetItems From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
     public function getItemByCategory($category_id, $api = false)
     {
-
         try {
             $items = [];
             $items = Item::select('id', 'name', 'price', 'quantity', 'code_no', 'category_id', 'status', 'image')
@@ -90,7 +147,6 @@ class ItemRepository implements ItemRepositoryInterface
             } else {
                 $items = $items->paginate(10);
             }
-
             return $items;
         } catch (\Exception $e) {
             $screen = "GetItems From ItemRepository::";
@@ -126,8 +182,9 @@ class ItemRepository implements ItemRepositoryInterface
             $total_discount          = ($discount != null) ? $discount->total_discount : 0;
             $item->discount          = $total_discount;
             $item->original_discount = $total_discount;
+            $item->quantity          = 1;
             $item->amount            = $item->price - $total_discount;
-            $item->original_amount   = $item->price - $total_discount;
+            $item->original_amount   = $item->price;
             return $item;
         } catch (\Exception $e) {
             $screen = "GetItemData From ItemRepository::";
@@ -176,7 +233,27 @@ class ItemRepository implements ItemRepositoryInterface
             abort(500);
         }
     }
-
+    public function CancelOrder(array $request)
+    {
+        try {
+            $cacel_order = [];
+            $id     = $request['corderId'];
+            $status = $request['status'];
+            $cancel = Order::find($id);
+            $cacel_order['status']      = $status;
+            $order_cancel = Utility::getUpdateId((array)$cacel_order);
+            $cancel->update($order_cancel);
+            $screen   = "CancelOrder From ItemRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            $returnArray['ResponseStatus'] = ResponseStatus::OK;
+            return $returnArray;
+        } catch (\Exception $e) {
+            $screen = "CancelOrder From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
     public function deleteItem($id)
     {
         try {

@@ -54,10 +54,10 @@
                                             </td>
                                             <td class="item-td" width="10%">@{{ data.price }}</td>
                                             <td id="discount" class="item-td">
-                                                <input type="text" value="@{{ data.discount * data.quantity }}"
+                                                <input type="text" value='@{{ data.discount * data.quantity }}'
                                                     style="border:none;background:none;" readonly class="price-input" />
                                             <td class="item-td" width="10%">
-                                                <input type="text" value="@{{ (data.price - data.discount) * data.quantity }}"
+                                                <input type="text" value='@{{data.amount* data.quantity }}'
                                                     style="border:none;background:none;" readonly class="price-input" />
                                             </td>
                                             <td class="item-td" width="15%">
@@ -101,7 +101,6 @@
                         </div>
                     </div>
                 </div> <!-- col-md-9 -->
-
                 <div class="col-md-3">
                     <div class="row category">
                         <div class="col-md-12 cat-list" id="cathome">
