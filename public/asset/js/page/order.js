@@ -4,7 +4,7 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.showItems = false;
   $scope.items = [];
   $scope.base_url = base_url;
-//   $scope.shift_id = shift_id;
+  $scope.shift_id = shiftId;
   $scope.categories = [];
   $scope.itemsData = [];
   $scope.allItems = [];
@@ -192,7 +192,6 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.calculateTotalAmount = function () {
     $scope.subTotal = 0;
     for (var i = 0; i < $scope.itemsData.length; i++) {
-      // console.log($scope.itemsData);
       $scope.subTotal +=
         ($scope.itemsData[i].price - $scope.itemsData[i].discount) *
         $scope.itemsData[i].quantity;
@@ -217,14 +216,14 @@ app.controller("myCtrl", function ($scope, $http) {
 
     }
   };
-  // for item search end////////////////////////////////////////////////////////////////
+  // for item search end//
 
   // for make order start//
   $scope.makeOrder = function () {
     var orderDetails = {
       items: $scope.itemsData,
       subTotal: $scope.subTotal,
-      shift_id: 1,
+      shift_id: shiftId,
     };
 
     $http({
@@ -235,7 +234,6 @@ app.controller("myCtrl", function ($scope, $http) {
       function (response) {
         if (response.status == 200) {
           window.location.href = base_url + "order-list";
-          //  $scope.orderlist();
         } else {
           // window.location.href = base_url + 'sg_frontend/order?err=shift';
         }
@@ -245,6 +243,6 @@ app.controller("myCtrl", function ($scope, $http) {
       }
     );
   };
-  // for make order end/////////////////////////////////////////////////////////////////
+  // for make order end//
 
 });

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class ShiftController extends Controller
 {
     private $ShiftRepository;
@@ -24,11 +23,11 @@ class ShiftController extends Controller
     {
         try {
             $shift_open = false;
-            $shift=$this->ShiftRepository->getShiftStart();
+            $shift = $this->ShiftRepository->getShiftStart();
             if ($shift > 0) {
                 $shift_open = true;
             }
-            $shift_list=$this->ShiftRepository->getShiftList();
+            $shift_list = $this->ShiftRepository->getShiftList();
 
             $screen = "Shift Index Screen::";
             $queryLog = DB::getQueryLog();
@@ -44,15 +43,15 @@ class ShiftController extends Controller
     public function start()
     {
         try {
-            $shift=$this->ShiftRepository->getShiftStart();
-            if($shift  <= 0){
-                $shift_start=$this->ShiftRepository->start();
-                if($shift_start['ResponseStatus'] == ResponseStatus::OK){
+            $shift = $this->ShiftRepository->getShiftStart();
+            if ($shift  <= 0) {
+                $shift_start = $this->ShiftRepository->start();
+                if ($shift_start['ResponseStatus'] == ResponseStatus::OK) {
                     return redirect()->back()->with(['shift_start' => 'Success!,Shift is starting now!']);
-                }else{
+                } else {
                     return redirect()->back()->withErrors(['shift_error' => 'Cannot start Shift ,Somethine is wrong!']);
                 }
-            }else{
+            } else {
                 return redirect()->back()->withErrors(['shift_error' => 'Fail!,Shift is already start!']);
             }
             $screen = "Shift Open From Shift Index Screen::";
@@ -65,23 +64,24 @@ class ShiftController extends Controller
         }
     }
 
-    public function end(){
-        try{
-            $shift=$this->ShiftRepository->getShiftStart();
-            if($shift > 0){
-              $update=  $this->ShiftRepository->end();
-              if($update['ResponseStatus'] == ResponseStatus::OK){
-                return redirect()->back()->with(['success' => 'Success!,Shift is closed now!']);
-              }else{
-                return redirect()->back()->withErrors(['fail' => 'Cannot end Shift ,Somethine is wrong!']);
-              }
-            }else{
+    public function end()
+    {
+        try {
+            $shift = $this->ShiftRepository->getShiftStart();
+            if ($shift > 0) {
+                $update =  $this->ShiftRepository->end();
+                if ($update['ResponseStatus'] == ResponseStatus::OK) {
+                    return redirect()->back()->with(['success' => 'Success!,Shift is closed now!']);
+                } else {
+                    return redirect()->back()->withErrors(['fail' => 'Cannot end Shift ,Somethine is wrong!']);
+                }
+            } else {
                 return redirect()->back()->withErrors(['fail' => 'Fail!,Shift is already end']);
             }
             $screen = "ShiftClose From ShiftController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $screen = "ShiftClose From ShiftController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
@@ -91,5 +91,17 @@ class ShiftController extends Controller
     public function redirectTo404()
     {
         abort(404);
+    }
+
+
+    public function shiftClose()
+    {
+        try {
+            return view('frontend.shift_close');
+        } catch (\Exception $e) {
+            $screen = "Shift Index Screen::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
 }

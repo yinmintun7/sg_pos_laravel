@@ -112,11 +112,14 @@ class LoginController extends Controller
                 'username' => $request->username,
                 'password' => $request->password,
             ]);
-            $screen = "Post Login Form";
+            $screen = "FrontendLogin from LoginController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-
             if ($auth) {
+                $shift_id = Utility::getShift();
+                if ($shift_id != null) {
+                    Session::put('shift_id', $shift_id->id);
+                }
                 return redirect('/order');
             } else {
                 return redirect()->back()->withErrors(['login_error' => 'Wrong Credential!'])->withInput();

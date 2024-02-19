@@ -6,6 +6,7 @@ use Closure;
 use App\Constant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\ShiftCheckRule;
 
 class CashierPermissionMiddleware
 {
@@ -21,6 +22,10 @@ class CashierPermissionMiddleware
         if (Auth::guard('admin')->user() != null) {
             $role = Auth::guard('admin')->user()->role;
             if ($role == Constant::CASHIER_ROLE) {
+                $shiftRule = new ShiftCheckRule();
+                if ($shiftRule->passes('shift', 'value')) {
+                    return redirect('/shift-close');
+                }
                 return $next($request);
             } else {
                 return redirect('/unauthorze');

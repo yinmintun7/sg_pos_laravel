@@ -71,7 +71,9 @@ class CategoryRepository implements CategoryRepositoryInterface
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
+
     }
+
     public function getCategoryByParentId(int $id)
     {
         try {

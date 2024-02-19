@@ -21,12 +21,12 @@ app.controller("myCtrl", function ($scope, $http) {
       }).then(
         function (response) {
           if (response.status == 200) {
-            
+
             $scope.itemsData = response.data;
             $scope.fetchChildCategory(0);
             $scope.fetchAllItems();
             $scope.calculateTotalAmount();
-           
+
           } else {
             console.log("Error:" + response.status);
           }
@@ -36,7 +36,7 @@ app.controller("myCtrl", function ($scope, $http) {
         }
       );
     };
-  
+
     $scope.returnBack = function(){
       $scope.fetchChildCategory(0);
     }
@@ -78,7 +78,7 @@ app.controller("myCtrl", function ($scope, $http) {
         }
       );
     };
-  
+
     $scope.fetchItems = function (category_id) {
       var data = {
         category_id: category_id,
@@ -101,7 +101,7 @@ app.controller("myCtrl", function ($scope, $http) {
         }
       );
     };
-  
+
     $scope.fetchAllItems = function () {
       var data = {};
       var url = base_url + "api/get_all_items";
@@ -122,7 +122,7 @@ app.controller("myCtrl", function ($scope, $http) {
         }
       );
     };
-  
+
     $scope.getItemData = function (item_id) {
       var data = {
         item_id: item_id,
@@ -170,7 +170,7 @@ app.controller("myCtrl", function ($scope, $http) {
         if (item.id === item_id) {
           const newQuantity = item.quantity + 1;
           //const newAmount = (item.price - item.discount) * newQuantity;
-  
+
           return {
             ...item,
             quantity: newQuantity,
@@ -198,7 +198,7 @@ app.controller("myCtrl", function ($scope, $http) {
       $scope.itemsData = updatedItems;
        $scope.calculateTotalAmount();
     };
-  
+
     $scope.calculateTotalAmount = function () {
       $scope.subTotal = 0;
       for (var i = 0; i < $scope.itemsData.length; i++) {
@@ -226,7 +226,7 @@ app.controller("myCtrl", function ($scope, $http) {
       }
     };
     // // for item search end////////////////////////////////////////////////////////////////
-  
+
     // for make order start//
     $scope.makeOrder = function (id) {
       var orderDetails = {
@@ -235,7 +235,7 @@ app.controller("myCtrl", function ($scope, $http) {
         subTotal: $scope.subTotal,
         shift_id: shift_id,
       };
-  
+
       $http({
         method: "POST",
         url: base_url + "api/update_order",
@@ -254,8 +254,5 @@ app.controller("myCtrl", function ($scope, $http) {
         }
       );
     };
-  
-    
-   
 
 });

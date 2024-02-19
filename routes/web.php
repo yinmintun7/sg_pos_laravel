@@ -26,6 +26,7 @@ use App\Http\Controllers\test\TestController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/shift-close', [ShiftController::class, 'shiftClose']);
 Route::get('/login', [LoginController::class, 'getFrontendLoginForm']);
 Route::post('/postFrontendlogin', [LoginController::class, 'postFrontendlogin'])->name('frontendLogin');
 Route::get('/logout', [LoginController::class, 'frontendLogout']);
@@ -40,6 +41,7 @@ Route::group(['prefix' => '/', 'middleware' => 'cashier'], function () {
     Route::post('/store-order', [OrderController::class, 'storeOrder']);
     Route::post('/get-order-list', [OrderController::class, 'getOrderList']);
     Route::post('/cancel-order', [OrderController::class, 'CancelOrder']);
+    Route::post('/edit-order/{id}', [OrderController::class, 'EditOrder']);
 });
 
 Route::get('/sg-backend/login', [LoginController::class, 'getLoginForm']);

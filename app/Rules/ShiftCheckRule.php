@@ -31,7 +31,6 @@ class ShiftCheckRule implements Rule
                             ->count();
         return $shift_check_rule === 0;
     }
-
     /**
      * Get the validation error message.
      *
@@ -39,6 +38,6 @@ class ShiftCheckRule implements Rule
      */
     public function message()
     {
-        return 'Cannot delete category while shift is opening';
+        return 'Cannot delete while shift is opening';
     }
 }

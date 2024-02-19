@@ -49,13 +49,13 @@ class OrderController extends Controller
     }
     public function getCategory(GetCategoryRequest $request)
     {
-        try{
+        try {
             $categories = $this->CategoryRepository->getCategoryByParentId((int) $request->parent_id);
             $screen = "loadParentCategory From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
             return CategoryResource::collection($categories);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $screen = "loadParentCategory From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
@@ -64,13 +64,13 @@ class OrderController extends Controller
     }
     public function getAllItem(Request $request)
     {
-        try{
+        try {
             $items = $this->ItemRepository->getItems((bool) true);
             $screen = "loadAllItems From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
             return ItemResource::collection($items);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $screen = "loadAllItems From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
@@ -80,13 +80,13 @@ class OrderController extends Controller
 
     public function getItemByCategory(GetItemByCatRequest $request)
     {
-        try{
+        try {
             $items = $this->ItemRepository->getItemByCategory((int) $request->category_id, (bool) true);
             return ItemResource::collection($items);
             $screen = "loadGetItemByCategory From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $screen = "loadGetItemByCategory From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
@@ -95,13 +95,13 @@ class OrderController extends Controller
     }
     public function getItemData(GetItemRequest $request)
     {
-        try{
-            $item = $this->ItemRepository->getOrderItemById((int) $request->item_id);
+        try {
+            $item = $this->OrderRepository->getOrderItemById((int) $request->item_id);
             return new OrderItemResource($item);
             $screen = "loadgetItemData From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $screen = "loadgetItemData From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
@@ -111,8 +111,8 @@ class OrderController extends Controller
 
     public function storeOrder(StoreOrderRequest $request)
     {
-        try{
-            $item = $this->ItemRepository->storeOrderItems((array) $request->all());
+        try {
+            $this->OrderRepository->storeOrderItems((array) $request->all());
             $screen = "storeOrderItem From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
@@ -121,7 +121,7 @@ class OrderController extends Controller
                 'message' => 'success store order',
                 'status'  => ResponseStatus::OK,
             ]);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $screen = "storeOrderItem From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
@@ -131,13 +131,13 @@ class OrderController extends Controller
 
     public function getOrderList(GetOrderListRequest $request)
     {
-        try{
-            $order_list = $this->ItemRepository->getOrderList((int) $request->shift_id);
+        try {
+            $order_list = $this->OrderRepository->getOrderList((int) $request->shift_id);
             $screen = "loadOrderList From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
             return GetOrderListResource::collection($order_list);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $screen = "loadOrderList From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
@@ -147,8 +147,8 @@ class OrderController extends Controller
 
     public function CancelOrder(OrderStatusRequest $request)
     {
-        try{
-            $cancel_order = $this->ItemRepository->CancelOrder((array) $request->all());
+        try {
+            $cancel_order = $this->OrderRepository->CancelOrder((array) $request->all());
             $screen = "cancelOrder From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
@@ -157,8 +157,27 @@ class OrderController extends Controller
                 'message' => 'success cancel order',
                 'status'  => ResponseStatus::OK,
             ]);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $screen = "cancelOrder From OrderController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
+    public function EditOrder(int $id)
+    {
+        try {
+            $category = $this->OrderRepository->getEditOrder((int) $id);
+            if ($category == null) {
+                return response()->view('errors.404', [], 404);
+            }
+            $screen   = "GetCategoryById From CategoryController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            return view('backend.category.form', compact(['category']));
+        } catch (\Exception $e) {
+            $screen = "GetCategoryById From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }

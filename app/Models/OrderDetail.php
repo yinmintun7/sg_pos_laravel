@@ -16,7 +16,7 @@ class OrderDetail extends Model
         'order_id',
         'item_id',
         'discount_price',
-        'orginal_price',
+        'original_price',
         'status',
         'created_at',
         'created_by',

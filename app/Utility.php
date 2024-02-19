@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
+use App\Models\Shift;
 use Carbon\Carbon;
 
 class Utility
@@ -52,6 +53,14 @@ class Utility
         $data['deleted_at'] = $today_date;
         $data['deleted_by'] = $user_id;
         return $data;
+    }
+    public static function getShift()
+    {
+        $shift_id = Shift::select('id')
+                 ->whereNotNull('start_date_time')
+                 ->whereNull('end_date_time')
+                 ->first();
+        return $shift_id;
     }
 
     public static function cropResize($file, $destination_path, $unique_name)

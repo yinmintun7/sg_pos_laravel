@@ -4,7 +4,7 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.showItems = false;
   $scope.items = [];
   $scope.base_url = base_url;
-  $scope.shift_id = shift_id;
+  $scope.shift_id = shiftId;
   $scope.categories = [];
   $scope.itemsData = [];
   $scope.allItems = [];

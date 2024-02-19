@@ -4,9 +4,9 @@ namespace App\Repository\Order;
 
 interface OrderRepositoryInterface
 {
-    public function create(array $data);
-    public function getCategory();
-    public function getCategoryById(int $id);
-    public function updateCategory($category);
-    public function deleteCategory($id);
+    public function getOrderItemById(int $item_id);
+    public function storeOrderItems(array $order_items);
+    public function getOrderList(int $shift_id);
+    public function CancelOrder(array $order);
+    public function getEditOrder(int $order_id);
 }

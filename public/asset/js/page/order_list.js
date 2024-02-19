@@ -1,13 +1,14 @@
 var app = angular.module("myApp", []);
 app.controller("myCtrl", function ($scope, $http) {
     $scope.orderList = [];
+    $scope.shift_id = shiftId;
     $scope.init = function () {
         $scope.orderlist();
       };
 
 $scope.orderlist = function () {
     var data = {
-      shift_id: 1,
+      shift_id: shiftId,
     };
     $http({
       method: "POST",

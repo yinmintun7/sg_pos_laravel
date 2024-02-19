@@ -57,7 +57,7 @@
                                                 <input type="text" value='@{{ data.discount * data.quantity }}'
                                                     style="border:none;background:none;" readonly class="price-input" />
                                             <td class="item-td" width="10%">
-                                                <input type="text" value='@{{data.amount* data.quantity }}'
+                                                <input type="text" value='@{{ data.amount * data.quantity }}'
                                                     style="border:none;background:none;" readonly class="price-input" />
                                             </td>
                                             <td class="item-td" width="15%">
@@ -147,5 +147,17 @@
         </div>
     </div><!-- container-fluid -->
     </div><!-- wrapper -->
+    <script>
+        $(document).ready(function() {
+            @if ($errors->has('shift_id'))
+                new PNotify({
+                    title: 'Oh No!',
+                    text: '{!! $errors->first('shift_id') !!}',
+                    type: 'error',
+                    styling: 'bootstrap3'
+                });
+            @endif
+        });
+    </script>
     <script src="{{ asset('asset/js/page/order.js?v=20240215') }}"></script>
 @endsection
