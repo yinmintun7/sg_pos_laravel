@@ -32,12 +32,16 @@ class ItemController extends Controller
     {
 
         try {
-            $store = $this->ItemRepository->create((array) $request->all());
-            if ($store['ResponseStatus'] == ResponseStatus::OK) {
-                return redirect('/sg-backend/item/list')->with('success', 'Success! Item created!');
-            } else {
-                return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create Item!']);
+            $validatedData = $request->validated();
+            if (!$validatedData) {
+                return redirect()->back()->withErrors($request->errors())->withInput();
             }
+                $store = $this->ItemRepository->create((array) $request->all());
+                if ($store['ResponseStatus'] == ResponseStatus::OK) {
+                    return redirect('/sg-backend/item/list')->with('success', 'Success! Item created!');
+                } else {
+                    return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create Item!']);
+                }
             $screen = "ItemCreate From ItemController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);

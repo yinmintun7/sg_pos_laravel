@@ -142,35 +142,20 @@ class OrderRepository implements OrderRepositoryInterface
                 array_push($item_ids, $item->item_id);
             }
 
+            $data = [];
             $items = Item::select(
-                'item.id',
-                'item.name',
-                'item.category_id',
-                'item.image',
-                'item.price',
-                'item.code_no',
-                DB::raw('(CASE WHEN item.id IN ('.implode(',', $item_ids).') THEN order_detail.quantity ELSE NULL END) AS quantity')
+                'id',
+                'name',
+                'category_id',
+                'image',
+                'price',
+                'code_no',
+                'quantity'
             )
-            ->leftJoin('order_detail', 'item.id', '=', 'order_detail.item_id')
-            ->whereIn('item.id', $item_ids)
-            ->where('item.status', Constant::ENABLE_STATUS)
-            ->whereNull('item.deleted_at')
+            ->whereIn('id', $item_ids)
+            ->where('status', Constant::ENABLE_STATUS)
+            ->whereNull('deleted_at')
             ->get();
-
-            // $data = []; $items = Item::select(
-            //     'item.id',
-            //     'item.name',
-            //     'item.category_id',
-            //     'item.image',
-            //     'item.price',
-            //     'item.code_no',
-            //     'order_detail.quantity'
-            // )
-            // ->leftJoin('order_detail')
-            // ->whereIn('item.id', $item_ids)
-            // ->where('item.status', Constant::ENABLE_STATUS)
-            // ->whereNull('item.deleted_at')
-            // ->get();
             foreach ($items as $item) {
                 $today_date = date('Y-m-d');
                 $discount = DiscountItem::select(DB::raw('CAST(
@@ -190,12 +175,11 @@ class OrderRepository implements OrderRepositoryInterface
                 $total_discount          = ($discount != null) ? $discount->total_discount : 0;
                 $item->discount          = $total_discount;
                 $item->original_discount = $total_discount;
-                $item->quantity          = $item->quantity;
+                $item->quantity          = 1;
                 $item->amount            = $item->price - $total_discount;
                 $item->original_amount   = $item->price;
                 array_push($data, $item);
             }
-
             return $data;
 
             $screen   = "GetCategoryById From CategoryRepository::";
@@ -209,4 +193,41 @@ class OrderRepository implements OrderRepositoryInterface
 
     }
 
+    public function updateOrder(array $data)
+    {
+        try {
+            DB::beginTransaction();
+            $update_data = [];
+            $id                          = $data['id'];
+            $update_data['total_amount'] = $data['subTotal'];
+            $update_data['shift_id']     = $data['shift_id'];
+            $update_order   =Order::find($id);
+            $confirm_update = Utility::getUpdateId((array)$update_data);
+            $update_order->update($confirm_update);
+            OrderDetail::where('order_id', $id)->delete();
+            $order_detail = [];
+            foreach ($data['items'] as $detail_item) {
+                $order_detail['quantity']       = $detail_item['quantity'];
+                $order_detail['sub_total']      = $detail_item['amount'];
+                $order_detail['order_id']       = $id;
+                $order_detail['item_id']        = $detail_item['id'];
+                $order_detail['discount_price'] = $detail_item['original_discount'];
+                $order_detail['original_price'] = $detail_item['original_amount'];
+                $store = Utility::getCreateId((array)$order_detail);
+                OrderDetail::create($store);
+            }
+            DB::commit();
+            $screen   = "UpdateOrder From Category Form Screen::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            $returnArray['ResponseStatus'] = ResponseStatus::OK;
+            return $returnArray;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $screen = "UpdateOrder From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+}
 }

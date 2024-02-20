@@ -199,4 +199,24 @@ class OrderController extends Controller
         }
 
     }
+
+    public function updateOrder(Request $request)
+    {
+        try {
+            $items = $this->OrderRepository->updateOrder((array) $request->all());
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'success cancel order',
+                'status'  => ResponseStatus::OK,
+            ]);
+            $screen = "updateOrder From OrderController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "updateOrder From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
 }

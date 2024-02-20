@@ -92,8 +92,13 @@
                                                 <img src="{{ asset('asset/images/frontend/payment/previous_img.png') }}"
                                                     alt="Previous" class="heightLine_06">
                                             </button>
+                                             @if (@isset($id))
+                                             <button class="order-btn makeorder-btn" id="order-item"
+                                             ng-click="makeOrder({{$id}})">
+                                            @else
                                             <button class="order-btn makeorder-btn" id="order-item"
-                                                ng-click="makeOrder()">
+                                            ng-click="makeOrder()">
+                                            @endif
                                                 <img src="{{ asset('asset/images/frontend/payment/order.png') }}"
                                                     class="heightLine_06">
                                             </button>

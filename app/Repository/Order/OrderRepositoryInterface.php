@@ -10,4 +10,5 @@ interface OrderRepositoryInterface
     public function CancelOrder(array $order);
     // public function getEditOrder(int $order_id);
     public function getOrderItems(int $id);
+    public function updateOrder(array $data);
 }
