@@ -66,7 +66,7 @@ $scope.orderlist = function () {
    }
 
    $scope.orderEditPage=function(id){
-    window.location.href = base_url + `sg_frontend/order_edit.php?id=${id}`;
+    window.location.href = base_url + `order-edit/${id}`;
    }
 
    $scope.orderDetail = function (orderId) {

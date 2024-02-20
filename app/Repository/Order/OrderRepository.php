@@ -129,10 +129,75 @@ class OrderRepository implements OrderRepositoryInterface
         }
     }
 
-    public function getEditOrder(int $id)
+    public function getOrderItems(int $id)
     {
         try {
-            $order = Order::find($id);
+            $item_ids = [];
+            $detail_items = OrderDetail::select('item_id')
+                        ->where('order_id', $id)
+                        ->where('status', Constant::ENABLE_STATUS)
+                        ->whereNull('deleted_at')
+                        ->get();
+            foreach ($detail_items as $item) {
+                array_push($item_ids, $item->item_id);
+            }
+
+            $items = Item::select(
+                'item.id',
+                'item.name',
+                'item.category_id',
+                'item.image',
+                'item.price',
+                'item.code_no',
+                DB::raw('(CASE WHEN item.id IN ('.implode(',', $item_ids).') THEN order_detail.quantity ELSE NULL END) AS quantity')
+            )
+            ->leftJoin('order_detail', 'item.id', '=', 'order_detail.item_id')
+            ->whereIn('item.id', $item_ids)
+            ->where('item.status', Constant::ENABLE_STATUS)
+            ->whereNull('item.deleted_at')
+            ->get();
+
+            // $data = []; $items = Item::select(
+            //     'item.id',
+            //     'item.name',
+            //     'item.category_id',
+            //     'item.image',
+            //     'item.price',
+            //     'item.code_no',
+            //     'order_detail.quantity'
+            // )
+            // ->leftJoin('order_detail')
+            // ->whereIn('item.id', $item_ids)
+            // ->where('item.status', Constant::ENABLE_STATUS)
+            // ->whereNull('item.deleted_at')
+            // ->get();
+            foreach ($items as $item) {
+                $today_date = date('Y-m-d');
+                $discount = DiscountItem::select(DB::raw('CAST(
+                            CASE
+                            WHEN dp.amount IS NULL AND dp.percentage IS NOT NULL THEN (i.price * dp.percentage / 100)
+                            WHEN dp.amount IS NOT NULL AND dp.percentage IS NULL THEN dp.amount
+                        END
+                        AS UNSIGNED) AS total_discount'))
+                        ->leftJoin('discount_promotion as dp', 'discount_item.discount_id', '=', 'dp.id')
+                        ->leftJoin('item as i', 'discount_item.item_id', '=', 'i.id')
+                        ->where('dp.start_date', '<=', $today_date)
+                        ->where('dp.end_date', '>=', $today_date)
+                        ->whereNull('dp.deleted_at')
+                        ->whereNull('discount_item.deleted_at')
+                        ->where('i.id', $item->id)
+                        ->first();
+                $total_discount          = ($discount != null) ? $discount->total_discount : 0;
+                $item->discount          = $total_discount;
+                $item->original_discount = $total_discount;
+                $item->quantity          = $item->quantity;
+                $item->amount            = $item->price - $total_discount;
+                $item->original_amount   = $item->price;
+                array_push($data, $item);
+            }
+
+            return $data;
+
             $screen   = "GetCategoryById From CategoryRepository::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);

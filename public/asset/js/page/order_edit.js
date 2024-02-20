@@ -4,7 +4,7 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.showItems = false;
   $scope.items = [];
   $scope.base_url = base_url;
-  $scope.shift_id = shift_id;
+  $scope.shift_id = shiftId;
   $scope.categories = [];
   $scope.itemsData = [];
   $scope.allItems = [];
@@ -16,13 +16,12 @@ app.controller("myCtrl", function ($scope, $http) {
     };
     $http({
         method: "POST",
-        url: base_url + "api/get_order_items",
+        url: base_url + "get-order-items",
         data: data,
       }).then(
         function (response) {
           if (response.status == 200) {
-
-            $scope.itemsData = response.data;
+            $scope.itemsData = response.data.data;
             $scope.fetchChildCategory(0);
             $scope.fetchAllItems();
             $scope.calculateTotalAmount();
@@ -53,7 +52,7 @@ app.controller("myCtrl", function ($scope, $http) {
       var data = {
         parent_id: parent_id,
       };
-      var url = base_url + "api/get_category.php";
+      var url = base_url + "get-category";
       $http({
         method: "POST",
         url: url,
@@ -61,7 +60,7 @@ app.controller("myCtrl", function ($scope, $http) {
       }).then(
         function (response) {
           if (response.status == 200) {
-            if (response.data.length <= 0) {
+            if (response.data.data.length <= 0) {
               $scope.showCategories = false;
               $scope.showItems = true;
               $scope.fetchItems(parent_id);
@@ -83,7 +82,7 @@ app.controller("myCtrl", function ($scope, $http) {
       var data = {
         category_id: category_id,
       };
-      var url = base_url + "api/get_item";
+      var url = base_url + "get-item-by-cat";
       $http({
         method: "POST",
         url: url,
@@ -104,7 +103,7 @@ app.controller("myCtrl", function ($scope, $http) {
 
     $scope.fetchAllItems = function () {
       var data = {};
-      var url = base_url + "api/get_all_items";
+      var url = base_url + "get-item";
       $http({
         method: "POST",
         url: url,
@@ -112,7 +111,7 @@ app.controller("myCtrl", function ($scope, $http) {
       }).then(
         function (response) {
           if (response.status == 200) {
-            $scope.allItems = response.data;
+            $scope.allItems = response.data.data;
           } else {
             alert("Something Wrong");
           }
@@ -127,7 +126,7 @@ app.controller("myCtrl", function ($scope, $http) {
       var data = {
         item_id: item_id,
       };
-      var url = base_url + "api/get_item_data";
+      var url = base_url + "get-item-data";
       $http({
         method: "POST",
         url: url,
@@ -149,7 +148,7 @@ app.controller("myCtrl", function ($scope, $http) {
             if (item_exist) {
               $scope.itemsData = updatedItems;
             } else {
-              $scope.itemsData.push(response.data[0]);
+              $scope.itemsData.push(response.data.data);
             }
           } else {
             alert("Something Wrong");
@@ -238,7 +237,7 @@ app.controller("myCtrl", function ($scope, $http) {
 
       $http({
         method: "POST",
-        url: base_url + "api/update_order",
+        url: base_url + "update_order",
         data: orderDetails,
       }).then(
         function (response) {

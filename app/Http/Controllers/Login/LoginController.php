@@ -131,4 +131,9 @@ class LoginController extends Controller
             abort(500);
         }
     }
+
+    public function hello()
+    {
+        dd('hello');
+    }
 }

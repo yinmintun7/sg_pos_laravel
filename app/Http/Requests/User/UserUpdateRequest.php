@@ -3,6 +3,7 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Validation\Rule;
+use App\Rules\CheckOldPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
@@ -29,7 +30,7 @@ class UserUpdateRequest extends FormRequest
             'usertype'         => 'required|in:admin,cashier',
             'password'         => 'required',
             'confirm_password' => 'required|same:password',
-            'old_password'     => 'required|same:password',
+            'old_password'     => ['required',new CheckOldPassword()],
             'username' => [
                 'required',
                 Rule::unique('users')->where(function ($query) {
@@ -59,6 +60,7 @@ class UserUpdateRequest extends FormRequest
             'password.required'     => 'Please fill password',
             'confirm_password.required' => 'Please confirm password',
             'confirm_password.same' => 'Password and confirm password must match',
+            'old_password.required' => 'Please enter old password to change!',
         ];
     }
 

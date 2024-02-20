@@ -168,14 +168,30 @@ class OrderController extends Controller
     public function EditOrder(int $id)
     {
         try {
-            $category = $this->OrderRepository->getEditOrder((int) $id);
-            if ($category == null) {
-                return response()->view('errors.404', [], 404);
-            }
-            $screen   = "GetCategoryById From CategoryController::";
+            // $category = $this->OrderRepository->getEditOrder((int) $id);
+            // if ($category == null) {
+            //     return response()->view('errors.404', [], 404);
+            // }
+            // $screen   = "GetCategoryById From CategoryController::";
+            // $queryLog = DB::getQueryLog();
+            // Utility::saveDebugLog($screen, $queryLog);
+            return view('frontend.order.order', compact(['id']));
+        } catch (\Exception $e) {
+            $screen = "GetCategoryById From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
+    public function getOrderItems(Request $request)
+    {
+        try {
+            $items = $this->OrderRepository->getOrderItems((int) $request->id);
+            return OrderItemResource::collection($items);
+            $screen = "cancelOrder From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-            return view('backend.category.form', compact(['category']));
         } catch (\Exception $e) {
             $screen = "GetCategoryById From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
