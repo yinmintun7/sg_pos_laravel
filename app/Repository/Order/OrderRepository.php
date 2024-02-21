@@ -238,14 +238,13 @@ class OrderRepository implements OrderRepositoryInterface
     {
         try {
             $shift_id = $data['shift_id'];
-            $id       = $data['id'];
-            $order = Order::select('id', 'created_at', 'total_amount')
-                           ->selectRaw("CONCAT('$shift_id', '-', id, DATE_FORMAT(created_at, '%y%m%d')) AS order_no")
-                          ->where('id', $id)
-                          ->whereNull('deleted_at')
-                          ->first();
-            dd($order);
-
+            $id       = $data['orderId'];
+            $order = Order::select('id', 'created_at', 'total_amount','status')
+            ->selectRaw("CONCAT($shift_id, '-', id, DATE_FORMAT(created_at, '%y%m%d')) AS order_no")
+            ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->first();
+            return $order;
             $screen   = "GetCategoryById From CategoryRepository::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);

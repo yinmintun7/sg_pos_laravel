@@ -40,4 +40,9 @@ class Item extends Model
         return $this->hasMany(DiscountItem::class, 'discount_id', 'id');
     }
 
+    public function getOrderDetail(): HasMany
+    {
+        return $this->hasMany(DiscountItem::class, 'item_id', 'id');
+    }
+
 }

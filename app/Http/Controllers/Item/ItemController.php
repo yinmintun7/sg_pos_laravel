@@ -32,6 +32,8 @@ class ItemController extends Controller
     {
 
         try {
+
+
             $validatedData = $request->validated();
             if (!$validatedData) {
                 return redirect()->back()->withErrors($request->errors())->withInput();

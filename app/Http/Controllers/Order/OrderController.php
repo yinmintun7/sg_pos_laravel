@@ -21,6 +21,7 @@ use App\Models\Item;
 use App\Repository\Category\CategoryRepositoryInterface;
 use App\Repository\Item\ItemRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\Order\OrderResource;
 use App\ResponseStatus;
 
 class OrderController extends Controller
@@ -227,14 +228,9 @@ class OrderController extends Controller
 
     public function getOrderDetail(Request $request)
     {
-        dd($request->all());
         try {
-            $items = $this->OrderRepository->getOrderDetail((array)$request->all());
-            return new JsonResponse([
-                'success' => true,
-                'message' => 'success cancel order',
-                'status'  => ResponseStatus::OK,
-            ]);
+            $order = $this->OrderRepository->getOrderDetail((array)$request->all());
+            return new OrderResource($order);
             $screen = "updateOrder From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);

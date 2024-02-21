@@ -15,7 +15,7 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.orderDetail = function (orderId) {
     var data = {
       orderId:orderId,
-    //   shift_id:shiftId
+     shift_id:shiftId
     };
     var url = base_url + "get-order-detail";
     $http({
@@ -25,11 +25,13 @@ app.controller("myCtrl", function ($scope, $http) {
     }).then(
       function (response) {
         if (response.status == 200) {
-          $scope.orderDetail = response.data;
-          $scope.qty = 0;
-          response.data.forEach((items) => {
-            $scope.qty += items.quantity;
-          });
+          $scope.orderDetail = response.data.data;
+          console.log($scope.orderDetail);
+        //   $scope.qty = 0;
+        //   response.data.forEach((items) => {
+        //     $scope.qty += items.quantity;
+        //   }
+          //);
 
           // window.location.href = base_url + `sg_frontend/order_detail?id=${orderId}`;
         } else {

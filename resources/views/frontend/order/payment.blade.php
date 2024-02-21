@@ -15,12 +15,12 @@
                         <h2 style="font-size: 14px; color: #727070; font-weight: 300;">Address: SoftGuide, 575B
                             <span style="display: block;">Tel: +1 012 345 67 89</span>
                         </h2>
-                        <span>OrderNo: @{{ orderDetail[0].order_no }}</span>
+                        <span>OrderNo: @{{ orderDetail.order_detail.item.order_no }}</span>
                     </div>
                     <div class="receipt_body" style=" margin-top: 25px;">
                         <div class="date_time_con" style="display: flex; justify-content: center; column-gap: 25px;">
-                            <div class="date">@{{ orderDetail[0].date }}</div>
-                            <div class="time">@{{ orderDetail[0].time }}</div>
+                            <div class="date">@{{ orderDetail.date }}</div>
+                            <div class="time">@{{ orderDetail.time }}</div>
                         </div>
                         <div class="items" style="padding: 20px;  margin-top: 25px;">
                             <table style="width: 100%;">
@@ -32,8 +32,8 @@
                                 </thead>
                                 <tbody style="border-bottom: 1px dashed #000;">
 
-                                    <tr ng-repeat="item in orderDetail" style="padding-top: 15px;">
-                                        <td style="text-align: left;">@{{ item.item_name }}</td>
+                                    <tr ng-repeat="item in orderDetail.order_detail" style="padding-top: 15px;">
+                                        <td style="text-align: left;">@{{ item.item.name }}</td>
                                         <td style="text-align: left;">@{{ item.quantity }}</td>
                                         <td style="text-align: right;">@{{ item.sub_total }}</td>
 
@@ -46,7 +46,7 @@
                                             @{{ qty }}
                                         </td>
                                         <td style="padding-top: 15px; text-align: right;">
-                                            @{{ orderDetail[0].total_amount }}
+                                            @{{ orderDetail.total_amount }}
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -64,7 +64,7 @@
                         <input type="hidden" class="void-value" id="" />
                         <input type="hidden" class="void-type" id="" />
                         <div class="col-lg-4 col-md-5 col-sm-6 col-6">
-                            <h3>Order no : @{{ orderDetail[0].order_no }}
+                            <h3>Order no : @{{ orderDetail.order_no }}
                             </h3>
                         </div>
                         <div class="col-lg-8 col-md-7 col-sm-6 col-6 receipt-btn">
@@ -91,17 +91,17 @@
                                         <td colspan="2">Sub Total</td>
                                         <td colspan="2"></td>
                                         </td>
-                                        <td colspan="2">@{{ orderDetail[0].total_amount }}</td>
+                                        <td colspan="2">@{{ orderDetail.total_amount }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" class="bg-gray">ITEM</td>
                                         <td colspan="2" class="bg-gray">QTY</td>
                                         <td colspan="2" class="bg-gray bg-gray-price">PRICE</td>
                                     </tr>
-                                    <tr ng-repeat="item in orderDetail">
-                                        <td colspan="2" style="text-align: left;">@{{ item.item_name }}</td>
-                                        <td colspan="2" style="text-align: center;">@{{ item.quantity }}</td>
-                                        <td colspan="2" style="text-align: right;">@{{ item.sub_total }}</td>
+                                    <tr ng-repeat="item in orderDetail.order_detail">
+                                        <td colspan="2" style="text-align: left;">@{{ item.item.name }}</td>
+                                        <td colspan="2" style="text-align: center;">@{{ item.item.quantity }}</td>
+                                        <td colspan="2" style="text-align: right;">@{{ item.item.sub_total }}</td>
                                     </tr>
 
                                 </table>

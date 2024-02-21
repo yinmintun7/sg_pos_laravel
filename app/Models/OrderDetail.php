@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderDetail extends Model
 {
@@ -26,4 +27,13 @@ class OrderDetail extends Model
         'deleted_by',
 
     ];
+    public function getOrderFromOrderDeatil(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
+
+    public function getItemFromOrderDeatil(): BelongsTo
+    {
+        return $this->belongsTo(Item::class, 'item_id', 'id');
+    }
 }
