@@ -31,7 +31,7 @@ $scope.orderlist = function () {
 
   // for cancel order start/////////////////////////////////////////////////////////////////
   $scope.OrderStatus = function (order,status) {
-    
+
     var data = {
       corderId: order.id,
       status:status,
@@ -69,7 +69,7 @@ $scope.orderlist = function () {
    }
 
    $scope.orderDetail = function (orderId) {
-    
+
     // var data = {
     //   orderId:orderId,
     // };
@@ -84,9 +84,9 @@ $scope.orderlist = function () {
           $scope.orderDetail = response.data;
           $scope.qty = 0;
           response.data.forEach(items => {
-            $scope.qty += items.quantity 
+            $scope.qty += items.quantity
           });
-          
+
           // window.location.href = base_url + `sg_frontend/order_detail?id=${orderId}`;
           console.log($scope.orderDetail);
         } else {
@@ -100,7 +100,7 @@ $scope.orderlist = function () {
   };
 
   $scope.paymentPage=function(id){
-    window.location.href = base_url + `sg_frontend/payment?id=${id}`;
+    window.location.href = base_url + `payment/${id}`;
    }
-  
+
 });

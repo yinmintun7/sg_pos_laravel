@@ -219,4 +219,30 @@ class OrderController extends Controller
         }
 
     }
+
+    public function getPaymentPage(int $id)
+    {
+        return view('frontend.order.payment', compact(['id']));
+    }
+
+    public function getOrderDetail(Request $request)
+    {
+        dd($request->all());
+        try {
+            $items = $this->OrderRepository->getOrderDetail((array)$request->all());
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'success cancel order',
+                'status'  => ResponseStatus::OK,
+            ]);
+            $screen = "updateOrder From OrderController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "updateOrder From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
 }

@@ -144,18 +144,20 @@ class OrderRepository implements OrderRepositoryInterface
 
             $data = [];
             $items = Item::select(
-                'id',
-                'name',
-                'category_id',
-                'image',
-                'price',
-                'code_no',
-                'quantity'
+                'item.id',
+                'item.name',
+                'item.category_id',
+                'item.image',
+                'item.price',
+                'item.code_no',
+                'order_detail.quantity'
             )
-            ->whereIn('id', $item_ids)
-            ->where('status', Constant::ENABLE_STATUS)
-            ->whereNull('deleted_at')
-            ->get();
+                        ->where('order_detail.order_id', '=', $id)
+                        ->leftJoin('order_detail', 'order_detail.item_id', '=', 'item.id')
+                        ->whereIn('item.id', $item_ids)
+                        ->where('item.status', Constant::ENABLE_STATUS)
+                        ->whereNull('item.deleted_at')
+                        ->get();
             foreach ($items as $item) {
                 $today_date = date('Y-m-d');
                 $discount = DiscountItem::select(DB::raw('CAST(
@@ -175,11 +177,12 @@ class OrderRepository implements OrderRepositoryInterface
                 $total_discount          = ($discount != null) ? $discount->total_discount : 0;
                 $item->discount          = $total_discount;
                 $item->original_discount = $total_discount;
-                $item->quantity          = 1;
+                $item->quantity          = $item->quantity;
                 $item->amount            = $item->price - $total_discount;
                 $item->original_amount   = $item->price;
                 array_push($data, $item);
             }
+
             return $data;
 
             $screen   = "GetCategoryById From CategoryRepository::";
@@ -201,7 +204,7 @@ class OrderRepository implements OrderRepositoryInterface
             $id                          = $data['id'];
             $update_data['total_amount'] = $data['subTotal'];
             $update_data['shift_id']     = $data['shift_id'];
-            $update_order   =Order::find($id);
+            $update_order   = Order::find($id);
             $confirm_update = Utility::getUpdateId((array)$update_data);
             $update_order->update($confirm_update);
             OrderDetail::where('order_id', $id)->delete();
@@ -229,5 +232,28 @@ class OrderRepository implements OrderRepositoryInterface
             abort(500);
         }
 
-}
+    }
+
+    public function getOrderDetail(array $data)
+    {
+        try {
+            $shift_id = $data['shift_id'];
+            $id       = $data['id'];
+            $order = Order::select('id', 'created_at', 'total_amount')
+                           ->selectRaw("CONCAT('$shift_id', '-', id, DATE_FORMAT(created_at, '%y%m%d')) AS order_no")
+                          ->where('id', $id)
+                          ->whereNull('deleted_at')
+                          ->first();
+            dd($order);
+
+            $screen   = "GetCategoryById From CategoryRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "GetCategoryById From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
 }

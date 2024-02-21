@@ -101,7 +101,7 @@ $scope.orderlist = function () {
   };
 
   $scope.paymentPage=function(id){
-    window.location.href = base_url + `sg_frontend/payment?id=${id}`;
+    window.location.href = base_url + `payment/${id}`;
    }
 
 });

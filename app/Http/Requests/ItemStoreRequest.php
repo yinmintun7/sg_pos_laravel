@@ -39,6 +39,7 @@ class ItemStoreRequest extends BaseFormRequest
             'image'        => ['required','mimes:png,jpg,jpeg,gif'],
         ];
     }
+
     public function messages()
     {
         return [

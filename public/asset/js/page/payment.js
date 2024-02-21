@@ -13,17 +13,18 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.hideOrderDetail =true;
 
   $scope.orderDetail = function (orderId) {
-    // var data = {
-    //   orderId:orderId,
-    // };
+    var data = {
+      orderId:orderId,
+    //   shift_id:shiftId
+    };
+    var url = base_url + "get-order-detail";
     $http({
       method: "POST",
-      url: base_url + "api/get_order_detail",
-      data: { orderId: orderId },
+      url:url,
+      data:data ,
     }).then(
       function (response) {
         if (response.status == 200) {
-          
           $scope.orderDetail = response.data;
           $scope.qty = 0;
           response.data.forEach((items) => {
@@ -77,7 +78,7 @@ app.controller("myCtrl", function ($scope, $http) {
 
   $scope.clear =function(){
     $scope.selectQuantity ='';
-    
+
   }
   $scope.calculateValue = function(){
     let total_cash_res=0;
@@ -94,7 +95,7 @@ app.controller("myCtrl", function ($scope, $http) {
     // $scope.refund = (total_cash_res >= $scope.orderDetail[0].total_amount) ? parseInt(total_cash_res) - parseInt($scope.orderDetail[0].total_amount ) : 0;
     $scope.balance= $scope.orderDetail[0].total_amount - total_cash_res;
     $scope.balance = ($scope.balance < 0) ? 0 : $scope.balance;
-   
+
   };
 
   $scope.payOrder = function () {
@@ -103,7 +104,7 @@ app.controller("myCtrl", function ($scope, $http) {
       const total=$scope.kyats[i].total_cash
       customer_pay_amount = parseInt(customer_pay_amount) + parseInt(total);
     }
-    
+
     var data = {
       id: $scope.orderDetail[0].id,
       order_no: $scope.orderDetail[0].order_no,
