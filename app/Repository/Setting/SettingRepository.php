@@ -45,7 +45,7 @@ class SettingRepository implements SettingRepositoryInterface
     public function getSetting()
     {
         try {
-            $setting = Setting::select('id', 'company_name', 'company_phone', 'company_email', 'company_address', 'company_logo', 'status')
+            $setting = Setting::select('id', 'company_name', 'company_phone', 'company_email', 'company_address', 'company_logo')
             ->whereNull('deleted_at')
             ->first();
             return $setting;

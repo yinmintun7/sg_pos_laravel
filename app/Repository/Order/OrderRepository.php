@@ -3,7 +3,7 @@
 namespace App\Repository\Order;
 
 use App\Constant;
-use App\Models\Category;
+use App\Models\Setting;
 use App\Utility;
 use App\Models\Item;
 use App\Models\DiscountItem;
@@ -11,7 +11,6 @@ use App\Models\Order;
 use App\Models\PaymentHistory;
 use App\ResponseStatus;
 use App\Models\OrderDetail;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository implements OrderRepositoryInterface
@@ -259,16 +258,18 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function insertPayOrder(array $data)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             DB::beginTransaction();
             $order_id = $data['id'];
             $order_no = $data['order_no'];
-            $refund = $data['refund'];
+            $refund   = $data['refund'];
             $customer_pay_amount = $data['customer_pay_amount'];
             $kyats = $data['kyats'];
             $update_order = [];
             $update_order = Order::find($order_id);
-            $update_order['status'] = 1;
+            $update_order['status']  = Constant::PAID_STATUS;
             $update_order['payment'] = $customer_pay_amount;
             $update_order['refund']  = $refund;
             $confirm_update = Utility::getUpdateId((array)$update_order);
@@ -285,15 +286,36 @@ class OrderRepository implements OrderRepositoryInterface
                 PaymentHistory::create($store);
             }
             DB::commit();
-            $screen   = "GetCategoryById From CategoryRepository::";
+            $returnArray['ResponseStatus'] = ResponseStatus::OK;
+            return $returnArray;
+            $screen   = "insertOrderPay From OrderRepository::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             DB::rollBack();
-            $screen = "GetCategoryById From CategoryRepository::";
+            $screen = "insertOrderPay From OrderRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
 
     }
+
+    public function getSettingData()
+    {
+        try {
+            $setting = Setting::select('id','company_name', 'company_phone', 'company_email', 'company_address','company_logo')
+                    ->whereNull('deleted_at')
+                    ->first();
+            return $setting;
+            $screen   = "GetSettingData From OrderRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "GetSettingData From OrderRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
 }

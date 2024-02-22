@@ -6,7 +6,6 @@ app.controller("myCtrl", function ($scope, $http) {
 
   };
   $scope.orderDetail = function (orderId) {
-
     var data = {
       orderId:orderId,
       shift_id:shiftId
@@ -40,5 +39,23 @@ app.controller("myCtrl", function ($scope, $http) {
     );
   };
 
+   $scope.convertDateFormat = function(inputDate) {
+    var date = new Date(inputDate);
+    var day = date.getUTCDate();
+    var month = date.getUTCMonth() + 1;
+    var year = date.getUTCFullYear();
+    var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+    return formattedDate;
+}
 
+$scope.convertTimeFormat = function(inputDate) {
+    var date = new Date(inputDate);
+    var hours = date.getUTCHours();
+    var minutes = date.getUTCMinutes();
+    var am_pm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + am_pm;
+    return formattedTime;
+}
 });

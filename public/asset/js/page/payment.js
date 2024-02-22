@@ -120,7 +120,7 @@ app.controller("myCtrl", function ($scope, $http) {
       function (response) {
         if (response.status == 200) {
           console.log(response.data)
-          window.location.href = base_url + "sg_frontend/order_list";
+          window.location.href = base_url + "order-list";
         } else {
           console.log("fail");
         }

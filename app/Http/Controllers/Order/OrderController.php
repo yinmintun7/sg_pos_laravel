@@ -15,9 +15,9 @@ use App\Http\Requests\Api\OrderStatusRequest;
 use App\Repository\Order\OrderRepositoryInterface;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Item\OrderItemResource;
+use App\Http\Resources\Setting\SettingResource;
 use App\Http\Resources\Item\ItemResource;
 use App\Http\Resources\Item\GetOrderListResource;
-use App\Models\Item;
 use App\Repository\Category\CategoryRepositoryInterface;
 use App\Repository\Item\ItemRepositoryInterface;
 use Illuminate\Http\JsonResponse;
@@ -248,18 +248,38 @@ class OrderController extends Controller
 
     public function insertPayOrder(Request $request)
     {
-        dd($request->all());
         try {
             $order = $this->OrderRepository->insertPayOrder((array)$request->all());
-            return new OrderResource($order);
-            $screen = "updateOrder From OrderController::";
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'success cancel order',
+                'status'  => ResponseStatus::OK,
+            ]);
+            $screen = "insertOrderPay From OrderRepository::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
-            $screen = "updateOrder From CategoryRepository::";
+            $screen = "insertOrderPay From OrderRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
 
+    }
+
+
+    public function getSettingData()
+    {
+        try {
+            $setting = $this->OrderRepository->getSettingData();
+            dd($setting);
+            return new SettingResource($setting);
+            $screen = "getSettingData From OrderController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "getSettingData From OrderController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
 }

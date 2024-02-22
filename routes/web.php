@@ -48,6 +48,7 @@ Route::group(['prefix' => '/', 'middleware' => 'cashier'], function () {
     Route::post('/get-order-detail', [OrderController::class,'getOrderDetail']);
     Route::get('/order-detail-page/{id}', [OrderController::class,'getOrderDetailPage']);
     Route::post('/insert-paid-order', [OrderController::class,'insertPayOrder']);
+    Route::get('/get-setting-data', [OrderController::class,'getSettingData']);
 });
 
 Route::get('/sg-backend/login', [LoginController::class, 'getLoginForm']);

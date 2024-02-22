@@ -17,19 +17,17 @@
                 </div>
                 <div class="receipt_body" style=" margin-top: 25px;">
                     <div class="date_time_con" style="display: flex; justify-content: center; column-gap: 25px;">
-                        <div class="date">@{{ orderDetail.date }}</div>
-                        <div class="time">@{{ orderDetail.time }}</div>
+                        <div class="date">@{{ convertDateFormat(orderDetail.created_at) }}</div>
+                        <div class="time">@{{ convertTimeFormat(orderDetail.created_at) }}</div>
                     </div>
                     <div class="items" style="padding: 20px;  margin-top: 25px;">
                         <table style="width: 100%;">
-
                             <thead style="border-bottom: 1px dashed #000;">
                                 <th style="text-align: left;">ITEM</th>
-                                <th style="text-align: left;">QTY</th>
+                                <th style="text-align: center;">QTY</th>
                                 <th style="text-align: right;">PRICE</th>
                             </thead>
                             <tbody style="border-bottom: 1px dashed #000;">
-
                                 <tr ng-repeat="item in orderDetail.order_detail" style="padding-top: 15px;">
                                     <td colspan="2" style="text-align: left;">@{{ item.item.name }}</td>
                                     <td colspan="2" style="text-align: center;">@{{ item.quantity }}</td>
@@ -41,7 +39,7 @@
                             <tfoot>
                                 <tr>
                                     <td style="padding-top: 15px; text-align: left;">Total</td>
-                                    <td style="padding-top: 15px; text-align: left;">
+                                    <td style="padding-top: 15px; text-align: center;">
                                         @{{ qty }}
                                     </td>
                                     <td style="padding-top: 15px; text-align: right;">@{{ orderDetail.total_amount }}</td>
@@ -54,7 +52,6 @@
                 </p>
             </div>
         </div>
-
     </div>
     <div style="text-align: center; margin: 20px 0 30px 0;">
         <button class="btn btn-secondary btn-lg" onclick="printInvoice()"><i class="fa fa-print"

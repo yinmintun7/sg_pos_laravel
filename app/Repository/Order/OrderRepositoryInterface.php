@@ -13,4 +13,5 @@ interface OrderRepositoryInterface
     public function updateOrder(array $data);
     public function getOrderDetail(array $data);
     public function insertPayOrder(array $data);
+    public function getSettingData();
 }

@@ -6,7 +6,6 @@
             <div id="order-detail" ng-hide="hideOrderDetail">
                 <div class="container"
                     style="display: block; width: 100%; background: #fff; max-width: 270px; padding: 25px;margin: 5px auto 0; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);">
-
                     <div class="receipt_header"
                         style="padding-bottom: 40px; border-bottom: 1px dashed #000; text-align: center;">
                         <h1 style="font-size: 20px; margin-bottom: 5px; text-transform: uppercase;">Receipt of Sale
