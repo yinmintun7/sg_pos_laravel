@@ -100,10 +100,9 @@
                                     </tr>
                                     <tr ng-repeat="item in orderDetail.order_detail">
                                         <td colspan="2" style="text-align: left;">@{{ item.item.name }}</td>
-                                        <td colspan="2" style="text-align: center;">@{{ item.item.quantity }}</td>
-                                        <td colspan="2" style="text-align: right;">@{{ item.item.sub_total }}</td>
+                                        <td colspan="2" style="text-align: center;">@{{ item.quantity }}</td>
+                                        <td colspan="2" style="text-align: right;">@{{ item.sub_total }}</td>
                                     </tr>
-
                                 </table>
                             </div><!-- table-responsive -->
 
@@ -134,9 +133,8 @@
                             </div><!-- table-responsive -->
                             <div class="row receipt-btn02">
                                 <div class="col-md-6 col-sm-6 col-6"><a class="btn btn-primary view-btn"
-                                        href="order_detail.php">VIEW DETAILS</a></div>
+                                        href="/order-detail-page/@{{ orderDetail.id }}">VIEW DETAILS</a></div>
                             </div>
-
                         </div>
                         <div class="col-md-8 col-sm-8 col-6">
                             <div class="row">
@@ -256,9 +254,7 @@
                                                 ng-disabled="topaydisable">To Pay</button>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div> <!-- row -->
                         </div> <!-- col-md-8 -->
                     </div>
@@ -267,11 +263,11 @@
         </div><!-- container-fluid -->
     </div><!-- wrapper -->
     <!--
-                                                        print template here
-                                                    {{-- @include('cashier.invoice.payment_print') --}}
-                                                    -->
+                                                                                        print template here
+                                                                                    {{-- @include('cashier.invoice.payment_print') --}}
+                                                                                    -->
     <!-- item print her
-                                                    {{-- @include('cashier.invoice.items_list') --}}
-                                                -->
+                                                                                    {{-- @include('cashier.invoice.items_list') --}}
+                                                                                -->
     <script src="{{ asset('asset/js/page/payment.js?v=20240215') }}"></script>
 @endsection

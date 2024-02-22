@@ -8,6 +8,7 @@ use App\Utility;
 use App\Models\Item;
 use App\Models\DiscountItem;
 use App\Models\Order;
+use App\Models\PaymentHistory;
 use App\ResponseStatus;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Auth;
@@ -239,7 +240,7 @@ class OrderRepository implements OrderRepositoryInterface
         try {
             $shift_id = $data['shift_id'];
             $id       = $data['orderId'];
-            $order = Order::select('id', 'created_at', 'total_amount','status')
+            $order = Order::select('id', 'created_at', 'total_amount', 'status')
             ->selectRaw("CONCAT($shift_id, '-', id, DATE_FORMAT(created_at, '%y%m%d')) AS order_no")
             ->where('id', $id)
             ->whereNull('deleted_at')
@@ -249,6 +250,46 @@ class OrderRepository implements OrderRepositoryInterface
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
+            $screen = "GetCategoryById From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
+    public function insertPayOrder(array $data)
+    {
+        try {
+            DB::beginTransaction();
+            $order_id = $data['id'];
+            $order_no = $data['order_no'];
+            $refund = $data['refund'];
+            $customer_pay_amount = $data['customer_pay_amount'];
+            $kyats = $data['kyats'];
+            $update_order = [];
+            $update_order = Order::find($order_id);
+            $update_order['status'] = 1;
+            $update_order['payment'] = $customer_pay_amount;
+            $update_order['refund']  = $refund;
+            $confirm_update = Utility::getUpdateId((array)$update_order);
+            $update_order->update($confirm_update);
+            foreach ($kyats as $kyat) {
+                $insert_data = [];
+                $cash = $kyat['cash'];
+                $quantity = $kyat['quantity'];
+                $insert_data['order_id']  = $order_id;
+                $insert_data['code_no']   = $order_no;
+                $insert_data['cash']      = $cash;
+                $insert_data['quantity']  = $quantity;
+                $store = Utility::getCreateId((array)$insert_data);
+                PaymentHistory::create($store);
+            }
+            DB::commit();
+            $screen   = "GetCategoryById From CategoryRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            DB::rollBack();
             $screen = "GetCategoryById From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);

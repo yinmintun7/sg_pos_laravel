@@ -40,6 +40,7 @@ class ItemRepository implements ItemRepositoryInterface
             for ($i = 0; $i <= 3; $i++) {
                 $code_key .= chr(rand(65, 90));
             }
+
             $code_no = $create_item->category_id . $create_item->id . '-' . $code_key;
             $insert_codeno = Item::find($create_item->id);
             $confirm_codeno['code_no'] = $code_no;

@@ -9,7 +9,6 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.refund='';
   $scope.disable = false;
   $scope.topaydisable = true;
-
   $scope.hideOrderDetail =true;
 
   $scope.orderDetail = function (orderId) {
@@ -27,11 +26,10 @@ app.controller("myCtrl", function ($scope, $http) {
         if (response.status == 200) {
           $scope.orderDetail = response.data.data;
           console.log($scope.orderDetail);
-        //   $scope.qty = 0;
-        //   response.data.forEach((items) => {
-        //     $scope.qty += items.quantity;
-        //   }
-          //);
+          $scope.qty = 0;
+          $scope.orderDetail.order_detail.forEach(item => {
+              $scope.qty += item.quantity;
+          });
 
           // window.location.href = base_url + `sg_frontend/order_detail?id=${orderId}`;
         } else {
@@ -88,14 +86,14 @@ app.controller("myCtrl", function ($scope, $http) {
       const total=$scope.kyats[i].total_cash
       total_cash_res = parseInt(total_cash_res) + parseInt(total);
     }
-    if(total_cash_res >= $scope.orderDetail[0].total_amount){
+    if(total_cash_res >= $scope.orderDetail.total_amount){
       $scope.topaydisable =false;
-      $scope.refund = parseInt(total_cash_res) - parseInt($scope.orderDetail[0].total_amount ) ;
+      $scope.refund = parseInt(total_cash_res) - parseInt($scope.orderDetail.total_amount ) ;
     }else{
       $scope.refund =0;
     }
     // $scope.refund = (total_cash_res >= $scope.orderDetail[0].total_amount) ? parseInt(total_cash_res) - parseInt($scope.orderDetail[0].total_amount ) : 0;
-    $scope.balance= $scope.orderDetail[0].total_amount - total_cash_res;
+    $scope.balance= $scope.orderDetail.total_amount - total_cash_res;
     $scope.balance = ($scope.balance < 0) ? 0 : $scope.balance;
 
   };
@@ -106,10 +104,9 @@ app.controller("myCtrl", function ($scope, $http) {
       const total=$scope.kyats[i].total_cash
       customer_pay_amount = parseInt(customer_pay_amount) + parseInt(total);
     }
-
     var data = {
-      id: $scope.orderDetail[0].id,
-      order_no: $scope.orderDetail[0].order_no,
+      id: $scope.orderDetail.id,
+      order_no: $scope.orderDetail.order_no,
       refund : $scope.refund,
       customer_pay_amount : customer_pay_amount,
       kyats : $scope.kyats,
@@ -117,7 +114,7 @@ app.controller("myCtrl", function ($scope, $http) {
     console.log(data);
     $http({
       method: "POST",
-      url: base_url + "api/insert_paid_order",
+      url: base_url + "insert-paid-order",
       data: data,
     }).then(
       function (response) {

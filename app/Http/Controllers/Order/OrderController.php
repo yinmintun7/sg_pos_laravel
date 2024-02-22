@@ -225,11 +225,32 @@ class OrderController extends Controller
     {
         return view('frontend.order.payment', compact(['id']));
     }
+    public function getOrderDetailPage(int $id)
+    {
+        return view('frontend.order.order_detail', compact(['id']));
+    }
 
     public function getOrderDetail(Request $request)
     {
         try {
             $order = $this->OrderRepository->getOrderDetail((array)$request->all());
+            return new OrderResource($order);
+            $screen = "updateOrder From OrderController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "updateOrder From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
+    public function insertPayOrder(Request $request)
+    {
+        dd($request->all());
+        try {
+            $order = $this->OrderRepository->insertPayOrder((array)$request->all());
             return new OrderResource($order);
             $screen = "updateOrder From OrderController::";
             $queryLog = DB::getQueryLog();
