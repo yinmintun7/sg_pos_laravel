@@ -125,13 +125,13 @@
             </div>
         </div>
     </div>
-    </div>
     @include('layouts.backend.partial.footer_start')
     @include('layouts.backend.partial.footer_end')
     <script>
         function fileInput() {
             $('#fileInput').click();
         }
+
         function previewImage(input) {
             const file = input.files[0];
             let fileExtension = file.name.split('.').pop();

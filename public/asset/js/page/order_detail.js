@@ -6,6 +6,7 @@ app.controller("myCtrl", function ($scope, $http) {
 
   };
   $scope.orderDetail = function (orderId) {
+    $scope.getSettingData();
     var data = {
       orderId:orderId,
       shift_id:shiftId
@@ -29,6 +30,27 @@ app.controller("myCtrl", function ($scope, $http) {
 
           // window.location.href = base_url + `sg_frontend/order_detail?id=${orderId}`;
 
+        } else {
+          console.log("Error:" + response.status);
+        }
+      },
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
+  $scope.getSettingData = function () {
+    var url = base_url + "get-setting-data";
+    $http({
+      method: "GET",
+      url: url,
+    }).then(
+      function (response) {
+        if (response.status == 200) {
+          $scope.settingData = [];
+          $scope.settingData = response.data.
+          data;
         } else {
           console.log("Error:" + response.status);
         }

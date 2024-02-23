@@ -59,7 +59,6 @@ Route::post('/postlogin', [LoginController::class, 'postLoginForm'])->name('sg-b
 
 Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
     Route::get('/index', [DashboardController::class, 'index']);
-
     Route::group(['prefix' => 'shift'], function () {
         Route::get('/index', [ShiftController::class, 'index']);
         Route::post('/start', [ShiftController::class, 'start']);

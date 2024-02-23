@@ -29,7 +29,7 @@ class ShiftCheckRule implements Rule
         $shift_check_rule = Shift::whereNotNull('start_date_time')
                             ->whereNull('end_date_time')
                             ->count() === 0;
-        // return $shift_check_rule === 0;
+        return $shift_check_rule === 0;
     }
     /**
      * Get the validation error message.
