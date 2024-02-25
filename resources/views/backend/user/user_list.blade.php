@@ -19,7 +19,6 @@
                                                 <input type="checkbox" id="check-all" class="flat">
                                             </th>
                                             <th class="column-title">Username </th>
-                                            <th class="column-title">Password </th>
                                             <th class="column-title">Role</th>
                                             <th class="column-title">Status </th>
 
@@ -39,7 +38,6 @@
                                                     <input type="checkbox" class="flat" name="table_records">
                                                 </td>
                                                 <td class=" ">{{ $user->username }}</td>
-                                                <td class=" ">{{ $user->password }}</td>
                                                 <td class=" ">{{ $user->role_name }}</td>
                                                 <td class=" ">
                                                     @if ($user->status == 0)
@@ -56,19 +54,13 @@
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <a href="{{ url('/sg-backend/user/edit/') }}/{{ $user->id }}"
-                                                                class="btn btn-info btn-xs">
-                                                                <i class="fa fa-pencil"></i> Edit
-                                                            </a>
-                                                        </div>
                                                         <div class="col-md-6">
                                                             <form action="{{ url('/sg-backend/user/delete') }}"
                                                                 method="POST" id="user-form-{{ $user->id }}">
                                                                 @csrf
                                                                 <input type="hidden" name="id"
                                                                     value="{{ $user->id }}">
-                                                                <button type="button" class="btn btn-danger btn-lg"
+                                                                <button type="button" class="btn btn-danger btn-xs"
                                                                     onclick="confirmDelete('user-form-{{ $user->id }}')">
                                                                     <i class="fa fa-trash"></i> Delete
                                                                 </button>
@@ -76,7 +68,6 @@
                                                         </div>
                                                     </div>
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                     </tbody>

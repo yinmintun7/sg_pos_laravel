@@ -55,7 +55,7 @@
                                                 </td>
                                                 <td class="last">
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-6">
                                                             <a href="{{ url('/sg-backend/category/edit/') }}/{{ $category->id }}" class="btn btn-info btn-xs">
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
@@ -64,7 +64,7 @@
                                                             <form action="{{ url('/sg-backend/category/delete') }}" method="POST" id="category-form-{{ $category->id }}" >
                                                                 @csrf
                                                                 <input type="hidden" name="id" value="{{ $category->id }}">
-                                                                <button type="button" class="btn btn-danger btn-lg" onclick="confirmDelete('category-form-{{$category->id}}')">
+                                                                <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('category-form-{{$category->id}}')">
                                                                     <i class="fa fa-trash"></i> Delete
                                                                 </button>
                                                             </form>

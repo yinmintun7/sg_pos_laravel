@@ -25,8 +25,8 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'usertype' => 'required|in:admin,cashier',
-            'password' => 'required',
+            'usertype'         => 'required|in:admin,cashier',
+            'password'         => ['required','min:6'],
             'confirm_password' => 'required|same:password',
             'username' => [
                 'required',
@@ -39,9 +39,9 @@ class UserStoreRequest extends FormRequest
         ];
 
         if ($this->input('usertype') === 'cashier') {
-            $rules['username'] = 'required|numeric'; // Allow only numeric input for cashier
+            $rules['username'] = 'required|numeric';
         } elseif ($this->input('usertype') === 'admin') {
-            $rules['username'] = 'required|string'; // Allow only string input for admin
+            $rules['username'] = 'required|string';
         }
         return $rules;
     }
@@ -49,14 +49,15 @@ class UserStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'username.required'     => 'Please fill username',
-            'username.string'       => 'Username must be a string',
-            'username.numeric'      => 'Username must be numeric',
-            'username.unique'       => 'Username is already taken',
-            'usertype.required'     => 'Please fill usertype',
-            'password.required'     => 'Please fill password',
+            'username.required'         => 'Please fill username',
+            'username.string'           => 'Username must be a string',
+            'username.numeric'          => 'Username must be numeric',
+            'username.unique'           => 'Username is already taken',
+            'usertype.required'         => 'Please fill usertype',
+            'password.required'         => 'Please fill password',
+            'password.min'              => 'Password must be at least 6 characters long',
             'confirm_password.required' => 'Please confirm password',
-            'confirm_password.same' => 'Password and confirm password must match',
+            'confirm_password.same'     => 'Password and confirm password must match',
         ];
     }
 

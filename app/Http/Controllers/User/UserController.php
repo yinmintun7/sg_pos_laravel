@@ -33,7 +33,7 @@ class UserController extends Controller
         try {
             $store = $this->UserRepository->create((array) $request->all());
             if ($store['ResponseStatus'] == ResponseStatus::OK) {
-                return redirect('/sg-backend/category/list')->with('success', 'Success! Category created!');
+                return redirect('/sg-backend/user/list')->with('success', 'Success! Category created!');
             } else {
                 return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create category!']);
             }

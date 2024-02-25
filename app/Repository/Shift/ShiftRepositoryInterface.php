@@ -8,4 +8,5 @@ interface ShiftRepositoryInterface
     public function start();
     public function end();
     public function getShiftList();
+    public function hasUnpayOrder(int $shift_id);
 }

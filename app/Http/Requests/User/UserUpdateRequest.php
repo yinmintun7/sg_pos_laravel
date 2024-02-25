@@ -23,14 +23,14 @@ class UserUpdateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
+
     public function rules()
     {
+        $user_id = $this->input('id');
         $rules = [
-            'id'               =>['required','numeric'],
-            'usertype'         => 'required|in:admin,cashier',
-            'password'         => 'required',
-            'confirm_password' => 'required|same:password',
-            'old_password'     => ['required',new CheckOldPassword()],
+            'id'               => ['required', 'numeric'],
+            'usertype'         => ['required', 'in:admin,cashier'],
+            'old_password'     => ['required', new CheckOldPassword($user_id)],
             'username' => [
                 'required',
                 Rule::unique('users')->where(function ($query) {
@@ -46,21 +46,28 @@ class UserUpdateRequest extends FormRequest
         } elseif ($this->input('usertype') === 'admin') {
             $rules['username'] = 'required|string';
         }
+
+        if ($this->filled('password')) {
+            $rules['password'] = 'required|min:6';
+            $rules['confirm_password'] = 'required|same:password';
+        }
+
         return $rules;
     }
 
     public function messages()
     {
         return [
-            'username.required'     => 'Please fill username',
-            'username.string'       => 'Username must be a string',
-            'username.numeric'      => 'Username must be numeric',
-            'username.unique'       => 'Username is already taken',
-            'usertype.required'     => 'Please fill usertype',
-            'password.required'     => 'Please fill password',
+            'username.required'         => 'Please fill username',
+            'username.string'           => 'Username must be a string',
+            'username.numeric'          => 'Username must be numeric',
+            'username.unique'           => 'Username is already taken',
+            'usertype.required'         => 'Please fill usertype',
+            'old_password.required'     => 'Please enter old password to change!',
+            'password.required'         => 'Please fill password',
+            'password.min'              => 'Password must be at least 6 characters long',
             'confirm_password.required' => 'Please confirm password',
-            'confirm_password.same' => 'Password and confirm password must match',
-            'old_password.required' => 'Please enter old password to change!',
+            'confirm_password.same'     => 'Password and confirm password must match',
         ];
     }
 

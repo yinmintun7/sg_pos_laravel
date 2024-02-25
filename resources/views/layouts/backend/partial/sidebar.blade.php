@@ -4,8 +4,6 @@
             <a href="index.html" class="site_title"><i class="fa fa-cart-plus"
                     aria-hidden="true"></i><span>SG-POS</span></a>
         </div>
-        <div class="clearfix"></div>
-
         <div class="profile clearfix">
             <div class="profile_pic">
                 <img src="{{ URL::asset('asset/images/img.jpg') }}" alt="..." class="img-circle profile_img">
@@ -16,7 +14,6 @@
             </div>
         </div>
         <br />
-
         <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">

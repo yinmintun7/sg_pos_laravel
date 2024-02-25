@@ -4,21 +4,45 @@ namespace App\Repository\Shift;
 
 use App\Constant;
 use App\Models\Shift;
+use App\Models\Order;
 use App\Utility;
 use App\ResponseStatus;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ShiftRepository implements ShiftRepositoryInterface
 {
     public function getShiftStart()
     {
-        $shift = Shift::select(DB::raw('count(id) as total'))
+        try{
+            $shift = Shift::select('id')
             ->whereNotNull('start_date_time')
             ->whereNull('end_date_time')
             ->whereNull('deleted_at')
             ->first();
-        return $shift->total;
+            return $shift ? $shift->id : null;
+        }catch (\Exception $e) {
+            $screen = "getShiftStart From ShiftRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
+    public function hasUnpayOrder($shift)
+    {
+        try{
+            $has_unpay_order = Order::select(DB::raw('count(id) as total'))
+            ->where('status', 0)
+            ->where('shift_id', $shift)
+            ->whereNull('deleted_at')
+            ->first();
+        return $has_unpay_order->total;
+        }catch (\Exception $e) {
+            $screen = "Shiftend From ShiftRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
     }
 
     public function start()
@@ -34,6 +58,8 @@ class ShiftRepository implements ShiftRepositoryInterface
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
+            $screen = "ShiftStart From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
@@ -49,6 +75,8 @@ class ShiftRepository implements ShiftRepositoryInterface
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
+            $screen = "ShiftEnd From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
@@ -64,6 +92,8 @@ class ShiftRepository implements ShiftRepositoryInterface
                 ->paginate(10);
             return $shift_list;
         } catch (\Exception $e) {
+            $screen = "getShiftList From ItemRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }

@@ -169,13 +169,7 @@ class OrderController extends Controller
     public function EditOrder(int $id)
     {
         try {
-            // $category = $this->OrderRepository->getEditOrder((int) $id);
-            // if ($category == null) {
-            //     return response()->view('errors.404', [], 404);
-            // }
-            // $screen   = "GetCategoryById From CategoryController::";
-            // $queryLog = DB::getQueryLog();
-            // Utility::saveDebugLog($screen, $queryLog);
+
             return view('frontend.order.order', compact(['id']));
         } catch (\Exception $e) {
             $screen = "GetCategoryById From CategoryRepository::";
@@ -266,12 +260,10 @@ class OrderController extends Controller
 
     }
 
-
     public function getSettingData()
     {
         try {
             $setting = $this->OrderRepository->getSettingData();
-            dd($setting);
             return new SettingResource($setting);
             $screen = "getSettingData From OrderController::";
             $queryLog = DB::getQueryLog();

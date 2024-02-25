@@ -1,3 +1,4 @@
+</script>
 <!-- jQuery -->
 <script src="{{ URL::asset('asset/js/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap -->
@@ -22,5 +23,4 @@
 <script src="{{ URL::asset('asset/js/date-time/daterangepicker.js') }}"></script>
 <!-- bootstrap-datetimepicker -->
 <script src="{{ URL::asset('asset/js/date-time/bootstrap-datetimepicker.min.js') }}"></script>
-
 </body>

@@ -144,7 +144,7 @@
                 $insert_data = [];
                 $insert_data['username'] = $data['username'];
                 $insert_data['password'] = bcrypt($data['password']);
-                $insert_data['status']   = $data['status'];
+                // $insert_data['status']   = $data['status'];
                 if ($data['usertype'] == 'admin') {
                     $insert_data['role'] = Constant::ADMIN_ROLE;
                 }
@@ -191,13 +191,14 @@
         }
         public function update($request)
         {
-
             try {
                 $id = $request['id'];
                 $update_data = [];
                 $update_data['username'] = $request['username'];
-                $update_data['password'] = bcrypt($request['password']);
-                $update_data['status']   = $request['status'];
+                if (array_key_exists('password', $request)) {
+                    $update_data['password'] = bcrypt($request['password']);
+                }
+                // $update_data['status']   = $request['status'];
                 if ($request['usertype'] == 'admin') {
                     $update_data['role'] = Constant::ADMIN_ROLE;
                 }

@@ -23,8 +23,8 @@ class CashierPermissionMiddleware
             $role = Auth::guard('admin')->user()->role;
             if ($role == Constant::CASHIER_ROLE) {
                 $shift = Shift::whereNotNull('start_date_time')
-                                    ->whereNull('end_date_time')
-                                    ->first();
+                                ->whereNull('end_date_time')
+                                ->first();
                 if ($shift == null) {
                     return redirect('/shift-close');
                 } else {

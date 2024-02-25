@@ -2,7 +2,6 @@
 @section('title', isset($category) ? 'Category Update' : 'Category Create')
 @section('content')
     <div class="right_col" role="main">
-        <div class="">
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <div class="x_panel">
@@ -105,9 +104,8 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
-    </div>
+    <!-- page content -->
     @include('layouts.backend.partial.footer_start')
     @include('layouts.backend.partial.footer_end')
     <script>

@@ -1,7 +1,7 @@
 var app = angular.module("myApp", []);
 app.controller("myCtrl", function ($scope, $http) {
   $scope.orderDetal=[];
-
+  $scope.settingData = [];
   $scope.init = function () {
 
   };
@@ -22,13 +22,10 @@ app.controller("myCtrl", function ($scope, $http) {
           $scope.orderDetail = [];
           $scope.orderDetail = response.data.
           data;
-          console.log($scope.orderDetail);
           $scope.qty = 0;
           $scope.orderDetail.order_detail.forEach(item => {
               $scope.qty += item.quantity;
           });
-
-          // window.location.href = base_url + `sg_frontend/order_detail?id=${orderId}`;
 
         } else {
           console.log("Error:" + response.status);
@@ -43,12 +40,11 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.getSettingData = function () {
     var url = base_url + "get-setting-data";
     $http({
-      method: "GET",
+      method: "POST",
       url: url,
     }).then(
       function (response) {
         if (response.status == 200) {
-          $scope.settingData = [];
           $scope.settingData = response.data.
           data;
         } else {

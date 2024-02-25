@@ -14,12 +14,12 @@
                         <h2 style="font-size: 14px; color: #727070; font-weight: 300;">Address: SoftGuide, 575B
                             <span style="display: block;">Tel: +1 012 345 67 89</span>
                         </h2>
-                        <span>OrderNo: @{{ orderDetail.order_detail.item.order_no }}</span>
+                        <span>OrderNo: @{{ orderDetail.order_no }}</span>
                     </div>
                     <div class="receipt_body" style=" margin-top: 25px;">
                         <div class="date_time_con" style="display: flex; justify-content: center; column-gap: 25px;">
-                            <div class="date">@{{ orderDetail.date }}</div>
-                            <div class="time">@{{ orderDetail.time }}</div>
+                            <div class="date">@{{ convertDateFormat(orderDetail.created_at) }}</div>
+                            <div class="time">@{{ convertTimeFormat(orderDetail.created_at) }}</div>
                         </div>
                         <div class="items" style="padding: 20px;  margin-top: 25px;">
                             <table style="width: 100%;">
@@ -35,7 +35,6 @@
                                         <td style="text-align: left;">@{{ item.item.name }}</td>
                                         <td style="text-align: left;">@{{ item.quantity }}</td>
                                         <td style="text-align: right;">@{{ item.sub_total }}</td>
-
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -104,8 +103,7 @@
                                     </tr>
                                 </table>
                             </div><!-- table-responsive -->
-
-                            <h3 class="receipt-ttl"></h3>
+                            <h3 class="receipt-ttl">Total:@{{ orderDetail.total_amount }}</h3>
                             <div class="table-responsive">
                                 <table class="table receipt-table" id="invoice-table">
                                     <tr class="before-tr" style="height: 32px;">
@@ -233,7 +231,7 @@
                                                 ng-click="clickValue(4)">4</button>
                                             <button class="btn quantity" id="5"
                                                 ng-click="clickValue(5)">5</button>
-                                            <button class="btn quantity ml-2" id="6"
+                                            <button class="btn quantity" id="6"
                                                 ng-click="clickValue(6)">6</button>
                                             <button class="btn quantity" id="7"
                                                 ng-click="clickValue(7)">7</button>
@@ -261,12 +259,14 @@
             </div>
         </div><!-- container-fluid -->
     </div><!-- wrapper -->
-    <!--
-                                                                                        print template here
-                                                                                    {{-- @include('cashier.invoice.payment_print') --}}
-                                                                                    -->
-    <!-- item print her
-                                                                                    {{-- @include('cashier.invoice.items_list') --}}
-                                                                                -->
+    <script>
+        function printInvoice() {
+            var printContents = document.getElementById('order-detail').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
     <script src="{{ asset('asset/js/page/payment.js?v=20240215') }}"></script>
 @endsection

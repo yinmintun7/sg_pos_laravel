@@ -4,17 +4,21 @@ namespace App\Rules;
 
 use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class CheckOldPassword implements Rule
 {
+    protected $user_id;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user_id)
     {
-        //
+
+            $this->user_id = $user_id;
+
     }
 
     /**
@@ -26,8 +30,14 @@ class CheckOldPassword implements Rule
      */
     public function passes($attribute, $value)
     {
-        $old_pass = User::select('password')
-                   ->where('id', );
+        $user_password = bcrypt($value);
+        $user = User::find($this->user_id);
+        $password = $user->password;
+        if($user_password === $password){
+           return false;
+        }else{
+            return true;
+        }
 
     }
 
@@ -38,6 +48,6 @@ class CheckOldPassword implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'Incrrect password!';
     }
 }

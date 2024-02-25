@@ -20,6 +20,7 @@ class SettingResource extends JsonResource
             'company_phone'   => $this->company_phone,
             'company_email'   => $this->company_address,
             'company_logo'    => $this->company_logo,
+            'company_address' => $this->company_address,
     ];
     }
 }

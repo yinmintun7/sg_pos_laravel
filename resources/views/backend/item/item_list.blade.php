@@ -65,7 +65,7 @@
                                                 <td class="">
                                                     <div class = "row">
                                                         <div class="col-md-5">
-                                                            <a href="{{ url('/sg-backend/item/edit/') }}/{{ $item->id }}" class="btn btn-info btn-md">
+                                                            <a href="{{ url('/sg-backend/item/edit/') }}/{{ $item->id }}" class="btn btn-info btn-xs">
                                                                 <i class="fa fa-pencil"></i> Edit
                                                             </a>
                                                         </div>
@@ -73,7 +73,7 @@
                                                             <form action="{{ url('/sg-backend/item/delete') }}" method="POST" id="item-form-{{ $item->id }}">
                                                                 @csrf
                                                                 <input type="hidden" name="id" value="{{ $item->id }}">
-                                                                <button type="button" class="btn btn-danger btn-md" onclick="confirmDelete('item-form-{{ $item->id }}')">
+                                                                <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('item-form-{{ $item->id }}')">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i> Delete
                                                                 </button>
                                                             </form>

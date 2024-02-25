@@ -1,8 +1,8 @@
 /**
  * Resize function without multiple trigger
- * 
+ *
  * Usage:
- * $(window).smartresize(function(){  
+ * $(window).smartresize(function(){
  *     // code here
  * });
  */
@@ -16,8 +16,8 @@
             var obj = this, args = arguments;
             function delayed () {
                 if (!execAsap)
-                    func.apply(obj, args); 
-                timeout = null; 
+                    func.apply(obj, args);
+                timeout = null;
             }
 
             if (timeout)
@@ -25,11 +25,11 @@
             else if (execAsap)
                 func.apply(obj, args);
 
-            timeout = setTimeout(delayed, threshold || 100); 
+            timeout = setTimeout(delayed, threshold || 100);
         };
     };
 
-    // smartresize 
+    // smartresize
     jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
 
 })(jQuery,'smartresize');
@@ -611,7 +611,7 @@ function init_starrr() {
 
 function init_JQVmap() {
 
-    //console.log('check init_JQVmap [' + typeof (VectorCanvas) + '][' + typeof (jQuery.fn.vectorMap) + ']' );	
+    //console.log('check init_JQVmap [' + typeof (VectorCanvas) + '][' + typeof (jQuery.fn.vectorMap) + ']' );
 
     if (typeof (jQuery.fn.vectorMap) === 'undefined') { return; }
 
@@ -1721,7 +1721,7 @@ function init_daterangepicker_right() {
 }
 
 function init_daterangepicker_single_call() {
-    
+
     if (typeof ($.fn.daterangepicker) === 'undefined') { return; }
     $('#start_date').daterangepicker({
         autoUpdateInput: false,
@@ -1731,8 +1731,8 @@ function init_daterangepicker_single_call() {
     }, function (start, end, label) {
         $('#start_date').val(start.format('MM/DD/YYYY'));
     });
-    
-    var end_date_picker = $('#end_date').daterangepicker({  
+
+    var end_date_picker = $('#end_date').daterangepicker({
         singleDatePicker: true,
         singleClasses: "picker_2",
         autoUpdateInput: false,
@@ -2586,16 +2586,13 @@ function init_morris_charts() {
         Morris.Bar({
             element: 'graph_bar',
             data: [
-                { device: 'iPhone 4', geekbench: 380 },
-                { device: 'iPhone 4S', geekbench: 655 },
-                { device: 'iPhone 3GS', geekbench: 275 },
-                { device: 'iPhone 5', geekbench: 1571 },
-                { device: 'iPhone 5S', geekbench: 655 },
-                { device: 'iPhone 6', geekbench: 2154 },
-                { device: 'iPhone 6 Plus', geekbench: 1144 },
-                { device: 'iPhone 6S', geekbench: 2371 },
-                { device: 'iPhone 6S Plus', geekbench: 1471 },
-                { device: 'Other', geekbench: 1371 }
+                { device: 'Sun', geekbench: 380 },
+                { device: 'Mon', geekbench: 655 },
+                { device: 'Tue', geekbench: 275 },
+                { device: 'Wed', geekbench: 1571 },
+                { device: 'Thu', geekbench: 655 },
+                { device: 'Fri', geekbench: 2154 },
+                { device: 'Sat', geekbench: 1144 },
             ],
             xkey: 'device',
             ykeys: ['geekbench'],
@@ -5048,4 +5045,4 @@ $(document).ready(function () {
     init_autosize();
     init_autocomplete();
 
-});	
+});

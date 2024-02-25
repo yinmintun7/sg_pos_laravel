@@ -30,8 +30,6 @@ app.controller("myCtrl", function ($scope, $http) {
           $scope.orderDetail.order_detail.forEach(item => {
               $scope.qty += item.quantity;
           });
-
-          // window.location.href = base_url + `sg_frontend/order_detail?id=${orderId}`;
         } else {
           console.log("Error:" + response.status);
         }
@@ -88,11 +86,11 @@ app.controller("myCtrl", function ($scope, $http) {
     }
     if(total_cash_res >= $scope.orderDetail.total_amount){
       $scope.topaydisable =false;
+      $scope.disable = true;
       $scope.refund = parseInt(total_cash_res) - parseInt($scope.orderDetail.total_amount ) ;
     }else{
       $scope.refund =0;
     }
-    // $scope.refund = (total_cash_res >= $scope.orderDetail[0].total_amount) ? parseInt(total_cash_res) - parseInt($scope.orderDetail[0].total_amount ) : 0;
     $scope.balance= $scope.orderDetail.total_amount - total_cash_res;
     $scope.balance = ($scope.balance < 0) ? 0 : $scope.balance;
 
@@ -130,5 +128,25 @@ app.controller("myCtrl", function ($scope, $http) {
       }
     );
   };
+
+  $scope.convertDateFormat = function(inputDate) {
+    var date = new Date(inputDate);
+    var day = date.getUTCDate();
+    var month = date.getUTCMonth() + 1;
+    var year = date.getUTCFullYear();
+    var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+    return formattedDate;
+}
+
+$scope.convertTimeFormat = function(inputDate) {
+    var date = new Date(inputDate);
+    var hours = date.getUTCHours();
+    var minutes = date.getUTCMinutes();
+    var am_pm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + am_pm;
+    return formattedTime;
+}
 
 });

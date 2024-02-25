@@ -1,7 +1,6 @@
 @extends('layouts.frontend.master')
 @section('title', 'Order')
 @section('content')
-
     <body class="nav-md">
         <style>
             body {

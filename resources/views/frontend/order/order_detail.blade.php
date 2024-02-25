@@ -1,19 +1,29 @@
 @extends('layouts.frontend.master')
 @section('title', 'Payment')
 @section('content')
-    <div class="containder_fluid" ng-app="myApp" ng-controller="myCtrl" ng-init="orderDetail({{ $id }})">
+    <div class="col-lg-8 col-md-7 col-sm-6 col-6 receipt-btn justify-content-start">
+        <button class="btn" onclick="history.back()">
+
+            <img src="{{asset('asset/images/frontend/payment/previous_img.png')}}" alt="Previous"
+                class="heightLine_06" />
+            </a>
+        </button>
+    </div>
+    <div class="containder_fluid" ng-app="myApp" ng-controller="myCtrl" ng-init="orderDetail(<?php echo $id; ?>)">
         <div id="order-detail">
             <div class="container"
                 style="display: block; width: 100%; background: #fff; max-width: 270px; padding: 25px;margin: 5px auto 0; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);">
 
-                <div class="receipt_header" style="padding-bottom: 40px; border-bottom: 1px dashed #000; text-align: center;">
+                <div class="receipt_header"
+                    style="padding-bottom: 40px; border-bottom: 1px dashed #000; text-align: center;">
                     <h1 style="font-size: 20px; margin-bottom: 5px; text-transform: uppercase;">Receipt of Sale
-                        <span style="display: block; font-size: 25px;">SG</span>
+                        <span style="display: block; font-size: 25px;">@{{settingData.company_name}}</span>
                     </h1>
-                    <h2 style="font-size: 14px; color: #727070; font-weight: 300;">Address: SoftGuide, 575B
-                        <span style="display: block;">Tel: +1 012 345 67 89</span>
+                    <h2 style="font-size: 14px; color: #727070; font-weight: 300;">Address: @{{settingData.company_address}}
+                        <span style="display: block;">Tel: @{{settingData.company_phone}}</span>
                     </h2>
-                    <span>OrderNo: @{{ orderDetail.order_no }}</span>
+                    <span>OrderNo: @{{ orderDetail.order_no }}</span></br></br>
+                    <span>CashierNmae - {{getLoginUser()}}</span>
                 </div>
                 <div class="receipt_body" style=" margin-top: 25px;">
                     <div class="date_time_con" style="display: flex; justify-content: center; column-gap: 25px;">
@@ -22,24 +32,24 @@
                     </div>
                     <div class="items" style="padding: 20px;  margin-top: 25px;">
                         <table style="width: 100%;">
+
                             <thead style="border-bottom: 1px dashed #000;">
                                 <th style="text-align: left;">ITEM</th>
-                                <th style="text-align: center;">QTY</th>
+                                <th style="text-align: left;">QTY</th>
                                 <th style="text-align: right;">PRICE</th>
                             </thead>
                             <tbody style="border-bottom: 1px dashed #000;">
+
                                 <tr ng-repeat="item in orderDetail.order_detail" style="padding-top: 15px;">
-                                    <td colspan="2" style="text-align: left;">@{{ item.item.name }}</td>
-                                    <td colspan="2" style="text-align: center;">@{{ item.quantity }}</td>
-                                    <td colspan="2" style="text-align: right;">@{{ item.sub_total }}</td>
-                                    <!-- <td>@{{ item.discount_price }}</td>
-                                                                             <td>@{{ item.sub_total }}</td> -->
+                                    <td style="text-align: left;">@{{ item.item.name }}</td>
+                                    <td style="text-align: left;">@{{ item.quantity }}</td>
+                                    <td style="text-align: right;">@{{ item.sub_total }}</td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td style="padding-top: 15px; text-align: left;">Total</td>
-                                    <td style="padding-top: 15px; text-align: center;">
+                                    <td style="padding-top: 15px; text-align: left;">
                                         @{{ qty }}
                                     </td>
                                     <td style="padding-top: 15px; text-align: right;">@{{ orderDetail.total_amount }}</td>
@@ -52,6 +62,7 @@
                 </p>
             </div>
         </div>
+
     </div>
     <div style="text-align: center; margin: 20px 0 30px 0;">
         <button class="btn btn-secondary btn-lg" onclick="printInvoice()"><i class="fa fa-print"

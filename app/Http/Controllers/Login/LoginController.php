@@ -93,12 +93,12 @@ class LoginController extends Controller
     {
         try {
 
-            // if (Auth::guard('admin')->user() != null) {
-            //     $role = Auth::guard('admin')->user()->role;
-            //     if ($role == Constant::CASHIER_ROLE) {
-            //         return redirect('/order');
-            //     }
-            // }
+            if (Auth::guard('admin')->user() != null) {
+                $role = Auth::guard('admin')->user()->role;
+                if ($role == Constant::CASHIER_ROLE) {
+                    return redirect('/order');
+                }
+            }
             return view('Login.frontend_login');
         } catch (\Exception $e) {
             abort(500);

@@ -6,8 +6,6 @@ use App\Utility;
 use App\ResponseStatus;
 use App\Http\Controllers\Controller;
 use App\Repository\Shift\ShiftRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ShiftController extends Controller
@@ -28,7 +26,6 @@ class ShiftController extends Controller
                 $shift_open = true;
             }
             $shift_list = $this->ShiftRepository->getShiftList();
-
             $screen = "Shift Index Screen::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
@@ -69,11 +66,16 @@ class ShiftController extends Controller
         try {
             $shift = $this->ShiftRepository->getShiftStart();
             if ($shift > 0) {
-                $update =  $this->ShiftRepository->end();
-                if ($update['ResponseStatus'] == ResponseStatus::OK) {
-                    return redirect()->back()->with(['success' => 'Success!,Shift is closed now!']);
-                } else {
-                    return redirect()->back()->withErrors(['fail' => 'Cannot end Shift ,Somethine is wrong!']);
+                $has_unpay_order = $this->ShiftRepository->hasUnpayOrder((int)$shift);
+                if($has_unpay_order > 0){
+                    return redirect()->back()->withErrors(['fail' => 'Cannot end Shift while all orders are not paied!']);
+                }else{
+                    $shift_end =  $this->ShiftRepository->end();
+                    if ($shift_end['ResponseStatus'] == ResponseStatus::OK) {
+                        return redirect()->back()->with(['success' => 'Success!,Shift is closed now!']);
+                    } else {
+                        return redirect()->back()->withErrors(['fail' => 'Cannot end Shift ,Something is wrong!']);
+                    }
                 }
             } else {
                 return redirect()->back()->withErrors(['fail' => 'Fail!,Shift is already end']);
@@ -92,7 +94,6 @@ class ShiftController extends Controller
     {
         abort(404);
     }
-
 
     public function shiftClose()
     {
