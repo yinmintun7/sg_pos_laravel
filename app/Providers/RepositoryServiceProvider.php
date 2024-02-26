@@ -17,6 +17,8 @@ use App\Repository\User\UserRepository;
 use App\Repository\User\UserRepositoryInterface;
 use App\Repository\Order\OrderRepository;
 use App\Repository\Order\OrderRepositoryInterface;
+use App\Repository\Report\ReportRepository;
+use App\Repository\Report\ReportRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -35,6 +37,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(ReportRepositoryInterface::class, ReportRepository::class);
 
     }
 

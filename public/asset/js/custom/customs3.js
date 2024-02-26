@@ -2581,29 +2581,29 @@ function init_morris_charts() {
     if (typeof (Morris) === 'undefined') { return; }
     console.log('init_morris_charts');
 
-    if ($('#graph_bar').length) {
-
-        Morris.Bar({
-            element: 'graph_bar',
-            data: [
-                { device: 'Sun', geekbench: 380 },
-                { device: 'Mon', geekbench: 655 },
-                { device: 'Tue', geekbench: 275 },
-                { device: 'Wed', geekbench: 1571 },
-                { device: 'Thu', geekbench: 655 },
-                { device: 'Fri', geekbench: 2154 },
-                { device: 'Sat', geekbench: 1144 },
-            ],
-            xkey: 'device',
-            ykeys: ['geekbench'],
-            labels: ['Geekbench'],
-            barRatio: 0.4,
-            barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            xLabelAngle: 35,
-            hideHover: 'auto',
-            resize: true
-        });
-
+if ($('#graph_bar').length) {
+    $.ajax({
+        url: '/sg-backend/report/weekly',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            Morris.Bar({
+                element: 'graph_bar',
+                data: data,
+                xkey: 'date',
+                ykeys: ['amount'],
+                labels: ['Geekbench'],
+                barRatio: 0.4,
+                barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+                xLabelAngle: 35,
+                hideHover: 'auto',
+                resize: true
+            });
+        },
+        error: function(xhr, status, error) { // Callback function to handle errors
+            console.error('Error fetching data:', error); // Log the error to the console
+        }
+    });
     }
 
     if ($('#graph_bar_group').length) {

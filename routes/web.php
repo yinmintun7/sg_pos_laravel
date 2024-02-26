@@ -9,6 +9,7 @@ use App\Http\Controllers\Shift\ShiftController;
 use App\Http\Controllers\Discount\DiscountController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\Report\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\test\TestController;
 
@@ -111,5 +112,9 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/edit/{id}', [UserController::class, 'edit']);
         Route::post('/update', [UserController::class, 'update'])->name('updateUser');
         Route::post('/delete', [UserController::class, 'delete'])->name('delete');
+    });
+
+    Route::group(['prefix' => 'report'], function () {
+        Route::get('/weekly', [Reportcontroller::class, 'weekly']);
     });
 });
