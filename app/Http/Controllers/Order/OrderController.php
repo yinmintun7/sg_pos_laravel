@@ -12,6 +12,7 @@ use App\Http\Requests\Api\GetItemByCatRequest;
 use App\Http\Requests\Api\StoreOrderRequest;
 use App\Http\Requests\Api\GetOrderListRequest;
 use App\Http\Requests\Api\OrderStatusRequest;
+use App\Http\Requests\Api\getOrderItemsRequest;
 use App\Repository\Order\OrderRepositoryInterface;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Item\OrderItemResource;
@@ -63,7 +64,7 @@ class OrderController extends Controller
         }
 
     }
-    public function getAllItem(Request $request)
+    public function getAllItem()
     {
         try {
             $items = $this->ItemRepository->getItems((bool) true);
@@ -179,7 +180,7 @@ class OrderController extends Controller
 
     }
 
-    public function getOrderItems(Request $request)
+    public function getOrderItems(getOrderItemsRequest $request)
     {
         try {
             $items = $this->OrderRepository->getOrderItems((int) $request->id);

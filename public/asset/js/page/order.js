@@ -238,11 +238,26 @@ app.controller("myCtrl", function ($scope, $http) {
           // window.location.href = base_url + 'sg_frontend/order?err=shift';
         }
       },
-      function (error) {
-        console.error(error);
-      }
-    );
+    ).catch(function (error) {
+        if (error.status === 422) {
+            var errors = error.data.errors;
+            angular.forEach(errors, function (error) {
+                $scope.showError(error);
+            });
+        } else {
+            console.error("An error occurred:", error);
+        }
+    });
   };
   // for make order end//
+
+  $scope.showError = function(error) {
+    new PNotify({
+        title: 'Error!',
+        text: error,
+        type: 'error',
+        styling: 'bootstrap3'
+    });
+};
 
 });

@@ -24,7 +24,7 @@ class OrderStatusRequest extends FormRequest
     public function rules()
     {
         return [
-           'corderId' => ['required','numeric'],
+           'orderId' => ['required','numeric'],
            'status'   => ['required','numeric']
         ];
     }

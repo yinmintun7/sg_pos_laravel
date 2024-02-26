@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shift;
+use App\Models\Order;
 use Carbon\Carbon;
 
 /**
@@ -34,5 +35,21 @@ class ShiftFactory extends Factory
         'updated_at'      => $start_time,
         'updated_by'      => 1,
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Shift $shift) {
+            Order::factory()->count(rand(10, 30))->create(
+                [
+                    'shift_id'      => $shift->id,
+                    'total_amount'  => 7000,
+                    'created_at'    => $shift->created_at,
+                    'created_by'    => $shift->created_by,
+                    'updated_at'    => $shift->updated_at,
+                    'updated_by'    => $shift->updated_by,
+                ]
+            );
+        });
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Shift extends Model
 {
@@ -24,4 +25,9 @@ class Shift extends Model
         'deleted_by',
 
     ];
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'shift_id', 'id');
+    }
 }

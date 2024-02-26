@@ -11,9 +11,9 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.orderDetail = [];
   $scope.subTotal = 0;
   $scope.init = function (id) {
-    $('.loading').show();
+    // $('.loading').show();
    var data = {
-      id:id,
+     order_id:id,
     };
     $http({
         method: "POST",
@@ -22,19 +22,25 @@ app.controller("myCtrl", function ($scope, $http) {
       }).then(
         function (response) {
           if (response.status == 200) {
+            $('.loading').hide();
             $scope.itemsData = response.data.data;
             $scope.fetchChildCategory(0);
             $scope.fetchAllItems();
             $scope.calculateTotalAmount();
-
           } else {
             console.log("Error:" + response.status);
           }
         },
-        function (error) {
-          console.error(error);
+      ).catch(function (error) {
+        if (error.status === 422) {
+            var errors = error.data.errors;
+            angular.forEach(errors, function (error) {
+                $scope.showError(error);
+            });
+        } else {
+            console.error("An error occurred:", error);
         }
-      );
+    });
     };
 
     $scope.returnBack = function(){
@@ -239,7 +245,7 @@ app.controller("myCtrl", function ($scope, $http) {
         id:id,
         items: $scope.itemsData,
         subTotal: $scope.subTotal,
-        shift_id: shiftId,
+        // shift_id: shiftId,
       };
 
       $http({
@@ -250,7 +256,6 @@ app.controller("myCtrl", function ($scope, $http) {
         function (response) {
           if (response.status == 200) {
              window.location.href = base_url + "order-list";
-             console.log(response.data);
           } else {
             // window.location.href = base_url + 'sg_frontend/order?err=shift';
           }
@@ -258,7 +263,30 @@ app.controller("myCtrl", function ($scope, $http) {
         function (error) {
           console.error(error);
         }
-      );
+      ).catch(function (error) {
+        if (error.status === 422) {
+            var errors = error.data.errors;
+            angular.forEach(errors, function (error) {
+                new PNotify({
+                    title: 'Error!',
+                    text: error,
+                    type: 'error',
+                    styling: 'bootstrap3'
+                });
+            });
+        } else {
+            console.error("An error occurred:", error);
+        }
+    });
+    };
+
+    $scope.showError = function(error) {
+        new PNotify({
+            title: 'Error!',
+            text: error,
+            type: 'error',
+            styling: 'bootstrap3'
+        });
     };
 
 });

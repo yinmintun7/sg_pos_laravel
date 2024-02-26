@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/bootstrap/css/fontawesomeall.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/font-awesome/css/font-awesome.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('asset/css/sweetalert.css') }}">
+    <link href="{{ URL::asset('asset/pnotify/dist/pnotify.css') }}" rel="stylesheet">
     <link href="{{ asset('asset/css/style.css?v=20240109') }}" rel="stylesheet">
     <script src="{{ asset('asset/bootstrap/js/jquery-2.2.4.min.js') }}"></script>
     <script src="{{ asset('asset/bootstrap/js/popper.min.js') }}"></script>
@@ -24,6 +25,9 @@
     <script src="{{ asset('asset/js/swiper.min.js') }}"></script>
     <script src="{{ asset('asset/js/sweetalert-dev.js') }}"></script>
     <script src="{{ asset('asset/js/angular/angular.min.js') }}"></script>
+    <script src="{{ URL::asset('asset/pnotify/dist/pnotify.js') }}"></script>
+    <!-- <script src="{{ URL::asset('asset/pnotify/dist/pnotify.buttons.js') }}"></script>
+<script src=".{{ URL::asset('asset/pnotify/dist/pnotify.nonblock.js') }}"></script> -->
     <script src="{{ asset('asset/js/common.js') }}"></script>
     <style>
         .item-td {

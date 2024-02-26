@@ -1,4 +1,3 @@
-</script>
 <!-- jQuery -->
 <script src="{{ URL::asset('asset/js/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap -->
