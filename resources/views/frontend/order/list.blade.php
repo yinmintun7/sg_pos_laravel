@@ -67,8 +67,9 @@
                                         <span ng-if="order.status === 0"><button class="btn btn-primary"
                                                 ng-click="paymentPage(order.id)"><i class="fa fa-money"
                                                     aria-hidden="true"></i>ToPay</button></span>
-                                        <span ng-if="order.status === 1"><button class="btn btn-success"><i
-                                                    class="fa fa-money" aria-hidden="true"></i>Paid</button></span>
+                                        <span ng-if="order.status === 1" ng-style="{'pointer-events': (order.status === 1) ? 'none' : 'auto', 'opacity': (order.status === 1) ? '0.5' : '1', 'cursor': (order.status === 1) ? 'not-allowed' : 'pointer'}"><button
+                                                class="btn btn-success"><i class="fa fa-money"
+                                                    aria-hidden="true"></i>Paid</button></span>
                                         <button class="btn btn-primary" ng-if="order.status === 2"
                                             ng-click="OrderStatus(order,0)"><i class="fa fa-repeat"
                                                 aria-hidden="true"></i>Active</button>
@@ -77,8 +78,11 @@
                                                 aria-hidden="true"></i>Cancel</button>
                                         <button class="btn btn-info" ng-click="orderDetailPage(order.id)"><i
                                                 class="fa fa-eye" aria-hidden="true"></i>ViewDetail</button>
-                                        <button class="btn btn-info" ng-click="orderEditPage(order.id)"><i class="fa fa-eye"
-                                                aria-hidden="true"></i>OrderEdit</button>
+                                        <button class="btn btn-info" ng-click="orderEditPage(order.id)"
+                                            ng-style="{'pointer-events': (order.status === 1) ? 'none' : 'auto', 'opacity': (order.status === 1) ? '0.5' : '1', 'cursor': (order.status === 1) ? 'not-allowed' : 'pointer'}">
+                                            <i class="fa fa-eye" aria-hidden="true"></i> OrderEdit
+                                        </button>
+
                                     </td>
                                 </tr>
                             </tbody>

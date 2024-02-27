@@ -2577,25 +2577,22 @@ function init_DataTables() {
 /* CHART - MORRIS  */
 
 function init_morris_charts() {
-    // Check if Morris library is available
     if (typeof Morris === 'undefined') {
         return;
     }
 
     if ($('#graph_bar').length) {
-        // Make AJAX request to fetch data
         $.ajax({
             url: '/sg-backend/report/weekly/graph',
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                // Initialize Morris Bar chart
                 Morris.Bar({
                     element: 'graph_bar',
                     data: data,
                     xkey: 'date',
                     ykeys: ['amount'],
-                    labels: ['Geekbench'],
+                    labels: ['amount'],
                     barRatio: 0.4,
                     barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
                     xLabelAngle: 35,
@@ -2604,12 +2601,10 @@ function init_morris_charts() {
                 });
             },
             error: function(xhr, status, error) {
-                // Handle error
                 console.error('Error fetching data:', error);
             }
         });
     }
-
 
     if ($('#graph_bar_group').length) {
 
@@ -2707,32 +2702,34 @@ function init_morris_charts() {
     }
 
     if ($('#graph_line').length) {
-
-        Morris.Line({
-            element: 'graph_line',
-            xkey: 'year',
-            ykeys: ['value'],
-            labels: ['Value'],
-            hideHover: 'auto',
-            lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            data: [
-                { year: '2012', value: 20 },
-                { year: '2013', value: 10 },
-                { year: '2014', value: 5 },
-                { year: '2015', value: 5 },
-                { year: '2016', value: 20 }
-            ],
-            resize: true
+        $.ajax({
+            url: '/sg-backend/report/monthly/graph',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                Morris.Line({
+                    element: 'graph_line',
+                    xkey: 'month',
+                    ykeys: ['nonth'],
+                    labels: ['amount'],
+                    hideHover: 'auto',
+                    lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+                    data: data,
+                    resize: true
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
         });
 
-        $MENU_TOGGLE.on('click', function () {
+        $MENU_TOGGLE.on('click', function() {
             $(window).resize();
         });
-
     }
 
-};
 
+};
 
 
 /* ECHRTS */

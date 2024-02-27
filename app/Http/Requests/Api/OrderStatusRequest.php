@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class OrderStatusRequest extends FormRequest
 {
@@ -24,8 +26,22 @@ class OrderStatusRequest extends FormRequest
     public function rules()
     {
         return [
-           'orderId' => ['required','numeric'],
+           'corderId'  => ['required','numeric'],
            'status'   => ['required','numeric']
         ];
+    }
+    public function messages()
+    {
+        return [
+            'orderId.required'  => 'OrderId rquired too cancel order!',
+            'status.required'   => 'Order status rquired too cancel order!',
+            'orderId.numeric'   => 'Subtotal must be numeric!',
+            'status.numeric'    => 'Shift_id must be numeric!',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
     }
 }

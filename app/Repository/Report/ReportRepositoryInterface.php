@@ -6,5 +6,5 @@ interface ReportRepositoryInterface
 {
     public function weeklySaleGraph();
     public function weeklySaleExcel();
-
+    public function monthlySaleGraph();
 }

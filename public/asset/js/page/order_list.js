@@ -37,7 +37,6 @@ $scope.orderlist = function () {
       corderId: order.id,
       status:status,
     };
-
     $http({
       method: "POST",
       url: base_url + "cancel-order",
@@ -52,10 +51,16 @@ $scope.orderlist = function () {
           console.log("fail");
         }
       },
-      function (error) {
-        console.error(error);
-      }
-    );
+    ).catch(function (error) {
+        if (error.status === 422) {
+            var errors = error.data.errors;
+            angular.forEach(errors, function (error) {
+                $scope.showError(error);
+            });
+        } else {
+            console.error("An error occurred:", error);
+        }
+    });
   };
 
   // for cancel order end/////////////////////////////////////////////////////////////////
@@ -71,13 +76,13 @@ $scope.orderlist = function () {
 
    $scope.orderDetail = function (orderId) {
 
-    // var data = {
-    //   orderId:orderId,
-    // };
+    var data = {
+      orderId:orderId,
+    };
     $http({
       method: "POST",
       url: base_url + "api/get_order_detail",
-      data: {orderId:orderId},
+      data:data,
     }).then(
       function (response) {
         if (response.status == 200) {
@@ -103,5 +108,14 @@ $scope.orderlist = function () {
   $scope.paymentPage=function(id){
     window.location.href = base_url + `payment/${id}`;
    }
+
+   $scope.showError = function(error) {
+    new PNotify({
+        title: 'Error!',
+        text: error,
+        type: 'error',
+        styling: 'bootstrap3'
+    });
+}
 
 });

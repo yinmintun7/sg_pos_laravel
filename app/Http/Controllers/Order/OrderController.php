@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers\Order;
 
-use App\Http\Controllers\Controller;
 use App\Utility;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\Api\GetCategoryRequest;
-use App\Http\Requests\Api\GetItemRequest;
-use App\Http\Requests\Api\GetItemByCatRequest;
-use App\Http\Requests\Api\StoreOrderRequest;
-use App\Http\Requests\Api\GetOrderListRequest;
-use App\Http\Requests\Api\OrderStatusRequest;
-use App\Http\Requests\Api\getOrderItemsRequest;
-use App\Repository\Order\OrderRepositoryInterface;
-use App\Http\Resources\Category\CategoryResource;
-use App\Http\Resources\Item\OrderItemResource;
-use App\Http\Resources\Setting\SettingResource;
-use App\Http\Resources\Item\ItemResource;
-use App\Http\Resources\Item\GetOrderListResource;
-use App\Repository\Category\CategoryRepositoryInterface;
-use App\Repository\Item\ItemRepositoryInterface;
-use Illuminate\Http\JsonResponse;
-use App\Http\Resources\Order\OrderResource;
 use App\ResponseStatus;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\GetItemRequest;
+use App\Http\Resources\Item\ItemResource;
+use App\Http\Resources\Order\OrderResource;
+use App\Http\Requests\Api\StoreOrderRequest;
+use App\Http\Requests\Api\GetCategoryRequest;
+use App\Http\Requests\Api\OrderStatusRequest;
+use App\Http\Requests\Api\GetItemByCatRequest;
+use App\Http\Requests\Api\GetOrderListRequest;
+use App\Http\Resources\Item\OrderItemResource;
+use App\Http\Requests\Api\getOrderItemsRequest;
+use App\Http\Resources\Setting\SettingResource;
+use App\Repository\Item\ItemRepositoryInterface;
+use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Item\GetOrderListResource;
+use App\Repository\Order\OrderRepositoryInterface;
+use App\Repository\Category\CategoryRepositoryInterface;
 
 class OrderController extends Controller
 {
