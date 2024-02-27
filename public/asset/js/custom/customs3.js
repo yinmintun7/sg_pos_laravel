@@ -2577,34 +2577,39 @@ function init_DataTables() {
 /* CHART - MORRIS  */
 
 function init_morris_charts() {
-
-    if (typeof (Morris) === 'undefined') { return; }
-    console.log('init_morris_charts');
-
-if ($('#graph_bar').length) {
-    $.ajax({
-        url: '/sg-backend/report/weekly',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            Morris.Bar({
-                element: 'graph_bar',
-                data: data,
-                xkey: 'date',
-                ykeys: ['amount'],
-                labels: ['Geekbench'],
-                barRatio: 0.4,
-                barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-                xLabelAngle: 35,
-                hideHover: 'auto',
-                resize: true
-            });
-        },
-        error: function(xhr, status, error) { // Callback function to handle errors
-            console.error('Error fetching data:', error); // Log the error to the console
-        }
-    });
+    // Check if Morris library is available
+    if (typeof Morris === 'undefined') {
+        return;
     }
+
+    if ($('#graph_bar').length) {
+        // Make AJAX request to fetch data
+        $.ajax({
+            url: '/sg-backend/report/weekly/graph',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // Initialize Morris Bar chart
+                Morris.Bar({
+                    element: 'graph_bar',
+                    data: data,
+                    xkey: 'date',
+                    ykeys: ['amount'],
+                    labels: ['Geekbench'],
+                    barRatio: 0.4,
+                    barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+                    xLabelAngle: 35,
+                    hideHover: 'auto',
+                    resize: true
+                });
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
+
 
     if ($('#graph_bar_group').length) {
 

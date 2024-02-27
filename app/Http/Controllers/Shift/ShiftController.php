@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Shift;
 
 use App\Utility;
 use App\ResponseStatus;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Repository\Shift\ShiftRepositoryInterface;
-use Illuminate\Support\Facades\DB;
 
 class ShiftController extends Controller
 {
@@ -67,9 +67,9 @@ class ShiftController extends Controller
             $shift = $this->ShiftRepository->getShiftStart();
             if ($shift > 0) {
                 $has_unpay_order = $this->ShiftRepository->hasUnpayOrder((int)$shift);
-                if($has_unpay_order > 0){
+                if ($has_unpay_order > 0) {
                     return redirect()->back()->withErrors(['fail' => 'Cannot end Shift while all orders are not paied!']);
-                }else{
+                } else {
                     $shift_end =  $this->ShiftRepository->end();
                     if ($shift_end['ResponseStatus'] == ResponseStatus::OK) {
                         return redirect()->back()->with(['success' => 'Success!,Shift is closed now!']);

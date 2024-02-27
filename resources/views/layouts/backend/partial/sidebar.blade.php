@@ -20,7 +20,7 @@
             <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
-                    <li><a><i class="fa fa-home" href="{{ url('/index') }}"></i> Home</a>
+                    <li><a><i class="fa fa-home" href="{{ url('/sg-backend/index') }}"></i> Home</a>
                     </li>
                     <li><a><i class="fa fa-history" aria-hidden="true"></i> Shift <span
                                 class="fa fa-chevron-down"></span></a>
@@ -62,6 +62,13 @@
                         <ul class="nav child_menu">
                             <li><a href="{{ url('/sg-backend/setting/') }}">Create</a></li>
                             <li><a href="{{ url('/sg-backend/setting/list') }}">List</a></li>
+                        </ul>
+                    </li>
+                    <li><a><i class="fa fa-table" aria-hidden="true"></i>Report <span
+                                class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="{{ url('/sg-backend/report/weekly') }}">WeeklyReport</a></li>
+                            <li><a href="{{ url('/sg-backend//list') }}">List</a></li>
                         </ul>
                     </li>
                 </ul>

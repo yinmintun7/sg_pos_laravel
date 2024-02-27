@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repository\Report\ReportRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\JsonResponse;
 use App\ResponseStatus;
+use App\Exports\OrderWeeklyReport;
 
 class ReportController extends Controller
 {
@@ -19,23 +21,39 @@ class ReportController extends Controller
         $this->ReportRepository = $ReportRepository;
     }
 
-    public function weekly(){
-            try {
-                $weekly = $this->ReportRepository->weeklySale();
-                dd($weekly);
-                return new JsonResponse([
-                    'success' => true,
-                    'message' => 'success store order',
-                    'status'  => ResponseStatus::OK,
-                ]);
-                $screen = "Shift Open From Shift Index Screen::";
-                $queryLog = DB::getQueryLog();
-                Utility::saveDebugLog($screen, $queryLog);
-            } catch (\Exception $e) {
-                $screen = "Shift Open From Shift Index Screen::";
-                Utility::saveErrorLog($screen, $e->getMessage());
-                abort(500);
-            }
+    public function weeklySaleGraph()
+    {
+        dd('hi');
+        try {
+            $weekly = $this->ReportRepository->weeklySaleGraph();
+            dd($weekly);
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'success store order',
+                'status'  => ResponseStatus::OK,
+            ]);
+            $screen = "SelectWeeklySaleGraph report from ReportController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "SelectWeeklySaleGraph report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
         }
     }
 
+    public function weeklySaleExcel()
+    {
+        try {
+            // $weekly = $this->ReportRepository->weeklySaleExcel();
+            return Excel::download(new OrderWeeklyReport(), 'users.xlsx');
+            $screen = "SelectWeeklySaleExcel report from ReportController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "SelectWeeklySaleExcel report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+}

@@ -4,6 +4,7 @@ namespace App\Repository\Report;
 
 interface ReportRepositoryInterface
 {
-    public function weeklySale();
+    public function weeklySaleGraph();
+    public function weeklySaleExcel();
 
 }

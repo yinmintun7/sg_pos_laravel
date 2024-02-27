@@ -85,5 +85,17 @@ class Utility
         return $date->format('m/d/Y');
     }
 
+    public static function getLastSevenDay()
+    {
+        $today_date = '2024-01-24';
+        $dates = [Carbon::parse($today_date)->format('Y-m-d')];
+        $today = Carbon::parse($today_date);
+        for ($i = 0; $i < 6; $i++) {
+            $dates[] = $today->subDay()->format('Y-m-d');
+        }
+        $dates = array_reverse($dates);
+        return $dates;
+    }
+
 
 }
