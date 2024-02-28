@@ -115,7 +115,8 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
     });
 
     Route::group(['prefix' => 'report'], function () {
-        Route::get('/weekly', [ReportController::class, 'weeklySaleExcel']);
+        // Route::get('/daily/report', [ReportController::class, 'dailyReportTable']);
+        Route::get('/daily/report', [ReportController::class, 'dailyReport']);
         Route::get('/weekly/graph', [ReportController::class, 'weeklySaleGraph']);
         Route::get('/monthly/graph', [ReportController::class, 'monthlySaleGraph']);
     });

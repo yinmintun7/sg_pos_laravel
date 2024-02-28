@@ -67,7 +67,7 @@
                     <li><a><i class="fa fa-table" aria-hidden="true"></i>Report <span
                                 class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="{{ url('/sg-backend/report/weekly') }}">WeeklyReport</a></li>
+                            <li><a href="{{ url('/sg-backend/report/daily/report') }}">DailyReport</a></li>
                             <li><a href="{{ url('/sg-backend//list') }}">List</a></li>
                         </ul>
                     </li>

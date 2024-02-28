@@ -87,7 +87,7 @@ class Utility
 
     public static function getLastSevenDay()
     {
-        $today_date = '2024-01-24';
+        $today_date = date('Y-m-d');
         $dates = [Carbon::parse($today_date)->format('Y-m-d')];
         $today = Carbon::parse($today_date);
         for ($i = 0; $i < 6; $i++) {
@@ -96,6 +96,20 @@ class Utility
         $dates = array_reverse($dates);
         return $dates;
     }
+
+    public static function getLastTenMonths()
+    {
+        $today_date = date('Y-m-d');
+        $dates = [Carbon::parse($today_date)->format('Y-m-d')];
+        $today = Carbon::parse($today_date);
+
+        for ($i = 0; $i < 9; $i++) {
+            $dates[] = $today->subMonth()->format('Y-m-d');
+        }
+        $months = array_reverse($dates);
+        return $months;
+    }
+
 
 
 }

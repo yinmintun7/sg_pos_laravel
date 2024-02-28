@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\JsonResponse;
 use App\ResponseStatus;
-use App\Exports\OrderWeeklyReport;
+use App\Exports\OrderDailyReport;
 
 class ReportController extends Controller
 {
@@ -38,6 +38,7 @@ class ReportController extends Controller
 
     public function monthlySaleGraph()
     {
+        dd('hi');
         try {
             $weekly = $this->ReportRepository->monthlySaleGraph();
             return new JsonResponse($weekly);
@@ -51,11 +52,16 @@ class ReportController extends Controller
         }
     }
 
-    public function weeklySaleExcel()
+    public function dailyReport(OrderDailyReport $orderDailyReport)
     {
         try {
             // $weekly = $this->ReportRepository->weeklySaleExcel();
-            return Excel::download(new OrderWeeklyReport(), 'weekly.xlsx');
+            $start = null;
+            $end   = null;
+            $result = $orderDailyReport->setRange($start, $end);
+
+            // return Excel::download($orderDailyReport->setRange($start, $end), 'weekly.xlsx');
+            return view('backend.report.index', compact(['result']));
             $screen = "SelectWeeklySaleExcel report from ReportController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
@@ -65,4 +71,15 @@ class ReportController extends Controller
             abort(500);
         }
     }
+    // public function dailyReportTable()
+    // {
+    //     try {
+    //         $result = $this->ReportRepository->weeklySaleGraph();
+
+    //     } catch (\Exception $e) {
+    //         $screen = "SelectWeeklySaleExcel report from ReportController::";
+    //         Utility::saveErrorLog($screen, $e->getMessage());
+    //         abort(500);
+    //     }
+    // }
 }

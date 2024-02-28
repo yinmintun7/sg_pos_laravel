@@ -43,7 +43,6 @@ class ReportRepository implements ReportRepositoryInterface
             abort(500);
         }
 
-
     }
 
     public function monthlySaleGraph()
@@ -79,9 +78,37 @@ class ReportRepository implements ReportRepositoryInterface
 
     }
 
-    public function weeklySaleExcel()
+    public function getDailyReport()
     {
         try {
+            $dates = Utility::getLastSevenDay();
+            $result = [];
+            $all_total = 0;
+            foreach ($dates as $shift_date) {
+                $shifts = Shift::whereDate('start_date_time', $shift_date)->get();
+                if ($shifts != null) {
+                    $total_amount = 0;
+                    foreach ($shifts as $shift) {
+                        $sum_shift = Order::where('shift_id', $shift->id)->sum('total_amount');
+                        $total_amount = $total_amount + $sum_shift;
+                    }
+                    $all_total = $all_total + $total_amount;
+
+                    $weekly_date = (object) [
+                        'date'   => Carbon::parse($shift_date)->format('Y-m-d'),
+                        'amount' => $total_amount + $sum_shift,
+                        'total'  => ''
+                    ];
+                    array_push($result, $weekly_date);
+                }
+            }
+            $total_row = (object)[
+                'date'   => '',
+                'amount' => '',
+                'total'  => $all_total
+            ];
+            array_push($result, $total_row);
+            return $result;
 
         } catch (\Exception $e) {
             $screen = "SelectWeeklySaleExcel report from ReportRepository::";

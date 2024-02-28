@@ -16,6 +16,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserTableSeeder::class);
-        Shift::factory()->count(40)->create();
+        Shift::factory()->count(400)->create();
     }
 }

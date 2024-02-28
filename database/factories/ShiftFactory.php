@@ -2,11 +2,14 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Shift;
-use App\Models\Order;
+use App\Constant;
 use Carbon\Carbon;
+use App\Models\Item;
+use App\Models\Order;
+use App\Models\Shift;
+use App\Models\OrderDetail;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Shift>
@@ -19,7 +22,7 @@ class ShiftFactory extends Factory
      * @return array<string, mixed>
      */
     protected $model = Shift::class;
-    private $date_diff = 39;
+    private $date_diff = 399;
     public function definition()
     {
         $today_start = Carbon::today();
@@ -40,7 +43,7 @@ class ShiftFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Shift $shift) {
-            Order::factory()->count(rand(10, 30))->create(
+            $orders = Order::factory()->count(rand(10, 30))->create(
                 [
                     'shift_id'      => $shift->id,
                     'total_amount'  => 7000,
@@ -50,6 +53,35 @@ class ShiftFactory extends Factory
                     'updated_by'    => $shift->updated_by,
                 ]
             );
+            $orders->each(function (Order $order) {
+                $random = rand(1, 5);
+                $items  = Item::SELECT('id', 'price')
+                          ->where('status', Constant::ENABLE_STATUS)
+                          ->whereNull('deleted_at')
+                          ->whereNUll('created_by')
+                          ->LIMIT($random)
+                          ->get();
+                $sub_total = 0;
+                foreach ($items as $item) {
+                    $sub_total =  $sub_total + $item->price;
+                    $order_detail = new OrderDetail();
+                    $order_detail->quantity       = 1;
+                    $order_detail->sub_total      = $item->price;
+                    $order_detail->order_id       = $order->id;
+                    $order_detail->item_id        = $item->id;
+                    $order_detail->discount_price = 0;
+                    $order_detail->original_price = $item->price;
+                    $order_detail->created_by     = $order->created_by;
+                    $order_detail->updated_by     = $order->updated_by;
+                    $order_detail->created_at     = $order->created_at;
+                    $order_detail->updated_at     = $order->updated_at;
+                    $order_detail->save();
+                }
+                $update_order = Order::find($order->id);
+                $update_order ->total_amount = $sub_total;
+                $update_order->save();
+            });
         });
     }
+
 }
