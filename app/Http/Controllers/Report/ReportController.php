@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\JsonResponse;
 use App\ResponseStatus;
+use App\Http\Requests\GetDailyReportRequest;
 use App\Exports\OrderDailyReport;
 
 class ReportController extends Controller
@@ -38,7 +39,7 @@ class ReportController extends Controller
 
     public function monthlySaleGraph()
     {
-        dd('hi');
+
         try {
             $weekly = $this->ReportRepository->monthlySaleGraph();
             return new JsonResponse($weekly);
@@ -52,16 +53,13 @@ class ReportController extends Controller
         }
     }
 
-    public function dailyReport(OrderDailyReport $orderDailyReport)
+    public function dailyReportExcel(OrderDailyReport $orderDailyReport, GetDailyReportRequest $request)
     {
         try {
-            // $weekly = $this->ReportRepository->weeklySaleExcel();
-            $start = null;
-            $end   = null;
+            $start = isset($request['start_date']) ? $request['start_date'] : null;
+            $end   =  isset($request['end_date']) ? $request['end_date'] : null;
             $result = $orderDailyReport->setRange($start, $end);
-
-            // return Excel::download($orderDailyReport->setRange($start, $end), 'weekly.xlsx');
-            return view('backend.report.index', compact(['result']));
+            return Excel::download($orderDailyReport->setRange($start, $end), 'weekly.xlsx');
             $screen = "SelectWeeklySaleExcel report from ReportController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
@@ -71,15 +69,17 @@ class ReportController extends Controller
             abort(500);
         }
     }
-    // public function dailyReportTable()
-    // {
-    //     try {
-    //         $result = $this->ReportRepository->weeklySaleGraph();
-
-    //     } catch (\Exception $e) {
-    //         $screen = "SelectWeeklySaleExcel report from ReportController::";
-    //         Utility::saveErrorLog($screen, $e->getMessage());
-    //         abort(500);
-    //     }
-    // }
+    public function dailyReportTable(GetDailyReportRequest $request)
+    {
+        try {
+            $start = isset($request['start_date']) ? $request['start_date'] : null;
+            $end   =  isset($request['end_date']) ? $request['end_date'] : null;
+            $result = $this->ReportRepository->getDailyReport($start, $end);
+            return view('backend.report.index', compact(['result']));
+        } catch (\Exception $e) {
+            $screen = "SelectWeeklySaleExcel report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 }

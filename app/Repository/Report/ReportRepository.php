@@ -16,7 +16,7 @@ class ReportRepository implements ReportRepositoryInterface
     public function weeklySaleGraph()
     {
         try {
-            $dates = Utility::getLastSevenDay();
+            $dates = Utility::getLastSevenDay(null, null);
             $result = [];
             foreach ($dates as $shift_date) {
                 $shifts = Shift::whereDate('start_date_time', $shift_date)->get();
@@ -48,22 +48,34 @@ class ReportRepository implements ReportRepositoryInterface
     public function monthlySaleGraph()
     {
         try {
-            $dates = Utility::getLastSevenDay();
+            $months = Utility::getLastTenMonths(null, null);
             $result = [];
-            foreach ($dates as $shift_date) {
-                $shifts = Shift::whereDate('start_date_time', $shift_date)->get();
-                if ($shifts != null) {
-                    $total_amount = 0;
-                    foreach ($shifts as $shift) {
-                        $sum_shift = Order::where('shift_id', $shift->id)->sum('total_amount');
-                        $total_amount = $total_amount + $sum_shift;
-                    }
-                    $weekly_date = [
-                        'date'   => Carbon::parse($shift_date)->format('D'),
-                        'amount' => $total_amount + $sum_shift
-                    ];
-                    array_push($result, $weekly_date);
-                }
+            foreach ($months as $month) {
+                $startDate = Carbon::parse($month)->startOfMonth();
+                $endDate = Carbon::parse($month)->endOfMonth();
+                $datesInMonth = [];
+                $startDate->eachDay(function ($date) use (&$datesInMonth) {
+                    $datesInMonth[] = $date->format('Y-m-d');
+                });
+
+                // Add the dates of the month to the result array
+                $result[] = [
+                    'dates' => $datesInMonth
+                ];
+                dd($result);
+                // $shifts = Shift::whereDate('start_date_time', $shift_date)->get();
+                // if ($shifts != null) {
+                //     $total_amount = 0;
+                //     foreach ($shifts as $shift) {
+                //         $sum_shift = Order::where('shift_id', $shift->id)->sum('total_amount');
+                //         $total_amount = $total_amount + $sum_shift;
+                //     }
+                //     $weekly_date = [
+                //         'date'   => Carbon::parse($shift_date)->format('D'),
+                //         'amount' => $total_amount + $sum_shift
+                //     ];
+                //     array_push($result, $weekly_date);
+                // }
             }
             return $result;
             $screen = "SelectWeeklySaleGraph report from ReportRepository::";
@@ -75,13 +87,12 @@ class ReportRepository implements ReportRepositoryInterface
             abort(500);
         }
 
-
     }
 
-    public function getDailyReport()
+    public function getDailyReport($start, $end)
     {
         try {
-            $dates = Utility::getLastSevenDay();
+            $dates = Utility::getLastSevenDay($start, $end);
             $result = [];
             $all_total = 0;
             foreach ($dates as $shift_date) {
@@ -115,7 +126,6 @@ class ReportRepository implements ReportRepositoryInterface
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
 
     }
 }

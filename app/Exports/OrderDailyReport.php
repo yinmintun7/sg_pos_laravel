@@ -38,8 +38,7 @@ class OrderDailyReport implements FromCollection, WithHeadings, WithTitle, WithS
     }
     public function collection()
     {
-        $result = $this->DailyReportRepository->getDailyReport();
-        dd($result);
+        $result = $this->DailyReportRepository->getDailyReport($this->start, $this->end);
         $this->all_total_row = count($result) + 1;
         return new Collection($result);
     }

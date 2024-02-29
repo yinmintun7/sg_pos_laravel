@@ -85,31 +85,67 @@ class Utility
         return $date->format('m/d/Y');
     }
 
-    public static function getLastSevenDay()
+    public static function getLastSevenDay($start, $end)
     {
-        $today_date = date('Y-m-d');
-        $dates = [Carbon::parse($today_date)->format('Y-m-d')];
-        $today = Carbon::parse($today_date);
-        for ($i = 0; $i < 6; $i++) {
-            $dates[] = $today->subDay()->format('Y-m-d');
+        if ($start == null && $end == null) {
+            $sub_date   = 6;
+            $today_date = date('Y-m-d');
+            $dates      = [Carbon::parse($today_date)->format('Y-m-d')];
+            $calculate_date = Carbon::parse($today_date);
+        } else {
+            $start_date = Carbon::parse($start);
+            $end_date   = Carbon::parse($end);
+            $sub_date   = $start_date->diffInDays($end_date);
+            $dates      = [Carbon::parse($end)->format('Y-m-d')];
+            $calculate_date = Carbon::parse($end);
+        }
+        for ($i = 0; $i < $sub_date; $i++) {
+            $dates[] = $calculate_date->subDay()->format('Y-m-d');
         }
         $dates = array_reverse($dates);
         return $dates;
     }
-
     public static function getLastTenMonths()
     {
-        $today_date = date('Y-m-d');
-        $dates = [Carbon::parse($today_date)->format('Y-m-d')];
-        $today = Carbon::parse($today_date);
-
-        for ($i = 0; $i < 9; $i++) {
-            $dates[] = $today->subMonth()->format('Y-m-d');
+        $today = Carbon::today();
+        $dates = [];
+        for ($i = 1; $i <= 10; $i++) {
+            $previousMonth = $today->copy()->subMonths($i)->startOfMonth();
+            $dates[] = $previousMonth->format('Y-m-d');
         }
         $months = array_reverse($dates);
         return $months;
     }
 
+    // public static function getLastTenMonths()
+    // {
+    //     // Get the current date
+    //     $today = Carbon::today();
+
+    //     // Initialize an array to store all dates
+    //     $allDates = [];
+
+    //     // Loop through the previous ten months (excluding the current month)
+    //     for ($i = 1; $i <= 10; $i++) {
+    //         // Subtract $i months from the current date
+    //         $previousMonth = $today->copy()->subMonths($i)->startOfMonth();
+
+    //         // Get the number of days in the previous month
+    //         $numDays = $previousMonth->daysInMonth;
+
+    //         // Loop through each day in the previous month
+    //         for ($day = 1; $day <= $numDays; $day++) {
+    //             // Create a Carbon date object for the current day
+    //             $date = Carbon::create($previousMonth->year, $previousMonth->month, $day);
+
+    //             // Add the date to the array of all dates
+    //             $allDates[] = $date->format('Y-m-d');
+    //         }
+    //     }
+
+    //     // Print or return the array of all dates
+    //     return $allDates;
+    // }
 
 
 }

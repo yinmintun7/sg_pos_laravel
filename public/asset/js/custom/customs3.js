@@ -1747,6 +1747,21 @@ function init_daterangepicker_single_call() {
             end_date_picker.data('daterangepicker').updateView();
         }
     });
+    $('#start_date_report').daterangepicker({
+        autoUpdateInput: false,
+        singleDatePicker: true,
+        singleClasses: "picker_1",
+    }, function (start, end, label) {
+        $('#start_date_report').val(start.format('MM/DD/YYYY'));
+    });
+
+    var end_date_picker = $('#end_date_report').daterangepicker({
+        singleDatePicker: true,
+        singleClasses: "picker_2",
+        autoUpdateInput: false,
+    }, function (start, end, label) {
+        $('#end_date_report').val(start.format('MM/DD/YYYY'));
+    });
 
     $('#single_cal3').daterangepicker({
         singleDatePicker: true,

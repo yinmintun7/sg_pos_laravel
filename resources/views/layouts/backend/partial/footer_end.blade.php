@@ -7,11 +7,10 @@
 <!-- validator -->
 <!-- <script src="../vendors/validator/validator.js"></script> -->
 <script src="{{ URL::asset('asset/iCheck/icheck.js') }}"></script>
-
 <script src="{{ URL::asset('asset/js/raphael/raphael.min.js') }}"></script>
 <script src="{{ URL::asset('asset/js/morris/morris.min.js') }}"></script>
 <!-- Custom Theme Scripts -->
-<script src="{{ URL::asset('asset/js/custom/customs3.js') }}"></script>
+<script src="{{ URL::asset('asset/js/custom/customs3.js?v=2024229') }}"></script>
 
 <script src="{{ URL::asset('asset/pnotify/dist/pnotify.js') }}"></script>
 <!-- <script src="{{ URL::asset('asset/pnotify/dist/pnotify.buttons.js') }}"></script>
