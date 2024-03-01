@@ -19,6 +19,7 @@
 <!-- CDN link for bootstrap-daterangepicker -->
 <script src="{{ URL::asset('asset/js/date-time/moment.min.js') }}"></script>
 <script src="{{ URL::asset('asset/js/date-time/daterangepicker.js') }}"></script>
+<script src="{{ URL::asset('asset/js/dist/Chart.min.js') }}"></script>
 <!-- bootstrap-datetimepicker -->
 <script src="{{ URL::asset('asset/js/date-time/bootstrap-datetimepicker.min.js') }}"></script>
 </body>

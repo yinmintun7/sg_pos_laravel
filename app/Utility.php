@@ -105,47 +105,19 @@ class Utility
         $dates = array_reverse($dates);
         return $dates;
     }
-    public static function getLastTenMonths()
+
+    public static function getLastSevenMonths($start_month, $end_month)
     {
-        $today = Carbon::today();
-        $dates = [];
-        for ($i = 1; $i <= 10; $i++) {
-            $previousMonth = $today->copy()->subMonths($i)->startOfMonth();
-            $dates[] = $previousMonth->format('Y-m-d');
+        $start_date = Carbon::parse($start_month);
+        $end_date   = Carbon::parse($end_month);
+        $sub_month  = $end_date->diffInMonths($start_date);
+        $calculate_date = Carbon::parse($start_month);
+        $dates      = [Carbon::parse($start_date)->format('Y-m')];
+        for ($i = 0; $i < $sub_month - 1; $i++) {
+            $dates[] = $calculate_date->subMonth()->format('Y-m');
         }
-        $months = array_reverse($dates);
-        return $months;
+        $dates = array_reverse($dates);
+        return $dates;
     }
-
-    // public static function getLastTenMonths()
-    // {
-    //     // Get the current date
-    //     $today = Carbon::today();
-
-    //     // Initialize an array to store all dates
-    //     $allDates = [];
-
-    //     // Loop through the previous ten months (excluding the current month)
-    //     for ($i = 1; $i <= 10; $i++) {
-    //         // Subtract $i months from the current date
-    //         $previousMonth = $today->copy()->subMonths($i)->startOfMonth();
-
-    //         // Get the number of days in the previous month
-    //         $numDays = $previousMonth->daysInMonth;
-
-    //         // Loop through each day in the previous month
-    //         for ($day = 1; $day <= $numDays; $day++) {
-    //             // Create a Carbon date object for the current day
-    //             $date = Carbon::create($previousMonth->year, $previousMonth->month, $day);
-
-    //             // Add the date to the array of all dates
-    //             $allDates[] = $date->format('Y-m-d');
-    //         }
-    //     }
-
-    //     // Print or return the array of all dates
-    //     return $allDates;
-    // }
-
 
 }

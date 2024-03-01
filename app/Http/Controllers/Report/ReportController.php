@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Report;
 
 use App\Utility;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Repository\Report\ReportRepositoryInterface;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\JsonResponse;
 use App\ResponseStatus;
-use App\Http\Requests\GetDailyReportRequest;
+use Illuminate\Http\Request;
 use App\Exports\OrderDailyReport;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\GetDailyReportRequest;
+use App\Http\Requests\GetMonthlyReportRequest;
+use App\Repository\Report\ReportRepositoryInterface;
 
 class ReportController extends Controller
 {
@@ -39,15 +40,16 @@ class ReportController extends Controller
 
     public function monthlySaleGraph()
     {
-
         try {
-            $weekly = $this->ReportRepository->monthlySaleGraph();
-            return new JsonResponse($weekly);
-            $screen = "SelectWeeklySaleGraph report from ReportController::";
+            $start_month  = isset($request['start_month']) ? $request['start_date'] : date('Y-m');
+            $end_month    = isset($request['end_month']) ? $request['end_date'] : date('Y-m', strtotime(date('Y-m') .' - 7 months'));
+            $monthly_data = $this->ReportRepository->monthlySaleGraph( $start_month, $end_month);
+            return new JsonResponse($monthly_data);
+            $screen = "SelectMonthlySaleGraph report from ReportController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
-            $screen = "SelectWeeklySaleGraph report from ReportController::";
+            $screen = "SelectMonthlySaleGraph report from ReportController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
@@ -82,4 +84,36 @@ class ReportController extends Controller
             abort(500);
         }
     }
+
+    public function monthlyReportTable(GetMonthlyReportRequest $request)
+    {
+        try {
+            $start_month  = isset($request['start_month']) ? $request['start_date'] : date('Y-m');
+            $end_month    = isset($request['end_month']) ? $request['end_date'] : date('Y-m', strtotime(date('Y-m') .' - 7 months'));
+            $result = $this->ReportRepository->getMonthlySaleReport($start_month, $end_month);
+            return view('backend.report.index', compact(['result']));
+        } catch (\Exception $e) {
+            $screen = "SelectWeeklySaleExcel report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
+    public function monthlyReportExcel(OrderDailyReport $orderDailyReport, GetMonthlyReportRequest $request)
+    {
+        try {
+            $start = isset($request['start_date']) ? $request['start_date'] : null;
+            $end   =  isset($request['end_date']) ? $request['end_date'] : null;
+            $result = $orderDailyReport->setRange($start, $end);
+            return Excel::download($orderDailyReport->setRange($start, $end), 'weekly.xlsx');
+            $screen = "SelectWeeklySaleExcel report from ReportController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "SelectWeeklySaleExcel report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
 }

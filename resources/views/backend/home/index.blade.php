@@ -8,7 +8,7 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Bar Charts <small>Sessions</small></h2>
+                        <h2>WeeklySaleGraph</h2>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -21,11 +21,15 @@
             <div class="col-md-12 col-sm-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Line Graph <small>Sessions</small></h2>
+                        <h2>MonthlySaleGraph</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content2">
-                        <div id="graph_line" style="width:100%; height:300px;"></div>
+                    <div class="x_content">
+                        <canvas id="lineChart"></canvas>
                     </div>
                 </div>
             </div>

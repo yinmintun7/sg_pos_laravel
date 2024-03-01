@@ -1,17 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Item\ItemController;
+use App\Http\Controllers\test\TestController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Login\LoginController;
+use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\Shift\ShiftController;
+use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Category\CategoryController;
-use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Login\LoginController;
-use App\Http\Controllers\Shift\ShiftController;
 use App\Http\Controllers\Discount\DiscountController;
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\Order\OrderController;
-use App\Http\Controllers\Report\ReportController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\test\TestController;
+use App\Http\Controllers\Dashboard\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,9 +115,11 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
     });
 
     Route::group(['prefix' => 'report'], function () {
-        Route::get('/daily/report-list', [ReportController::class, 'dailyReportTable'])->name('dailyReport');
-        Route::get('/daily/report-excel', [ReportController::class, 'dailyReportExcel'])->name('dailyReportExcel');
         Route::get('/weekly/graph', [ReportController::class, 'weeklySaleGraph']);
         Route::get('/monthly/graph', [ReportController::class, 'monthlySaleGraph']);
+        Route::get('/daily/report-list', [ReportController::class, 'dailyReportTable'])->name('dailyReport');
+        Route::get('/daily/report-excel', [ReportController::class, 'dailyReportExcel'])->name('dailyReportExcel');
+        Route::get('/monthly/report-list', [ReportController::class, 'monthlyReportTable'])->name('monthlyReport');
+        Route::get('/monthly/report-excel', [ReportController::class, 'monthlyReportExcel'])->name('monthlyReportExcel');
     });
 });
