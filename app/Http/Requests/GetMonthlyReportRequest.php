@@ -13,7 +13,7 @@ class GetMonthlyReportRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,7 @@ class GetMonthlyReportRequest extends FormRequest
     public function rules()
     {
         return [
-              'start_month' => ['required'],
-              'end_month'   => ['required']
+
         ];
     }
 }

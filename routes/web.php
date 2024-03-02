@@ -119,7 +119,7 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/monthly/graph', [ReportController::class, 'monthlySaleGraph']);
         Route::get('/daily/report-list', [ReportController::class, 'dailyReportTable'])->name('dailyReport');
         Route::get('/daily/report-excel', [ReportController::class, 'dailyReportExcel'])->name('dailyReportExcel');
-        Route::get('/monthly/report-list', [ReportController::class, 'monthlyReportTable'])->name('monthlyReport');
+        Route::get('/monthly/table', [ReportController::class, 'monthlyReportTable'])->name('monthlyReport');
         Route::get('/monthly/report-excel', [ReportController::class, 'monthlyReportExcel'])->name('monthlyReportExcel');
     });
 });

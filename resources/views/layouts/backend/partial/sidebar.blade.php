@@ -68,6 +68,7 @@
                                 class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="{{ url('/sg-backend/report/daily/report-list') }}">DailyReport</a></li>
+                            <li><a href="{{ url('/sg-backend/report/monthly/report-list') }}">MonthlyReport</a></li>
                             <li><a href="{{ url('/sg-backend/list') }}">List</a></li>
                         </ul>
                     </li>

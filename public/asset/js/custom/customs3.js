@@ -2751,7 +2751,6 @@ function init_morris_charts() {
 
 /* ECHRTS */
 
-
 function init_echarts() {
 
     if (typeof (echarts) === 'undefined') { return; }

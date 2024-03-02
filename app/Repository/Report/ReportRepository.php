@@ -46,14 +46,14 @@ class ReportRepository implements ReportRepositoryInterface
 
     }
 
-    public function monthlySaleGraph()
+    public function getMonthlySale($start_month,$end_month)
     {
         try {
             $result = [];
             $month  = [];
             $total  = [];
-            $start_month = date('Y-m');
-            $end_month   = date('Y-m', strtotime($start_month .' - 7 months'));
+            // $start_month = date('Y-m');
+            // $end_month   = date('Y-m', strtotime($start_month .' - 7 months'));
             $dates = Utility::getLastSevenMonths($start_month, $end_month);
             foreach ($dates as $shift_month) {
                 $shifts = Shift::where('start_date_time', 'LIKE', $shift_month . '%')->get();
