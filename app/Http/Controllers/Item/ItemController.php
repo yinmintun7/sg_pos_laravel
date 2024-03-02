@@ -100,7 +100,6 @@ class ItemController extends Controller
 
     public function deleteItem(ItemDeleteRequest $request)
     {
-
         try {
             $delete_item = $this->ItemRepository->deleteItem((int) $request->id);
             if ($delete_item['ResponseStatus'] == ResponseStatus::OK) {

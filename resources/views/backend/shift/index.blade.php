@@ -48,6 +48,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     @foreach ($shift_list as $shift)
                                         <tr class="even pointer">
                                             <td class="a-center ">
@@ -56,7 +57,7 @@
                                             <td class=" ">{{ $shift->start_date_time }}</td>
                                             <td class=" ">{{ $shift->end_date_time }}</td>
                                             <td class="last">
-                                                <a href="javascript:void(0)" class="btn btn-info btn-xs"
+                                                <a href="{{url('/sg-backend/shift/order-list-page')}}/{{ $shift->id }}" class="btn btn-info btn-xs"
                                                     style="width:50%;"><i class="fa fa-pencil"></i> View Order List </a>
                                         </tr>
                                     @endforeach

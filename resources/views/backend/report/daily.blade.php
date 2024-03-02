@@ -26,14 +26,10 @@
                                     <thead>
 
                                         <tr class="headings">
-                                            <th>
-                                                <input type="checkbox" id="check-all" class="flat">
-                                            </th>
                                             <th class="column-title">Date</th>
                                             <th class="column-title">Amount</th>
 
                                         </tr>
-
                                     </thead>
                                     <tbody>
                                         <div class="row">
@@ -85,17 +81,11 @@
                                         @foreach ($result as $data)
                                             @if ($data->date == '')
                                                 <tr class="even pointer">
-                                                    <td class="a-center ">
-                                                        <input type="checkbox" class="flat" name="table_records">
-                                                    </td>
                                                     <td class=" ">Total</td>
                                                     <td class=" ">{{ $data->total }} </td>
                                                 </tr>
                                             @elseif ($data->date != '')
                                                 <tr class="even pointer">
-                                                    <td class="a-center ">
-                                                        <input type="checkbox" class="flat" name="table_records">
-                                                    </td>
                                                     <td class=" ">{{ $data->date }}</td>
                                                     <td class=" ">{{ $data->amount }} </td>
                                                 </tr>

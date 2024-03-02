@@ -6,6 +6,8 @@ use App\Utility;
 use App\ResponseStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrderListReport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\GetItemRequest;
@@ -141,6 +143,38 @@ class OrderController extends Controller
             return GetOrderListResource::collection($order_list);
         } catch (\Exception $e) {
             $screen = "loadOrderList From OrderController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
+    public function orderListPage(int $id)
+    {
+        try {
+            $order_list = $this->OrderRepository->getOrderList((int) $id);
+            $screen = "loadOrderList From OrderController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+            return view('backend.shift.order_list',compact(['order_list','id']));
+        } catch (\Exception $e) {
+            $screen = "loadOrderList From OrderController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+
+    }
+
+    public function downloadOrderListExcel(OrderListReport $orderListReport,$id)
+    {
+        try {
+            $name    = date('Ymdhis').'_'.'order_list.xlsx';
+            return Excel::download($orderListReport->setShiftid($id), $name);
+            $screen = "DownloadOrderlist From OrderController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "DownloadOrderlist From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }

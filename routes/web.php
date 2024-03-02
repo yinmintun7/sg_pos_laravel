@@ -66,7 +66,8 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::post('/end', [ShiftController::class, 'end']);
         Route::get('start', [ShiftController::class, 'redirectTo404']);
         Route::get('end', [ShiftController::class, 'redirectTo404']);
-
+        Route::get('/order-list-page/{id}', [OrderController::class, 'orderListPage']);
+        Route::get('/get-order-list-excel/{id}', [OrderController::class, 'downloadOrderListExcel']);
     });
 
     Route::group(['prefix' => 'category'], function () {
@@ -121,5 +122,7 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/daily/report-excel', [ReportController::class, 'dailyReportExcel'])->name('dailyReportExcel');
         Route::get('/monthly/table', [ReportController::class, 'monthlyReportTable'])->name('monthlyReport');
         Route::get('/monthly/report-excel', [ReportController::class, 'monthlyReportExcel'])->name('monthlyReportExcel');
+        Route::get('/yearly/report-list', [ReportController::class, 'yearlyReportTable'])->name('yearlyReport');
+        Route::get('/yearly/report-excel', [ReportController::class, 'yearlyReportExcel'])->name('yearlyReportExcel');
     });
 });

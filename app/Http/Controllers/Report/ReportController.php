@@ -44,7 +44,6 @@ class ReportController extends Controller
         try {
             $start = isset($request['start_date']) ? $request['start_date'] : null;
             $end   =  isset($request['end_date']) ? $request['end_date'] : null;
-            $result = $orderDailyReport->setRange($start, $end);
             return Excel::download($orderDailyReport->setRange($start, $end), 'weekly.xlsx');
             $screen = "SelectWeeklySaleExcel report from ReportController::";
             $queryLog = DB::getQueryLog();
@@ -55,6 +54,7 @@ class ReportController extends Controller
             abort(500);
         }
     }
+
     public function dailyReportTable(GetDailyReportRequest $request)
     {
         try {
@@ -89,8 +89,8 @@ class ReportController extends Controller
     public function monthlyReportTable(GetMonthlyReportRequest $request)
     {
         try {
-            $start_month  = isset($request['start_month']) ? $request['start_date'] : date('Y-m');
-            $end_month    = isset($request['end_month']) ? $request['end_date'] : date('Y-m', strtotime(date('Y-m') .' - 7 months'));
+            $start_month  = (isset($request->start_month)) ? $request->start_month : date('Y-m');
+            $end_month    = (isset($request->end_month)) ? $request->end_month : date('Y-m', strtotime(date('Y-m') .' - 7 months'));
             $result       = $this->ReportRepository->getMonthlySale($start_month, $end_month);
             return view('backend.report.monthly', compact(['result']));
             $screen = "SelectMonthlySale report from ReportController::";
@@ -106,8 +106,8 @@ class ReportController extends Controller
     public function monthlyReportExcel(OrderMonthlyReport $orderMonthlyReport, GetMonthlyReportRequest $request)
     {
         try {
-            $start_month  = (isset($request['start_month'])) ? $request['start_month'] : date('Y-m');
-            $end_month    = (isset($request['end_month'])) ? $request['end_month'] : date('Y-m', strtotime(date('Y-m') .' - 7 months'));
+            $start_month  = (isset($request->start_month)) ? $request->start_month : date('Y-m');
+            $end_month    = (isset($request->end_month)) ? $request->end_month : date('Y-m', strtotime(date('Y-m') .' - 7 months'));
             $name    = date('Ymdhis').'_'.'monthly_report.xlsx';
             return Excel::download($orderMonthlyReport->setRange($start_month, $end_month), $name);
             $screen = "DownloadMonthlySaleExcel report from ReportController::";
