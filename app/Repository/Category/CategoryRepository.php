@@ -21,7 +21,6 @@ class CategoryRepository implements CategoryRepositoryInterface
             $insert_data = [];
             $insert_data['name']      = $data['name'];
             $insert_data['parent_id'] = $data['parent_id'];
-            $insert_data['status']    = $data['status'];
             $file = $data['image'];
             $name_without_extension = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $file->getClientOriginalExtension();
@@ -34,7 +33,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            $screen = "CreateCategory From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }

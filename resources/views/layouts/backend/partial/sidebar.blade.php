@@ -69,7 +69,9 @@
                         <ul class="nav child_menu">
                             <li><a href="{{ url('/sg-backend/report/daily/report-list') }}">DailyReport</a></li>
                             <li><a href="{{ url('/sg-backend/report/monthly/table') }}">MonthlyReport</a></li>
-                            <li><Report href="{{ url('/sg-backend/report/yearly/report-list') }}">YearlyReport</a></li>
+                            <li>
+                                <Report href="{{ url('/sg-backend/report/yearly/report-list') }}">YearlyReport</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -77,5 +79,4 @@
         </div>
         <!-- /sidebar menu -->
     </div>
-</div>
 </div>

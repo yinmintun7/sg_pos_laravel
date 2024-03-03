@@ -11,6 +11,13 @@
                             <h2>{{ isset($discount) ? 'Discount Update' : 'Discount Create' }}</h2>
                             <div class="clearfix"></div>
                         </div>
+                        @if (@isset($discount))
+                            <div>
+                                <button class="btn btn-sm btn-secondary">
+                                    <a href="/sg-backend/discount/list" style="color: white;">Back</a>
+                                </button>
+                            </div>
+                        @endif
                         <div class="">
                             @if (@isset($discount))
                                 <form class="" action="{{ route('updateDiscount') }}" method="POST" novalidate>

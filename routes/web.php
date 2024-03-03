@@ -68,6 +68,7 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('end', [ShiftController::class, 'redirectTo404']);
         Route::get('/order-list-page/{id}', [OrderController::class, 'orderListPage']);
         Route::get('/get-order-list-excel/{id}', [OrderController::class, 'downloadOrderListExcel']);
+
     });
 
     Route::group(['prefix' => 'category'], function () {
@@ -77,6 +78,7 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/edit/{id}', [CategoryController::class, 'editCategory']);
         Route::post('/update', [CategoryController::class, 'updateCategory'])->name('updateCategory');
         Route::post('/delete', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+
     });
 
     Route::group(['prefix' => 'item'], function () {

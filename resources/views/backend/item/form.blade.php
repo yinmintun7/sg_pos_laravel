@@ -10,6 +10,13 @@
                             <h2>{{ isset($item) ? 'Item Update' : 'Item Create' }}</h2>
                             <div class="clearfix"></div>
                         </div>
+                        @if (@isset($item))
+                            <div>
+                                <button class="btn btn-sm btn-secondary">
+                                    <a href="/sg-backend/item/list" style="color: white;">Back</a>
+                                </button>
+                            </div>
+                        @endif
                         <div class="">
                             @if (@isset($item))
                                 <form class="" action="{{ route('updateItem') }}" method="POST"
@@ -109,7 +116,8 @@
                                 @endif
                             </div>
                         </div>
-                        <input class="hide" type="file" id="fileInput" name="image" onchange = 'previewImage(this)'>
+                        <input class="hide" type="file" id="fileInput" name="image"
+                            onchange = 'previewImage(this)'>
                         <div class="ln_solid">
                             <div class="form-group">
                                 <div class="col-md-6 offset-md-3">

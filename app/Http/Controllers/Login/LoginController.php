@@ -44,14 +44,12 @@ class LoginController extends Controller
             $screen = "Post Login Form";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-
             if ($auth) {
                 return redirect('/sg-backend/index');
             } else {
                 return redirect()->back()->withErrors(['login_error' => 'Wrong Credential!'])->withInput();
             }
         } catch (\Exception $e) {
-
             $screen = "Post Login Form";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
