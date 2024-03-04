@@ -9,4 +9,5 @@ interface ReportRepositoryInterface
     public function weeklySaleGraph();
     public function getMonthlySale($start_month, $end_month);
     public function getDailyReport($start, $end);
+    public function dailyBestSellingList();
 }

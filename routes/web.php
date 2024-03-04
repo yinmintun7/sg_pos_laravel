@@ -124,7 +124,10 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/daily/report-excel', [ReportController::class, 'dailyReportExcel'])->name('dailyReportExcel');
         Route::get('/monthly/table', [ReportController::class, 'monthlyReportTable'])->name('monthlyReport');
         Route::get('/monthly/report-excel', [ReportController::class, 'monthlyReportExcel'])->name('monthlyReportExcel');
-        Route::get('/yearly/report-list', [ReportController::class, 'yearlyReportTable'])->name('yearlyReport');
-        Route::get('/yearly/report-excel', [ReportController::class, 'yearlyReportExcel'])->name('yearlyReportExcel');
+        // Route::get('/yearly/report-list', [ReportController::class, 'yearlyReportTable'])->name('yearlyReport');
+        // Route::get('/yearly/report-excel', [ReportController::class, 'yearlyReportExcel'])->name('yearlyReportExcel');
+        Route::get('/daily/best-selling-list', [ReportController::class, 'dailyBestSellingList'])->name('monthlyReport');
+        Route::get('/daily/best-selling-excel', [ReportController::class, 'dailyBestSellingExcel']);
+        Route::get('/monthly/best-selling-list', [ReportController::class, 'monthlyBestSellingList']);
     });
 });

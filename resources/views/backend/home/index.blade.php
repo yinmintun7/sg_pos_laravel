@@ -5,7 +5,7 @@
     <div class="right_col" role="main">
         <div class="row">
             <!-- bar chart -->
-            <div class="col-md-12 col-sm-12 ">
+            <div class="col-md-6 col-sm-6 ">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>WeeklySaleGraph</h2>
@@ -18,7 +18,7 @@
             </div>
             <!-- /bar charts -->
             <!-- line graph -->
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-6 col-sm-6">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>MonthlySaleGraph</h2>

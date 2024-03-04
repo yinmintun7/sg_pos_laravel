@@ -7,6 +7,7 @@ use App\ResponseStatus;
 use Illuminate\Http\Request;
 use App\Exports\OrderDailyReport;
 use App\Exports\OrderMonthlyReport;
+use App\Exports\WeeklyBestSellingReport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -74,7 +75,7 @@ class ReportController extends Controller
         try {
             $start_month  = isset($request['start_month']) ? $request['start_date'] : date('Y-m');
             $end_month    = isset($request['end_month']) ? $request['end_date'] : date('Y-m', strtotime(date('Y-m') .' - 7 months'));
-            $monthly_data = $this->ReportRepository->getMonthlySale( $start_month, $end_month);
+            $monthly_data = $this->ReportRepository->getMonthlySale($start_month, $end_month);
             return new JsonResponse($monthly_data);
             $screen = "SelectMonthlySaleGraph report from ReportController::";
             $queryLog = DB::getQueryLog();
@@ -120,4 +121,49 @@ class ReportController extends Controller
         }
     }
 
+    public function dailyBestSellingList(Request $request)
+    {
+        try {
+            $start_date  = (isset($request->start_date)) ? $request->start_date : null;
+            $end_date    = (isset($request->end_date)) ? $request->end_date : null;
+            $result = $this->ReportRepository->dailyBestSellingList($start_date, $end_date);
+            return view('backend.report.daily_best_selling', compact(['result']));
+            $screen = "getWeeklyBestSellingItems from ReportController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "getWeeklyBestSellingItems report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
+    public function dailyBestSellingExcel(WeeklyBestSellingReport $weeklyBestSelling)
+    {
+        try {
+            $name  = date('Ymdhis').'_'.'monthly_report.xlsx';
+            return Excel::download($weeklyBestSelling->setRange(), $name);
+            $screen = "DownloadMonthlySaleExcel report from ReportController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "DownloadMonthlySaleExcel report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
+    public function monthlyBestSellingList(Request $request)
+    {
+        try {
+            return view('backend.report.monthly_best_selling');
+            $screen = "getWeeklyBestSellingItems from ReportController::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "getWeeklyBestSellingItems report from ReportController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
 }

@@ -156,7 +156,7 @@ class OrderController extends Controller
             $screen = "loadOrderList From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-            return view('backend.shift.order_list',compact(['order_list','id']));
+            return view('backend.shift.order_list', compact(['order_list','id']));
         } catch (\Exception $e) {
             $screen = "loadOrderList From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
@@ -165,16 +165,16 @@ class OrderController extends Controller
 
     }
 
-    public function downloadOrderListExcel(OrderListReport $orderListReport,$id)
+    public function downloadOrderListExcel(OrderListReport $orderListReport, $id)
     {
         try {
             $name    = date('Ymdhis').'_'.'order_list.xlsx';
-            return Excel::download($orderListReport->setShiftid($id), $name);
-            $screen = "DownloadOrderlist From OrderController::";
+            return Excel::download($orderListReport->setShiftId($id), $name);
+            $screen = "Download Orderlist From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
-            $screen = "DownloadOrderlist From OrderController::";
+            $screen = "Download Orderlist From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }

@@ -7,6 +7,7 @@ use App\Constant;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Shift;
 use App\ResponseStatus;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,7 @@ class ReportRepository implements ReportRepositoryInterface
 
     }
 
-    public function getMonthlySale($start_month,$end_month)
+    public function getMonthlySale($start_month, $end_month)
     {
         try {
             $result = [];
@@ -121,4 +122,32 @@ class ReportRepository implements ReportRepositoryInterface
         }
 
     }
+
+    public function dailyBestSellingList()
+    {
+        try {
+            $result = [];
+            $dates = Utility::getLastSevenDay(null, null);
+            foreach ($dates as $shift_date) {
+                $items = OrderDetail::leftJoin('item', 'item.id', 'order_detail.item_id')
+                        ->whereDate('order_detail.created_at', $shift_date)
+                        ->select('item.name', DB::raw('SUM(order_detail.quantity) as total_quantity'), DB::raw('SUM(order_detail.         sub_total) as total_sub_total'))
+                        ->whereNull('item.deleted_at')
+                        ->whereNull('order_detail.deleted_at')
+                        ->groupBy('item.name')
+                        ->orderBy('total_quantity', 'desc')
+                        ->paginate(10);
+                array_push($result, $items);
+            }
+            return $items;
+            $screen = "getWeeklyBestSellingItems from ReportRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "getWeeklyBestSellingItems from ReportRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
+    }
+
 }

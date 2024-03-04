@@ -1,6 +1,7 @@
 @extends('layouts.backend.master')
 @section('title', 'Orderlist')
 @section('content')
+    {{ dd($order_list) }}
     <div class="right_col" role="main">
         <div class="">
             <div class="row" style="display: block;">
@@ -12,7 +13,8 @@
                         </div>
                         <div class="x_content">
                             <div class="table-responsive">
-                                <a href="{{ url('/sg-backend/shift/get-order-list-excel') }}/{{ $id }}" class="btn btn-primary" name="download">
+                                <a href="{{ url('/sg-backend/shift/get-order-list-excel') }}/{{ $id }}"
+                                    class="btn btn-primary" name="download">
                                     <i class="fa fa-download" aria-hidden="true"></i>
                                     DownloadExcel
                                 </a>

@@ -25,6 +25,9 @@ class ShiftFactory extends Factory
     private $date_diff = 399;
     public function definition()
     {
+        Shift::truncate();
+        Order::truncate();
+        OrderDetail::truncate();
         $today_start = Carbon::today();
         $start_time = $today_start->subDay($this->date_diff)->addHour(rand(6, 18))->addMinute(rand(0, 59));
         $end_time = $start_time->copy()->addHour();
@@ -77,8 +80,12 @@ class ShiftFactory extends Factory
                     $order_detail->updated_at     = $order->updated_at;
                     $order_detail->save();
                 }
+                $random_refund = [0,100,200,500,1000,5000];
+                $refund = array_rand($random_refund);
                 $update_order = Order::find($order->id);
-                $update_order ->total_amount = $sub_total;
+                $update_order -> total_amount = $sub_total;
+                $update_order -> payment = $sub_total + $refund;
+                $update_order -> refund = $refund;
                 $update_order->save();
             });
         });

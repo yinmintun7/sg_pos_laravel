@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 class OrderListReport implements FromCollection, WithHeadings, WithTitle, WithStyles
 {
     private $all_total_row;
-    private $shfit_id;
+    private $shift_id;
     private $OrderRepository;
     public function __construct(OrderRepositoryInterface $OrderRepository)
     {
@@ -29,17 +29,17 @@ class OrderListReport implements FromCollection, WithHeadings, WithTitle, WithSt
     * @return \Illuminate\Support\Collection
     */
 
-    public function setShiftid($shfit_id)
+    public function setShiftId($shift_id)
     {
-        $this->shfit_id = $shfit_id;
+        $this->shift_id = $shift_id;
         return $this;
     }
     public function collection()
     {
-        $result    = $this->OrderRepository->getOrderList($this->shfit_id);
+        $result    = $this->OrderRepository->getOrderList($this->shift_id);
         $array     = [];
         $all_total = 0;
-        foreach($result as $order){
+        foreach ($result as $order) {
             $all_total = $all_total + $order->total_amount;
             $data = (object)[
                 'order_no' => $order->order_no,
@@ -47,7 +47,7 @@ class OrderListReport implements FromCollection, WithHeadings, WithTitle, WithSt
                 'amount'   => $order->total_amount,
                 'total'    => '',
             ];
-            array_push($array,$data);
+            array_push($array, $data);
         }
         $total_row = (object)[
             'order_no' => '',
@@ -55,7 +55,7 @@ class OrderListReport implements FromCollection, WithHeadings, WithTitle, WithSt
             'amount'   => '',
             'total'    =>  $all_total,
         ];
-        array_push($array,$total_row);
+        array_push($array, $total_row);
         $this->all_total_row = count($array) + 1;
         return new Collection($array);
     }
