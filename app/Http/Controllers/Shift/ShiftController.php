@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Shift;
 
-use App\Utility;
-use App\ResponseStatus;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Repository\Shift\ShiftRepositoryInterface;
+use App\ResponseStatus;
+use App\Utility;
+use Illuminate\Support\Facades\DB;
 
 class ShiftController extends Controller
 {
@@ -46,7 +46,7 @@ class ShiftController extends Controller
                 if ($shift_start['ResponseStatus'] == ResponseStatus::OK) {
                     return redirect()->back()->with(['shift_start' => 'Success!,Shift is starting now!']);
                 } else {
-                    return redirect()->back()->withErrors(['shift_error' => 'Cannot start Shift ,Somethine is wrong!']);
+                    return redirect()->back()->withErrors(['shift_error' => 'Cannot start Shift ,Something is wrong!']);
                 }
             } else {
                 return redirect()->back()->withErrors(['shift_error' => 'Fail!,Shift is already start!']);

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Login;
 
 use App\Constant;
-use App\Utility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminAuthRequest;
 use App\Http\Requests\CashierAuthRequest;
+use App\Utility;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -21,7 +21,6 @@ class LoginController extends Controller
     public function getLoginForm()
     {
         try {
-
             if (Auth::guard('admin')->user() != null) {
                 $role = Auth::guard('admin')->user()->role;
                 if ($role == Constant::ADMIN_ROLE) {
@@ -63,9 +62,12 @@ class LoginController extends Controller
             Session::flush();
             return redirect('/sg-backend/login');
         } catch (\Exception $e) {
+            $screen = "Post Login Form";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
+
     public function frontendLogout()
     {
         try {
@@ -73,6 +75,8 @@ class LoginController extends Controller
             Session::flush();
             return redirect('/login');
         } catch (\Exception $e) {
+            $screen = "Post Login Form";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
@@ -82,15 +86,15 @@ class LoginController extends Controller
         try {
             return view('auth.access_denied');
         } catch (\Exception $e) {
+            $screen = "Post Login Form";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
 
-
     public function getFrontendLoginForm()
     {
         try {
-
             if (Auth::guard('admin')->user() != null) {
                 $role = Auth::guard('admin')->user()->role;
                 if ($role == Constant::CASHIER_ROLE) {
@@ -99,11 +103,13 @@ class LoginController extends Controller
             }
             return view('Login.frontend_login');
         } catch (\Exception $e) {
+            $screen = "getFrontend Login Form";
+            Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
     }
 
-    public function postFrontendlogin(CashierAuthRequest $request)
+    public function postFrontendLogin(CashierAuthRequest $request)
     {
         try {
             $auth = Auth::guard('admin')->attempt([
@@ -123,15 +129,9 @@ class LoginController extends Controller
                 return redirect()->back()->withErrors(['login_error' => 'Wrong Credential!'])->withInput();
             }
         } catch (\Exception $e) {
-
             $screen = "Post Login Form";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-    }
-
-    public function hello()
-    {
-        dd('hello');
     }
 }

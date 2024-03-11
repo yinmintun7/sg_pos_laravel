@@ -161,7 +161,7 @@
     @include('layouts.backend.partial.footer_start')
     @include('layouts.backend.partial.footer_end')
 
-    <!-- java script herr -->
+    <!-- java script here -->
     <script>
         $(document).ready(function() {
             $('input[name="discount_type"]').change(function() {

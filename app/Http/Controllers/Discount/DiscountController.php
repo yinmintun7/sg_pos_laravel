@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Discount;
 
 use App\Http\Controllers\Controller;
-use App\ResponseStatus;
-use App\Utility;
+use App\Http\Requests\DiscountDeleteRequest;
 use App\Http\Requests\DiscountStoreRequest;
 use App\Http\Requests\Discount\DiscountUpdateRequest;
-use App\Http\Requests\ItemUpdateRequest;
-use App\Http\Requests\DiscountDeleteRequest;
 use App\Repository\Discount\DiscountRepositoryInterface;
 use App\Repository\Item\ItemRepositoryInterface;
+use App\ResponseStatus;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
 
 class DiscountController extends Controller
@@ -37,7 +36,6 @@ class DiscountController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function create(DiscountStoreRequest $request)
@@ -52,26 +50,21 @@ class DiscountController extends Controller
             $screen = "DiscountCreate from DiscountController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-
         } catch (\Exception $e) {
             $screen = "DiscountCreate from DiscountController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getDiscount()
     {
         try {
             $discounts = $this->DiscountRepository->getDiscount();
-            $screen = "GetItems From ItemController::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
-            return view('backend.discount.discount_list', compact(['discounts']));
             $screen = "GetDiscount from DiscountController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
+            return view('backend.discount.discount_list', compact(['discounts']));
         } catch (\Exception $e) {
             $screen = "GetDiscount from DiscountController::";
             Utility::saveErrorLog($screen, $e->getMessage());
@@ -87,7 +80,6 @@ class DiscountController extends Controller
             if ($discount == null) {
                 return response()->view('errors.404', [], 404);
             }
-            //dd($discount);
             $items = $this->ItemRepository->getItems();
             $screen   = "GetDiscountById From CategoryController::";
             $queryLog = DB::getQueryLog();
@@ -98,7 +90,6 @@ class DiscountController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function update(DiscountUpdateRequest $request)
@@ -118,7 +109,6 @@ class DiscountController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function delete(DiscountDeleteRequest $request)
@@ -139,6 +129,4 @@ class DiscountController extends Controller
             abort(500);
         }
     }
-
-
 }

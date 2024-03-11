@@ -1,17 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Discount\DiscountController;
 use App\Http\Controllers\Item\ItemController;
-use App\Http\Controllers\test\TestController;
-use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Login\LoginController;
 use App\Http\Controllers\Order\OrderController;
-use App\Http\Controllers\Shift\ShiftController;
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Setting\SettingController;
-use App\Http\Controllers\Category\CategoryController;
-use App\Http\Controllers\Discount\DiscountController;
-use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Shift\ShiftController;
+use App\Http\Controllers\User\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +28,9 @@ Route::get('/', function () {
 });
 Route::get('/shift-close', [ShiftController::class, 'shiftClose']);
 Route::get('/login', [LoginController::class, 'getFrontendLoginForm']);
-Route::post('/postFrontendlogin', [LoginController::class, 'postFrontendlogin'])->name('frontendLogin');
+Route::post('/post-frontend-login', [LoginController::class, 'postFrontendLogin'])->name('frontendLogin');
 Route::get('/logout', [LoginController::class, 'frontendLogout']);
-Route::get('/unauthorze', [LoginController::class, 'unauthorize']);
+Route::get('/unauthorize', [LoginController::class, 'unauthorize']);
 Route::group(['prefix' => '/', 'middleware' => 'cashier'], function () {
     Route::get('/order-list', [OrderController::class, 'orderList']);
     Route::get('/order', [OrderController::class, 'order']);
@@ -54,9 +53,8 @@ Route::group(['prefix' => '/', 'middleware' => 'cashier'], function () {
 
 Route::get('/sg-backend/login', [LoginController::class, 'getLoginForm']);
 Route::get('/sg-backend/logout', [LoginController::class, 'logout']);
-Route::get('/sg-backend/unauthorze', [LoginController::class, 'unauthorize']);
-Route::post('/postlogin', [LoginController::class, 'postLoginForm'])->name('sg-backendLogin');
-
+Route::get('/sg-backend/unauthorize', [LoginController::class, 'unauthorize']);
+Route::post('/post-login', [LoginController::class, 'postLoginForm'])->name('sg-backendLogin');
 
 Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
     Route::get('/index', [DashboardController::class, 'index']);
@@ -68,7 +66,6 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('end', [ShiftController::class, 'redirectTo404']);
         Route::get('/order-list-page/{id}', [OrderController::class, 'orderListPage']);
         Route::get('/get-order-list-excel/{id}', [OrderController::class, 'downloadOrderListExcel']);
-
     });
 
     Route::group(['prefix' => 'category'], function () {
@@ -78,7 +75,6 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/edit/{id}', [CategoryController::class, 'editCategory']);
         Route::post('/update', [CategoryController::class, 'updateCategory'])->name('updateCategory');
         Route::post('/delete', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
-
     });
 
     Route::group(['prefix' => 'item'], function () {
@@ -124,10 +120,10 @@ Route::group(['prefix' => 'sg-backend', 'middleware' => 'admin'], function () {
         Route::get('/daily/report-excel', [ReportController::class, 'dailyReportExcel'])->name('dailyReportExcel');
         Route::get('/monthly/table', [ReportController::class, 'monthlyReportTable'])->name('monthlyReport');
         Route::get('/monthly/report-excel', [ReportController::class, 'monthlyReportExcel'])->name('monthlyReportExcel');
-        // Route::get('/yearly/report-list', [ReportController::class, 'yearlyReportTable'])->name('yearlyReport');
-        // Route::get('/yearly/report-excel', [ReportController::class, 'yearlyReportExcel'])->name('yearlyReportExcel');
+        Route::get('/payment-history/{date}', [ReportController::class, 'paymentHistory']);
         Route::get('/daily/best-selling-list', [ReportController::class, 'dailyBestSellingList'])->name('monthlyReport');
         Route::get('/daily/best-selling-excel', [ReportController::class, 'dailyBestSellingExcel']);
-        Route::get('/monthly/best-selling-list', [ReportController::class, 'monthlyBestSellingList']);
+        Route::get('/monthly/best-selling-list', [ReportController::class, 'monthlyBestSellingList'])->name('monthlyBestSellingList');
+        Route::get('/monthly/best-selling-excel', [ReportController::class, 'monthlyBestSellingExcel'])->name('monthlyBestSellingExcel');
     });
 });

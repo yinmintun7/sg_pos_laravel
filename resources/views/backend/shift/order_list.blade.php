@@ -1,7 +1,6 @@
 @extends('layouts.backend.master')
 @section('title', 'Orderlist')
 @section('content')
-    {{ dd($order_list) }}
     <div class="right_col" role="main">
         <div class="">
             <div class="row" style="display: block;">

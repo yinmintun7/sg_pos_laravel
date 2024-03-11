@@ -4,22 +4,14 @@ namespace App\Repository\Item;
 
 use App\Constant;
 use App\Models\Item;
-use App\Models\Category;
-use App\Models\Order;
-use App\Models\OrderDetails;
-use App\Models\DiscountItem;
-use App\Models\OrderDetail;
-use App\Utility;
 use App\ResponseStatus;
-use Illuminate\Support\Facades\Auth;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\UploadedFile;
 
 class ItemRepository implements ItemRepositoryInterface
 {
     public function create(array $data)
     {
-
         $returnArray  = array();
         $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
@@ -40,7 +32,6 @@ class ItemRepository implements ItemRepositoryInterface
             for ($i = 0; $i <= 3; $i++) {
                 $code_key .= chr(rand(65, 90));
             }
-
             $code_no = $create_item->category_id . $create_item->id . '-' . $code_key;
             $insert_codeno = Item::find($create_item->id);
             $confirm_codeno['code_no'] = $code_no;
@@ -52,7 +43,8 @@ class ItemRepository implements ItemRepositoryInterface
         } catch (\Exception $e) {
             $screen = "ItemCreate From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
@@ -74,7 +66,8 @@ class ItemRepository implements ItemRepositoryInterface
         } catch (\Exception $e) {
             $screen = "GetItems From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
@@ -97,10 +90,10 @@ class ItemRepository implements ItemRepositoryInterface
         } catch (\Exception $e) {
             $screen = "GetItems From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
-
 
     public function updateItem($request)
     {
@@ -122,7 +115,6 @@ class ItemRepository implements ItemRepositoryInterface
                 $update_data['image'] = $unique_name;
                 $old_image     = storage_path('/app/public/upload/item/' . $id.'/'.$update->image);
                 unlink($old_image);
-
             }
             $update_data['name']        = $name;
             $update_data['category_id'] = $category_id;
@@ -131,15 +123,13 @@ class ItemRepository implements ItemRepositoryInterface
             $update_data['status']      = $status;
             $confirm_update = Utility::getUpdateId((array)$update_data);
             $update->update($confirm_update);
-            $screen   = "UpdateItem From ItemRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
             $screen = "UpdateItem From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
@@ -153,9 +143,10 @@ class ItemRepository implements ItemRepositoryInterface
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
-            $screen = "DeleteItem From ItemRepository::";
+            $screen = "deleteItem From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 }

@@ -5,9 +5,8 @@ namespace App\Repository\Discount;
 use App\Constant;
 use App\Models\DiscountItem;
 use App\Models\DiscountPromotion;
-use App\Utility;
 use App\ResponseStatus;
-use Illuminate\Support\Facades\Auth;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
 
 class DiscountRepository implements DiscountRepositoryInterface
@@ -47,44 +46,49 @@ class DiscountRepository implements DiscountRepositoryInterface
             DB::rollBack();
             $screen = "CreateDiscount From DiscountRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function getDiscount()
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $discount_items = [];
             $discount_items = DiscountPromotion::select('id', 'name', DB::raw("CASE WHEN amount IS NULL THEN CONCAT(percentage, '%') ELSE CONCAT(amount, ' kyats') END as discount_amount"), 'start_date', 'end_date', 'description', 'status')
                         ->whereNull('deleted_at')
                         ->orderByDesc('id')
                         ->paginate(10);
-
             return $discount_items;
         } catch (\Exception $e) {
             $screen = "GetCategory From Category Form Screen::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function getDiscountById(int $id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $discount_item = DiscountPromotion::find($id);
             return $discount_item;
-            $screen   = "GetDiscountById From DiscountRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             $screen = "GetDiscountById From DiscountRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function getItemByDiscountId(int $id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $data = [];
             $discount_items = DiscountItem::SELECT("item_id")
@@ -96,18 +100,18 @@ class DiscountRepository implements DiscountRepositoryInterface
                 array_push($data, $item->item_id);
             }
             return $data;
-            $screen   = "getItemByDiscountId From DiscountRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             $screen = "getItemByDiscountId From DiscountRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function update($request)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             DB::beginTransaction();
             $update_data = [];
@@ -136,22 +140,21 @@ class DiscountRepository implements DiscountRepositoryInterface
                 DiscountItem::create($store_dis);
             }
             DB::commit();
-            $screen   = "UpdateCategory From Category Form Screen::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
-
         } catch (\Exception $e) {
             DB::rollBack();
             $screen = "UpdateCategory From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function delete($id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             DB::beginTransaction();
             $delete_data = [];
@@ -169,7 +172,8 @@ class DiscountRepository implements DiscountRepositoryInterface
             DB::rollBack();
             $screen = "DeleteCategory From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 }

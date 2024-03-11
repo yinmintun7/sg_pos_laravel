@@ -120,4 +120,10 @@ class Utility
         return $dates;
     }
 
+    public static function convertDateFormat($month)
+    {
+        $date = \DateTime::createFromFormat('m-Y', $month);
+        return $date ? $date->format('m/Y') : null;
+    }
+
 }

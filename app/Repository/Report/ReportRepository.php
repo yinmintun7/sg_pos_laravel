@@ -2,21 +2,20 @@
 
 namespace App\Repository\Report;
 
-use App\Utility;
-use App\Constant;
-use DateTime;
-use Carbon\Carbon;
+use App\Models\Item;
 use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\Shift;
 use App\ResponseStatus;
+use App\Utility;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class ReportRepository implements ReportRepositoryInterface
 {
     public function weeklySaleGraph()
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $dates = Utility::getLastSevenDay(null, null);
             $result = [];
@@ -42,19 +41,19 @@ class ReportRepository implements ReportRepositoryInterface
         } catch (\Exception $e) {
             $screen = "SelectWeeklySaleGraph report from ReportRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
-
     }
 
     public function getMonthlySale($start_month, $end_month)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $result = [];
             $month  = [];
             $total  = [];
-            // $start_month = date('Y-m');
-            // $end_month   = date('Y-m', strtotime($start_month .' - 7 months'));
             $dates = Utility::getLastSevenMonths($start_month, $end_month);
             foreach ($dates as $shift_month) {
                 $shifts = Shift::where('start_date_time', 'LIKE', $shift_month . '%')->get();
@@ -79,12 +78,15 @@ class ReportRepository implements ReportRepositoryInterface
         } catch (\Exception $e) {
             $screen = "SelectMonthSaleGraph report from ReportRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function getDailyReport($start, $end)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $dates = Utility::getLastSevenDay($start, $end);
             $result = [];
@@ -114,30 +116,40 @@ class ReportRepository implements ReportRepositoryInterface
             ];
             array_push($result, $total_row);
             return $result;
-
+            $screen = "SelectWeeklySaleExcel report from ReportRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             $screen = "SelectWeeklySaleExcel report from ReportRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
 
     }
 
     public function dailyBestSellingList()
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $result = [];
             $dates = Utility::getLastSevenDay(null, null);
             foreach ($dates as $shift_date) {
-                $items = OrderDetail::leftJoin('item', 'item.id', 'order_detail.item_id')
-                        ->whereDate('order_detail.created_at', $shift_date)
-                        ->select('item.name', DB::raw('SUM(order_detail.quantity) as total_quantity'), DB::raw('SUM(order_detail.         sub_total) as total_sub_total'))
-                        ->whereNull('item.deleted_at')
-                        ->whereNull('order_detail.deleted_at')
-                        ->groupBy('item.name')
-                        ->orderBy('total_quantity', 'desc')
-                        ->paginate(10);
-                array_push($result, $items);
+                $items = Item::select('item.id', 'item.name')
+                            ->leftJoin(DB::raw('(SELECT
+                                                    item_id,
+                                                    SUM(original_price * quantity) AS total_sum_price,
+                                                    SUM(quantity) AS total_sum_quantity
+                                                FROM
+                                                    order_detail
+                                                WHERE
+                                                    created_at BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()
+                                                GROUP BY
+                                                    item_id
+                                                ) AS T02'), 'item.id', '=', 'T02.item_id')
+                            ->orderByDesc('T02.total_sum_quantity')
+                            ->get();
             }
             return $items;
             $screen = "getWeeklyBestSellingItems from ReportRepository::";
@@ -146,8 +158,73 @@ class ReportRepository implements ReportRepositoryInterface
         } catch (\Exception $e) {
             $screen = "getWeeklyBestSellingItems from ReportRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
+    public function monthlyBestSellingList($month)
+    {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+        try {
+            $result = [];
+            $month = '03/2024';
+            $results = Item::select('item.id', 'item.name')
+                            ->leftJoin(DB::raw('(SELECT
+                                        item_id,
+                                        SUM(original_price * quantity) AS total_sum_price,
+                                        SUM(quantity) AS total_sum_quantity
+                                    FROM
+                                        order_detail
+                                    WHERE
+                                        DATE_FORMAT(created_at, "%m/%Y") = ?
+                                    GROUP BY
+                                        item_id
+                                    ) AS T02'), 'item.id', '=', 'T02.item_id')
+                            ->orderByDesc('T02.total_sum_quantity')
+                            ->setBindings([$month])
+                            ->get();
+            return $results;
+            $screen = "getMonthlyBestSellingItems from ReportRepository::";
+            $queryLog = DB::getQueryLog();
+            Utility::saveDebugLog($screen, $queryLog);
+        } catch (\Exception $e) {
+            $screen = "getMonthlyBestSellingItems from ReportRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
+        }
+    }
+
+    public function paymentHistory($date)
+    {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+        try {
+            // foreach ($dates as $shift_date) {
+            $shift_ids = Shift::whereDate('start_date_time', $date)->get('id');
+            //     if ($shifts != null) {
+            //         $total_amount = 0;
+            //         foreach ($shifts as $shift) {
+            //             $sum_shift = Order::where('shift_id', $shift->id)->sum('total_amount');
+            //             $total_amount = $total_amount + $sum_shift;
+            //         }
+            //         $all_total = $all_total + $total_amount;
+
+            //         $weekly_date = (object) [
+            //             'date'   => Carbon::parse($shift_date)->format('Y-m-d'),
+            //             'amount' => $total_amount + $sum_shift,
+            //             'total'  => ''
+            //         ];
+            //         array_push($result, $weekly_date);
+            //     }
+            // }
+        } catch (\Exception $e) {
+            $screen = "SelectWeeklySaleExcel report from ReportRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
+        }
+    }
 }

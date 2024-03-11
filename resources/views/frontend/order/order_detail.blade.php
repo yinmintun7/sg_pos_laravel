@@ -3,9 +3,7 @@
 @section('content')
     <div class="col-lg-8 col-md-7 col-sm-6 col-6 receipt-btn justify-content-start">
         <button class="btn" onclick="history.back()">
-
-            <img src="{{asset('asset/images/frontend/payment/previous_img.png')}}" alt="Previous"
-                class="heightLine_06" />
+            <img src="{{ asset('asset/images/frontend/payment/previous_img.png') }}" alt="Previous" class="heightLine_06" />
             </a>
         </button>
     </div>
@@ -17,13 +15,13 @@
                 <div class="receipt_header"
                     style="padding-bottom: 40px; border-bottom: 1px dashed #000; text-align: center;">
                     <h1 style="font-size: 20px; margin-bottom: 5px; text-transform: uppercase;">Receipt of Sale
-                        <span style="display: block; font-size: 25px;">@{{settingData.company_name}}</span>
+                        <span style="display: block; font-size: 25px;">@{{ settingData.company_name }}</span>
                     </h1>
-                    <h2 style="font-size: 14px; color: #727070; font-weight: 300;">Address: @{{settingData.company_address}}
-                        <span style="display: block;">Tel: @{{settingData.company_phone}}</span>
+                    <h2 style="font-size: 14px; color: #727070; font-weight: 300;">Address: @{{ settingData.company_address }}
+                        <span style="display: block;">Tel: @{{ settingData.company_phone }}</span>
                     </h2>
                     <span>OrderNo: @{{ orderDetail.order_no }}</span></br></br>
-                    <span>CashierNmae - {{getLoginUser()}}</span>
+                    <span>CashierName - {{ getLoginUser() }}</span>
                 </div>
                 <div class="receipt_body" style=" margin-top: 25px;">
                     <div class="date_time_con" style="display: flex; justify-content: center; column-gap: 25px;">
@@ -62,14 +60,11 @@
                 </p>
             </div>
         </div>
-
     </div>
     <div style="text-align: center; margin: 20px 0 30px 0;">
         <button class="btn btn-secondary btn-lg" onclick="printInvoice()"><i class="fa fa-print"
                 aria-hidden="true"></i>Print</button>
     </div>
-
-
     <script>
         function printInvoice() {
             var printContents = document.getElementById('order-detail').innerHTML;

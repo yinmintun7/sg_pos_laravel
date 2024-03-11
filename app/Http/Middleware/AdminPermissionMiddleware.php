@@ -19,13 +19,12 @@ class AdminPermissionMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (Auth::guard('admin')->user() != null) {
-            $role=Auth::guard('admin')->user()->role;
-            if($role == Constant::ADMIN_ROLE){
+            $role = Auth::guard('admin')->user()->role;
+            if ($role == Constant::ADMIN_ROLE) {
                 return $next($request);
-            }else{
-                return redirect('/sg-backend/unauthorze');
+            } else {
+                return redirect('/sg-backend/unauthorize');
             }
-
         } else {
             return redirect('/sg-backend/login');
         }

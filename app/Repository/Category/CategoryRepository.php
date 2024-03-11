@@ -4,12 +4,9 @@ namespace App\Repository\Category;
 
 use App\Constant;
 use App\Models\Category;
-use App\Utility;
 use App\ResponseStatus;
-use Illuminate\Support\Facades\Auth;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
@@ -35,12 +32,14 @@ class CategoryRepository implements CategoryRepositoryInterface
         } catch (\Exception $e) {
             $screen = "CreateCategory From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         }
     }
 
     public function getCategory()
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $categories = [];
             $categories = Category::from('category as c')
@@ -54,46 +53,46 @@ class CategoryRepository implements CategoryRepositoryInterface
         } catch (\Exception $e) {
             $screen = "GetCategory From Category Form Screen::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         }
     }
 
     public function getCategoryById(int $id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $category = Category::find($id);
             return $category;
-            $screen   = "GetCategoryById From CategoryRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
+
         } catch (\Exception $e) {
             $screen = "GetCategoryById From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         }
-
     }
 
     public function getCategoryByParentId(int $id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $categories = Category::where('parent_id', $id)
                         ->whereNull('deleted_at')
                         ->where('status', Constant::ENABLE_STATUS)
                         ->get();
-            $screen   = "getCategoryByParentId From CategoryRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
             return $categories;
         } catch (\Exception $e) {
             $screen = "getCategoryByParentId From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         }
     }
 
     public function updateCategory($request)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $id = $request['id'];
             $name = $request['name'];
@@ -110,7 +109,6 @@ class CategoryRepository implements CategoryRepositoryInterface
                 $update_data['image'] = $unique_name;
                 $old_image     = storage_path('/app/public/upload/category/' . $id.'/'.$update->image);
                 unlink($old_image);
-
             }
             $update_data['name']      = $name;
             $update_data['parent_id'] = $parent_id;
@@ -119,19 +117,17 @@ class CategoryRepository implements CategoryRepositoryInterface
             $update->update($confirm_update);
             $screen   = "UpdateCategory From Category Form Screen::";
             $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
-            $returnArray['ResponseStatus'] = ResponseStatus::OK;
-            return $returnArray;
-
         } catch (\Exception $e) {
             $screen = "UpdateCategory From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         }
     }
 
     public function deleteCategory($id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $delete_data = [];
             $delete = Category::find($id);
@@ -142,7 +138,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         } catch (\Exception $e) {
             $screen = "DeleteCategory From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         }
     }
 }

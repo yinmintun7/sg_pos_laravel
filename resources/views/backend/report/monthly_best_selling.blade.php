@@ -31,8 +31,37 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <div class="row">
+                                            <form method="GET">
+                                                @if (request()->has('search'))
+                                                    <input type="hidden" name="search" value="1">
+                                                    <input type="hidden" name="month"
+                                                        value="{{ request()->get('month') }}">
+                                                @endif
+                                                <div class="field item form-group">
+                                                    <label for="demo-2"
+                                                        class="col-form-label col-md-3 col-sm-3 label-align">Select
+                                                        Month<span class="required">*</span></label>
+                                                    <input type="text" id="demo-2" name="month" />
+                                                </div>
+                                                <button type="submit" class="btn btn-primary" name="search"
+                                                    formaction="{{ route('monthlyBestSellingList') }}"><i
+                                                        class="fa fa-search" aria-hidden="true"></i> Search</button>
+                                                <button type="submit" class="btn btn-primary" name="download"
+                                                    formaction="{{ route('monthlyBestSellingExcel') }}"><i
+                                                        class="fa fa-cloud-download" aria-hidden="true"></i>
+                                                    Download</button>
+                                            </form>
+                                        </div>
+                                        {{-- <div class="row">
+                                            <a href="{{ url('/sg-backend/report/monthly/best-selling-excel') }}"
+                                                class="btn btn-primary" name="download">
+                                                <i class="fa fa-download" aria-hidden="true"></i>
+                                                DownloadExcel
+                                            </a>
+                                        </div>
                                         <h2>Select Month</h2>
-                                        <input type="text" id="demo-2" />
+                                        <input type="text" id="demo-2" /> --}}
                                     </tbody>
                                 </table>
                             </div>

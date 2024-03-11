@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Item;
 
 use App\Http\Controllers\Controller;
-use App\ResponseStatus;
-use App\Utility;
-use App\Models\Item;
+use App\Http\Requests\ItemDeleteRequest;
 use App\Http\Requests\ItemStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
-use App\Http\Requests\ItemDeleteRequest;
+use App\Models\Item;
 use App\Repository\Item\ItemRepositoryInterface;
+use App\ResponseStatus;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
@@ -23,17 +23,18 @@ class ItemController extends Controller
 
     public function form()
     {
-
-        return view('backend.item.form');
-
+        try {
+            return view('backend.item.form');
+        } catch (\Exception $e) {
+            $screen = "ItemCreateFrom From ItemController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
 
     public function create(ItemStoreRequest $request)
     {
-
         try {
-
-
             $validatedData = $request->validated();
             if (!$validatedData) {
                 return redirect()->back()->withErrors($request->errors())->withInput();
@@ -47,13 +48,11 @@ class ItemController extends Controller
             $screen = "ItemCreate From ItemController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-
         } catch (\Exception $e) {
             $screen = "ItemCreate From ItemController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getItems()
@@ -73,13 +72,18 @@ class ItemController extends Controller
 
     public function itemEditForm($id)
     {
-        $item = Item::find($id);
-        return view('backend.item.form', compact(['item']));
+        try {
+            $item = Item::find($id);
+            return view('backend.item.form', compact(['item']));
+        } catch (\Exception $e) {
+            $screen = "ItemCreateFrom From ItemController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
 
     public function updateItem(ItemUpdateRequest $request)
     {
-
         try {
             $update_cat = $this->ItemRepository->updateItem($request->all());
             if ($update_cat['ResponseStatus'] == ResponseStatus::OK) {
@@ -95,7 +99,6 @@ class ItemController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function deleteItem(ItemDeleteRequest $request)
@@ -116,6 +119,4 @@ class ItemController extends Controller
             abort(500);
         }
     }
-
-
 }

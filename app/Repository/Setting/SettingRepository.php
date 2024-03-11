@@ -2,12 +2,9 @@
 
 namespace App\Repository\Setting;
 
-use App\Constant;
-use App\Models\DiscountItem;
 use App\Models\Setting;
-use App\Utility;
 use App\ResponseStatus;
-use Illuminate\Support\Facades\Auth;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
 
 class SettingRepository implements SettingRepositoryInterface
@@ -38,12 +35,15 @@ class SettingRepository implements SettingRepositoryInterface
         } catch (\Exception $e) {
             $screen = "CreateSetting From SettingRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function getSetting()
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $setting = Setting::select('id', 'company_name', 'company_phone', 'company_email', 'company_address', 'company_logo')
             ->whereNull('deleted_at')
@@ -52,12 +52,15 @@ class SettingRepository implements SettingRepositoryInterface
         } catch (\Exception $e) {
             $screen = "GetSetting From SettingRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function update($request)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $id = $request['id'];
             $company_name    = $request['company_name'];
@@ -92,12 +95,15 @@ class SettingRepository implements SettingRepositoryInterface
         } catch (\Exception $e) {
             $screen = "UpdateSetting From SettingRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function delete($id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $delete_data = [];
             $delete = Setting::find($id);
@@ -108,7 +114,8 @@ class SettingRepository implements SettingRepositoryInterface
         } catch (\Exception $e) {
             $screen = "DeleteSetting From SettingRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 }

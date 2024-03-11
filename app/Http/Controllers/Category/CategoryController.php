@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Category;
 
-use App\Utility;
-use App\ResponseStatus;
-use App\Models\Category;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryDeleteRequest;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Repository\Category\CategoryRepositoryInterface;
+use App\ResponseStatus;
+use App\Utility;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -23,9 +22,13 @@ class CategoryController extends Controller
 
     public function form()
     {
-
-        return view('backend.category.form');
-
+        try {
+            return view('backend.category.form');
+        } catch (\Exception $e) {
+            $screen = "Category create From Category Form Screen::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
 
     public function create(CategoryStoreRequest $request)
@@ -37,10 +40,9 @@ class CategoryController extends Controller
             } else {
                 return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create category!']);
             }
-            $screen = "Category create From Category Form Screen::";
+            $screen = "CategoryCreate From Category Form Screen::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-
         } catch (\Exception $e) {
             $screen = "Category create From Category Form Screen::";
             Utility::saveErrorLog($screen, $e->getMessage());
@@ -66,21 +68,20 @@ class CategoryController extends Controller
 
     public function editCategory(int $id)
     {
-        try{
-            $category =$this->CategoryRepository->getCategoryById((int) $id);
-            if($category == null){
-               return response()->view('errors.404',[],404);
+        try {
+            $category = $this->CategoryRepository->getCategoryById((int) $id);
+            if ($category == null) {
+                return response()->view('errors.404', [], 404);
             }
             $screen   = "GetCategoryById From CategoryController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
             return view('backend.category.form', compact(['category']));
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $screen = "GetCategoryById From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function updateCategory(CategoryUpdateRequest $request)
@@ -92,19 +93,17 @@ class CategoryController extends Controller
             } else {
                 return redirect()->back()->withErrors(['fail' => 'Fail!,Cannot create category!']);
             }
-            $screen = "UpdateCategory From Category Form Screen::";
+            $screen = "UpdateCategory From CategoryController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
-            $screen = "UpdateCategory From Category Form Screen::";
+            $screen = "UpdateCategory From CategoryController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function deleteCategory(CategoryDeleteRequest $request)
-
     {
         try {
             $delete_cat = $this->CategoryRepository->deleteCategory((int) $request->id);
@@ -122,5 +121,4 @@ class CategoryController extends Controller
             abort(500);
         }
     }
-
 }

@@ -1,5 +1,5 @@
 @extends('layouts.backend.master')
-@section('title', 'DailyReport')
+@section('title', 'Payment History')
 @section('content')
     <div class="right_col" role="main">
         <div class="">
@@ -7,7 +7,7 @@
                 <div class="col-md-12 col-sm-12  ">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>DailyReport</h2>
+                            <h2>Payment History</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -28,7 +28,7 @@
                                         <tr class="headings">
                                             <th class="column-title">Date</th>
                                             <th class="column-title">Amount</th>
-                                            <th class="column-title">Action</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -78,28 +78,10 @@
                                                     Download</button>
                                             </form>
                                         </div>
-
-                                        @foreach ($result as $data)
-                                            @if ($data->date == '')
-                                                <tr class="even pointer">
-                                                    <td class=" ">Total</td>
-                                                    <td class=" ">{{ $data->total }} </td>
-                                                </tr>
-                                            @elseif ($data->date != '')
-                                                <tr class="even pointer">
-                                                    <td class=" ">{{ $data->date }}</td>
-                                                    <td class=" ">{{ $data->amount }} </td>
-                                                    <td class=" ">
-                                                        <div class="col-md-5">
-                                                            <a href="{{ url('/sg-backend/report/payment-history') }}/{{ $data->date }}"
-                                                                class="btn btn-info btn-xs">
-                                                                <i class="fa fa-pencil"></i> Edit
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
+                                        <tr class="even pointer">
+                                            <td class=" "></td>
+                                            <td class=" "></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

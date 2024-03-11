@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Setting;
 
 use App\Http\Controllers\Controller;
-use App\ResponseStatus;
-use App\Utility;
+use App\Http\Requests\Setting\SettingDeleteRequest;
 use App\Http\Requests\Setting\SettingStoreRequest;
 use App\Http\Requests\Setting\SettingUpdateRequest;
-use App\Http\Requests\Setting\SettingDeleteRequest;
 use App\Repository\Setting\SettingRepositoryInterface;
+use App\ResponseStatus;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
@@ -30,8 +30,6 @@ class SettingController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
-
     }
 
     public function create(SettingStoreRequest $request)
@@ -46,13 +44,11 @@ class SettingController extends Controller
             $screen = "SettingCreate From SettingController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-
         } catch (\Exception $e) {
             $screen = "SettingCreate From SettingController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function edit()
@@ -71,7 +67,6 @@ class SettingController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function list()
@@ -106,7 +101,6 @@ class SettingController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function delete(SettingDeleteRequest $request)

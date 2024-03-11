@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers\Order;
 
-use App\Utility;
-use App\ResponseStatus;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrderListReport;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\GetItemRequest;
-use App\Http\Resources\Item\ItemResource;
-use App\Http\Resources\Order\OrderResource;
-use App\Http\Requests\Api\StoreOrderRequest;
 use App\Http\Requests\Api\GetCategoryRequest;
-use App\Http\Requests\Api\OrderStatusRequest;
 use App\Http\Requests\Api\GetItemByCatRequest;
+use App\Http\Requests\Api\GetItemRequest;
 use App\Http\Requests\Api\GetOrderListRequest;
-use App\Http\Resources\Item\OrderItemResource;
+use App\Http\Requests\Api\OrderStatusRequest;
+use App\Http\Requests\Api\StoreOrderRequest;
 use App\Http\Requests\Api\getOrderItemsRequest;
-use App\Http\Resources\Setting\SettingResource;
-use App\Repository\Item\ItemRepositoryInterface;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Item\GetOrderListResource;
-use App\Repository\Order\OrderRepositoryInterface;
+use App\Http\Resources\Item\ItemResource;
+use App\Http\Resources\Item\OrderItemResource;
+use App\Http\Resources\Order\OrderResource;
+use App\Http\Resources\Setting\SettingResource;
 use App\Repository\Category\CategoryRepositoryInterface;
+use App\Repository\Item\ItemRepositoryInterface;
+use App\Repository\Order\OrderRepositoryInterface;
+use App\ResponseStatus;
+use App\Utility;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -45,12 +45,26 @@ class OrderController extends Controller
 
     public function orderList()
     {
-        return view('frontend.order.list');
+        try {
+            return view('frontend.order.list');
+        } catch (\Exception $e) {
+            $screen = "getOrderListPage From OrderController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
+
     public function order()
     {
-        return view('frontend.order.order');
+        try {
+            return view('frontend.order.order');
+        } catch (\Exception $e) {
+            $screen = "getOrderPage From OrderController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
+
     public function getCategory(GetCategoryRequest $request)
     {
         try {
@@ -64,8 +78,8 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
+
     public function getAllItem()
     {
         try {
@@ -79,7 +93,6 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getItemByCategory(GetItemByCatRequest $request)
@@ -95,8 +108,8 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
+
     public function getItemData(GetItemRequest $request)
     {
         try {
@@ -110,7 +123,6 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function storeOrder(StoreOrderRequest $request)
@@ -130,7 +142,6 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getOrderList(GetOrderListRequest $request)
@@ -146,7 +157,6 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function orderListPage(int $id)
@@ -162,7 +172,6 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function downloadOrderListExcel(OrderListReport $orderListReport, $id)
@@ -170,21 +179,20 @@ class OrderController extends Controller
         try {
             $name    = date('Ymdhis').'_'.'order_list.xlsx';
             return Excel::download($orderListReport->setShiftId($id), $name);
-            $screen = "Download Orderlist From OrderController::";
+            $screen = "Download OrderList From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
-            $screen = "Download Orderlist From OrderController::";
+            $screen = "Download OrderList From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function CancelOrder(OrderStatusRequest $request)
     {
         try {
-            $cancel_order = $this->OrderRepository->CancelOrder((array) $request->all());
+            $this->OrderRepository->CancelOrder((array) $request->all());
             $screen = "cancelOrder From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
@@ -198,20 +206,17 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function EditOrder(int $id)
     {
         try {
-
             return view('frontend.order.order', compact(['id']));
         } catch (\Exception $e) {
-            $screen = "GetCategoryById From CategoryRepository::";
+            $screen = "editOrder From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getOrderItems(getOrderItemsRequest $request)
@@ -219,21 +224,20 @@ class OrderController extends Controller
         try {
             $items = $this->OrderRepository->getOrderItems((int) $request->id);
             return OrderItemResource::collection($items);
-            $screen = "cancelOrder From OrderController::";
+            $screen = "getOrderItems From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
-            $screen = "GetCategoryById From CategoryRepository::";
+            $screen = "getOrderItems From OrderController::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function updateOrder(Request $request)
     {
         try {
-            $items = $this->OrderRepository->updateOrder((array) $request->all());
+            $this->OrderRepository->updateOrder((array) $request->all());
             return new JsonResponse([
                 'success' => true,
                 'message' => 'success cancel order',
@@ -247,32 +251,43 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getPaymentPage(int $id)
     {
-        return view('frontend.order.payment', compact(['id']));
+        try {
+            return view('frontend.order.payment', compact(['id']));
+        } catch (\Exception $e) {
+            $screen = "getPaymentpage From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
+
     public function getOrderDetailPage(int $id)
     {
-        return view('frontend.order.order_detail', compact(['id']));
+        try {
+            return view('frontend.order.order_detail', compact(['id']));
+        } catch (\Exception $e) {
+            $screen = "getOrderDetailPage From CategoryRepository::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
 
     public function getOrderDetail(Request $request)
     {
         try {
             $order = $this->OrderRepository->getOrderDetail((array)$request->all());
-            return new OrderResource($order);
             $screen = "updateOrder From OrderController::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
+            return new OrderResource($order);
         } catch (\Exception $e) {
             $screen = "updateOrder From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function insertPayOrder(Request $request)
@@ -292,7 +307,6 @@ class OrderController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getSettingData()

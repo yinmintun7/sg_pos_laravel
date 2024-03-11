@@ -10,7 +10,6 @@
                             <h2>Discount List </h2>
                             <div class="clearfix"></div>
                         </div>
-                        {{-- {{ dd($discounts) }} --}}
                         <div class="x_content">
                             <div class="table-responsive">
                                 <table class="table table-striped jambo_table bulk_action">

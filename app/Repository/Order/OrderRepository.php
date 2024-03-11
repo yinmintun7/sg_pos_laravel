@@ -3,14 +3,14 @@
 namespace App\Repository\Order;
 
 use App\Constant;
-use App\Models\Setting;
-use App\Utility;
-use App\Models\Item;
 use App\Models\DiscountItem;
+use App\Models\Item;
 use App\Models\Order;
-use App\Models\PaymentHistory;
-use App\ResponseStatus;
 use App\Models\OrderDetail;
+use App\Models\PaymentHistory;
+use App\Models\Setting;
+use App\ResponseStatus;
+use App\Utility;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository implements OrderRepositoryInterface
@@ -26,7 +26,6 @@ class OrderRepository implements OrderRepositoryInterface
             $insert_data['shift_id']     = $data['shift_id'];
             $store = Utility::getCreateId((array)$insert_data);
             $store_order = Order::create($store);
-            // dd($data['items']);
             foreach ($data['items'] as $detail_item) {
                 $insert_detail_data = [];
                 $insert_detail_data['quantity']       = $detail_item['quantity'];
@@ -45,12 +44,15 @@ class OrderRepository implements OrderRepositoryInterface
             DB::rollBack();
             $screen = "StoreOrder From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function getOrderList($shift_id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $currentDate = date("Y-m-d");
             $order_list = [];
@@ -66,12 +68,15 @@ class OrderRepository implements OrderRepositoryInterface
         } catch (\Exception $e) {
             $screen = "GetItems From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
+
     public function getOrderItemById(int $item_id)
     {
-
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $today_date = date('Y-m-d');
             $item = Item::where('id', $item_id)
@@ -103,12 +108,15 @@ class OrderRepository implements OrderRepositoryInterface
         } catch (\Exception $e) {
             $screen = "GetItemData From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function CancelOrder(array $request)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $cacel_order = [];
             $id     = $request['corderId'];
@@ -117,20 +125,20 @@ class OrderRepository implements OrderRepositoryInterface
             $cacel_order['status']      = $status;
             $order_cancel = Utility::getUpdateId((array)$cacel_order);
             $cancel->update($order_cancel);
-            $screen   = "CancelOrder From ItemRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
             $screen = "CancelOrder From ItemRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
     }
 
     public function getOrderItems(int $id)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $item_ids = [];
             $detail_items = OrderDetail::select('item_id')
@@ -141,7 +149,6 @@ class OrderRepository implements OrderRepositoryInterface
             foreach ($detail_items as $item) {
                 array_push($item_ids, $item->item_id);
             }
-
             $data = [];
             $items = Item::select(
                 'item.id',
@@ -182,22 +189,19 @@ class OrderRepository implements OrderRepositoryInterface
                 $item->original_amount   = $item->price;
                 array_push($data, $item);
             }
-
             return $data;
-
-            $screen   = "GetCategoryById From CategoryRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             $screen = "GetCategoryById From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
-
     }
 
     public function updateOrder(array $data)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             DB::beginTransaction();
             $update_data = [];
@@ -220,22 +224,21 @@ class OrderRepository implements OrderRepositoryInterface
                 OrderDetail::create($store);
             }
             DB::commit();
-            $screen   = "UpdateOrder From Category Form Screen::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
             $returnArray['ResponseStatus'] = ResponseStatus::OK;
             return $returnArray;
         } catch (\Exception $e) {
             DB::rollBack();
             $screen = "UpdateOrder From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
-
     }
 
     public function getOrderDetail(array $data)
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
             $shift_id = $data['shift_id'];
             $id       = $data['orderId'];
@@ -245,15 +248,12 @@ class OrderRepository implements OrderRepositoryInterface
             ->whereNull('deleted_at')
             ->first();
             return $order;
-            $screen   = "GetCategoryById From CategoryRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             $screen = "GetCategoryById From CategoryRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
-
     }
 
     public function insertPayOrder(array $data)
@@ -297,25 +297,22 @@ class OrderRepository implements OrderRepositoryInterface
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function getSettingData()
     {
+        $returnArray  = array();
+        $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
         try {
-            $setting = Setting::select('id','company_name', 'company_phone', 'company_email', 'company_address','company_logo')
+            $setting = Setting::select('id', 'company_name', 'company_phone', 'company_email', 'company_address', 'company_logo')
                     ->whereNull('deleted_at')
                     ->first();
             return $setting;
-            $screen   = "GetSettingData From OrderRepository::";
-            $queryLog = DB::getQueryLog();
-            Utility::saveDebugLog($screen, $queryLog);
         } catch (\Exception $e) {
             $screen = "GetSettingData From OrderRepository::";
             Utility::saveErrorLog($screen, $e->getMessage());
-            abort(500);
+            $returnArray['ResponseStatus'] = ResponseStatus::INTERNAL_SERVER_ERROR;
+            return $returnArray;
         }
-
     }
-
 }

@@ -3,7 +3,6 @@ app.controller("myCtrl", function ($scope, $http) {
   $scope.orderDetal=[];
   $scope.settingData = [];
   $scope.init = function () {
-
   };
   $scope.orderDetail = function (orderId) {
     $scope.getSettingData();

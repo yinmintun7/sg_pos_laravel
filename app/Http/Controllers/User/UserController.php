@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Utility;
-use App\ResponseStatus;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserDeleteRequest;
+use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Repository\User\UserRepositoryInterface;
+use App\ResponseStatus;
+use App\Utility;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -23,9 +22,13 @@ class UserController extends Controller
 
     public function form()
     {
-
-        return view('backend.user.form');
-
+        try {
+            return view('backend.user.form');
+        } catch (\Exception $e) {
+            $screen = "userCreateForm From UserController::";
+            Utility::saveErrorLog($screen, $e->getMessage());
+            abort(500);
+        }
     }
 
     public function create(UserStoreRequest $request)
@@ -40,14 +43,13 @@ class UserController extends Controller
             $screen = "Category create From Category Form Screen::";
             $queryLog = DB::getQueryLog();
             Utility::saveDebugLog($screen, $queryLog);
-
         } catch (\Exception $e) {
             $screen = "Category create From Category Form Screen::";
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
+
     public function list()
     {
         try {
@@ -79,7 +81,6 @@ class UserController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function update(UserUpdateRequest $request)
@@ -99,7 +100,6 @@ class UserController extends Controller
             Utility::saveErrorLog($screen, $e->getMessage());
             abort(500);
         }
-
     }
 
     public function delete(UserDeleteRequest $request)

@@ -56,7 +56,6 @@
                                 @endif
                             </div>
 
-
                             <div class="field item form-group">
                                 <label for="Status" class="col-form-label col-md-3 col-sm-3  label-align">Status<span
                                         class="required">*</span></label>

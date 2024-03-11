@@ -2,23 +2,23 @@
 
 namespace App\Providers;
 
-use App\Repository\Item\ItemRepository;
-use App\Repository\User\UserRepository;
-use Illuminate\Support\ServiceProvider;
-use App\Repository\Order\OrderRepository;
-use App\Repository\Shift\ShiftRepository;
-use App\Repository\Report\ReportRepository;
-use App\Repository\Setting\SettingRepository;
 use App\Repository\Category\CategoryRepository;
-use App\Repository\Discount\DiscountRepository;
-use App\Repository\Item\ItemRepositoryInterface;
-use App\Repository\User\UserRepositoryInterface;
-use App\Repository\Order\OrderRepositoryInterface;
-use App\Repository\Shift\ShiftRepositoryInterface;
-use App\Repository\Report\ReportRepositoryInterface;
-use App\Repository\Setting\SettingRepositoryInterface;
 use App\Repository\Category\CategoryRepositoryInterface;
+use App\Repository\Discount\DiscountRepository;
 use App\Repository\Discount\DiscountRepositoryInterface;
+use App\Repository\Item\ItemRepository;
+use App\Repository\Item\ItemRepositoryInterface;
+use App\Repository\Order\OrderRepository;
+use App\Repository\Order\OrderRepositoryInterface;
+use App\Repository\Report\ReportRepository;
+use App\Repository\Report\ReportRepositoryInterface;
+use App\Repository\Setting\SettingRepository;
+use App\Repository\Setting\SettingRepositoryInterface;
+use App\Repository\Shift\ShiftRepository;
+use App\Repository\Shift\ShiftRepositoryInterface;
+use App\Repository\User\UserRepository;
+use App\Repository\User\UserRepositoryInterface;
+use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
